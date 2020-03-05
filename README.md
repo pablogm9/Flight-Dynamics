@@ -11,4 +11,4 @@
 # (3) Data Processing
 #           - First stationary measurement [C_L v C_D, C_L_alpha, C_D_alpha]
 #           - Second stationary measurement (How to thrust: App. C, Normalizing: App. B) [C_m_alpha: from trim curve, C_m_delta: shift in c.g.] -> For both stick free and stick fixed
-#           - Complete 'Cit_par.py' [Using values]
+#           - Complete 'Cit_par.py' [Using values from stationary measurements]
