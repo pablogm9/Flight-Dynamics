@@ -12,3 +12,9 @@
 #           - First stationary measurement [C_L v C_D, C_L_alpha, C_D_alpha]
 #           - Second stationary measurement (How to thrust: App. C, Normalizing: App. B) [C_m_alpha: from trim curve, C_m_delta: shift in c.g.] -> For both stick free and stick fixed
 #           - Complete 'Cit_par.py' [Using values from stationary measurements]
+# (4) Verification
+#           - Compare (1) and (2)
+#           - Both code, calculation verification
+# (5) Validation
+#           - Characteristic Plots of Eigenmotions (CPE)
+#           - Compare CPE from (2) to the measured data
