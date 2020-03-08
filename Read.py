@@ -11,7 +11,7 @@ import pandas as pd
 from scipy.io import loadmat
 
 
-def get_data(file_name):
+def get_data(filename):
     
     '''
     Reads data from the provided MATLAB files. The files must be 
@@ -26,8 +26,13 @@ def get_data(file_name):
                          and the corresponding unit for that parameter, as
                          provided in the MATLAB file.
                          
+        - headers: Numpy array containing the name of each of the columns in the 
+                   dataframe. Can be used to select specific columns from the
+                   dataframe.
+                         
         - descriptions: Numpy array containing the description of each of the 
-                        parameters.
+                        parameters. Included just in case you need to check
+                        what a specific parameter actually is.
     
     '''
     
@@ -83,7 +88,7 @@ def get_data(file_name):
         flightdata_df[headers[i]] = np.resize(flightdata[i],(48321,))
     
 
-    return flightdata_df,descriptions
+    return flightdata_df,headers,descriptions
 
 
 
