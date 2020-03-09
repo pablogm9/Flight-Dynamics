@@ -12,11 +12,67 @@ import pandas as pd
 
 
 
+# ------------- Read EXCEL file -------------
+
+datasheet = pd.read_excel('Data/TESTFLIGHT2_Post_Flight_Datasheet.xlsx')
+datasheet.columns = ['A','B','C','D','E','F','G','H','I','J','K','L','M']
+datasheet.index = range(2,85)
 
 
-# --- Read EXCEL file ---
+# ------------- Extract parameters -------------
 
-datasheet = pd.read_excel('Data/REFERENCE_Post_Flight_Datasheet.xlsx')
+# --- Names, masses, blockfuel ---
+passenger_names = datasheet.loc[[8,9,10,11,12,13,14,15,16],'D']
+passenger_masses = datasheet.loc[[8,9,10,11,12,13,14,15,16],'H'] #[kg]
+block_fuel = datasheet.loc[18,'D']*0.453592
+
+
+# --- SERIES 1 ---
+series1 = datasheet.loc[[28,29,39,31,32,33,34],['B','C','D','E','F','G','H','I','J']]
+time_1 = series1['B'] #[hh:mm:ss]
+et_1 = series1['C'] #[sec]
+hp_1 = series1['D'] #[ft]
+IAS_1 = series1['E'] #[kts]
+a_1 = series1['F'] #[deg]
+FFL_1 = series1['G'] #[lbs/hr]
+FFR_1 = series1['H'] #[lbs/hr]
+F_used_1 = series1['I'] #[lbs]
+TAT_1 = series1['J'] #[deg C]
+
+
+# --- SERIES 2 ---
+series2 = datasheet.loc[[44,45,46,47,48,49,50],['B','C','D','E','F','G','H','I','J']]
+time_2 = series2['B'] #[hh:mm:ss]
+et_2 = series2['C'] #[sec]
+hp_2 = series2['D'] #[ft]
+IAS_2 = series2['E'] #[kts]
+a_2 = series2['F'] #[deg]
+FFL_2 = series2['G'] #[lbs/hr]
+FFR_2 = series2['H'] #[lbs/hr]
+F_used_2 = series2['I'] #[lbs]
+TAT_2 = series2['J'] #[deg C]
+
+
+
+# --- ELEVATOR TRIM CURVE ---
+elevator_series = datasheet.loc[[44,45,46,47,48,49,50],['B','C','D','E','F','G','H','I','J']]
+time_2 = series2['B'] #[hh:mm:ss]
+et_2 = series2['C'] #[sec]
+hp_2 = series2['D'] #[ft]
+IAS_2 = series2['E'] #[kts]
+a_2 = series2['F'] #[deg]
+FFL_2 = series2['G'] #[lbs/hr]
+FFR_2 = series2['H'] #[lbs/hr]
+F_used_2 = series2['I'] #[lbs]
+TAT_2 = series2['J'] #[deg C]
+
+
+
+# --- CG SHIFT ---
+
+
+
+# --- EIGENMOTIONS ---
 
 
 
