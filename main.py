@@ -31,19 +31,31 @@ reference_data,reference_headers,reference_descriptions = Read.get_data('ref_dat
 # ---------------- ANALYSIS OF STATIONARY MEASUREMENT DATA ----------------
  
 
-# Compute weight
+# --- Compute weight ---
 
 
 
-# Compute C_L
+# --- Compute C_L ---
 
 
 
-# Compute thrust
+# --- Compute thrust ---
 
 
+# Pressure altitude [m]
 
-# Compute C_D
+# Mach Number [-]
+
+# Left engine fuel flow [kg/s]
+
+# Right engine fuel flow [kg/s]
+
+# Temperature difference 
+
+# Call thrust.exe 
+
+
+# --- Compute C_D ---
 
 
 
