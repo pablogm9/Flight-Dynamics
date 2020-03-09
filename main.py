@@ -26,6 +26,29 @@ reference_data,reference_headers,reference_descriptions = Read.get_data('ref_dat
 #flight_data,flight_headers,flight_descriptions = Read.get_data('testflight2')
 
 
+
+
+# ---------------- ANALYSIS OF STATIONARY MEASUREMENT DATA ----------------
+ 
+
+# Compute weight
+
+
+
+# Compute C_L
+
+
+
+# Compute thrust
+
+
+
+# Compute C_D
+
+
+
+
+
 '''
 # ---------------- SAMPLE PLOTS ----------------
 
