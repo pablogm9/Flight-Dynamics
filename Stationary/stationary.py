@@ -20,7 +20,7 @@ import pandas as pd
 
 
 # --- Compute weight ---
-
+rampmass=
 
 
 
