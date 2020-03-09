@@ -29,7 +29,7 @@ import pandas as pd
 
 
 # --- Compute thrust ---
-
+'''''
 # Pressure altitude [m]
 h_p_index = np.where(reference_headers=='Dadc1_alt [ft]')[0].flat[0]
 h_p = np.array(reference_data[reference_headers[h_p_index]])*0.3048
@@ -62,8 +62,7 @@ delta_T = T_static - T_ISA
 
 
 # Call thrust.exe 
-
-
+''
 
 
 # --- Compute C_L ---
