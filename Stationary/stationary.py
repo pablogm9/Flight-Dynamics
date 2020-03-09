@@ -23,7 +23,7 @@ import pandas as pd
 rampmass=
 
 
-
+a = 'sku'
 
 
 
