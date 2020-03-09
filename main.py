@@ -43,12 +43,22 @@ reference_data,reference_headers,reference_descriptions = Read.get_data('ref_dat
 
 
 # Pressure altitude [m]
+h_p_index = np.where(reference_headers=='Dadc1_alt [ft]')[0].flat[0]
+h_p = np.array(reference_data[reference_headers[h_p_index]])*0.3048
+
 
 # Mach Number [-]
+M_index = np.where(reference_headers=='Dadc1_mach [mach]')[0].flat[0]
+M = np.array(reference_data[reference_headers[M_index]])
 
 # Left engine fuel flow [kg/s]
+left_fuelflow_index = np.where(reference_headers=='lh_engine_FMF [lbs/hr]')[0].flat[0]
+left_fuelflow = np.array(reference_data[reference_headers[left_fuelflow_index]])
 
 # Right engine fuel flow [kg/s]
+right_fuelflow_index = np.where(reference_headers=='rh_engine_FMF [lbs/hr]')[0].flat[0]
+right_fuelflow = np.array(reference_data[reference_headers[right_fuelflow_index]])
+
 
 # Temperature difference 
 
