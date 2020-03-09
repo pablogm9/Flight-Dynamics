@@ -10,6 +10,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import Read
+from Thrust import thrust
 
 
 
@@ -24,6 +25,16 @@ parameters =  np.array(['vane_AOA', 'elevator_dte', 'column_fe', 'lh_engine_FMF'
 
 reference_data,reference_headers,reference_descriptions = Read.get_data('ref_data')
 #flight_data,flight_headers,flight_descriptions = Read.get_data('testflight2')
+
+
+
+
+# ---------------- ANALYSIS OF STATIONARY MEASUREMENT DATA ----------------
+ 
+
+
+
+
 
 
 '''
