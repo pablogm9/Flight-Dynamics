@@ -44,30 +44,18 @@ passenger_masses = datasheet.loc[[8,9,10,11,12,13,14,15,16],'H'] #[kg]
 block_fuel = datasheet.loc[18,'D']*0.453592 #[kg]
 
 
-# --- SERIES 1 ---
-series1 = datasheet.loc[[28,29,30,31,32,33,34],['B','C','D','E','F','G','H','I','J']]
-time_1 = series1['B'] #[hh:mm:ss]
-et_1 = series1['C'] #[sec]
-h_p_1 = series1['D'] #[ft]
-IAS_1 = series1['E'] #[kts]
-a_1 = series1['F'] #[deg]
-FFL_1 = series1['G'] #[lbs/hr]
-FFR_1 = series1['H'] #[lbs/hr]
-F_used_1 = series1['I']*0.453592 #[kg]
-TAT_1 = series1['J'] #[deg C]
+# --- CL_CD SERIES ---
+series = datasheet.loc[[28,29,30,31,32,33,34],['B','C','D','E','F','G','H','I','J']]
+time = series['B'] #[hh:mm:ss]
+et = series['C'] #[sec]
+h_p = series['D'] #[ft]
+IAS = series['E'] #[kts]
+a = series['F'] #[deg]
+FFL = series['G'] #[lbs/hr]
+FFR = series['H'] #[lbs/hr]
+F_used = np.array(series['I'])*0.453592 #[kg]
+TAT = series['J'] #[deg C]
 
-
-# --- SERIES 2 ---
-series2 = datasheet.loc[[44,45,46,47,48,49,50],['B','C','D','E','F','G','H','I','J']]
-time_2 = series2['B'] #[hh:mm:ss]
-et_2 = series2['C'] #[sec]
-h_p_2 = series2['D'] #[ft]
-IAS_2 = series2['E'] #[kts]
-a_2 = series2['F'] #[deg]
-FFL_2 = series2['G'] #[lbs/hr]
-FFR_2 = series2['H'] #[lbs/hr]
-F_used_2 = series2['I']*0.453592 #[kg]
-TAT_2 = series2['J'] #[deg C]
 
 
 # --- ELEVATOR TRIM CURVE ---
@@ -123,81 +111,59 @@ Payload = np.sum(passenger_masses)
 # Ramp weight [kg]
 rampmass=(BEM+Payload+BlockFuel)
 
-# Used fuel [kg]
-F_used_1 = np.array(F_used_1)
-F_used_2 = np.array(F_used_2)
-
 # Weights [N]
-W_1 = np.ones(7)
-W_2 = np.ones(7)
+W = np.ones(7)
 
-
-for i in range(len(W_1)):
-    W_1[i]=(rampmass - F_used_1[i])*g_0
-    W_2[i]=(rampmass - F_used_2[i])*g_0
+for i in range(len(W)):
+    W[i]=(rampmass - F_used[i])*g_0
 
 
 # ------------- Compute Thrust -------------
 
 # Pressure altitudes in [m]
-hp_1 = np.array(h_p_1 * 0.3048)
-hp_2 = np.array(h_p_2 * 0.3048)
-
+hp = np.array(h_p * 0.3048)
 
 # Calibrated airspeed in [m/s]
 # V_C = V_IAS (neglecting instrument and position errors)
-V_C_1 = IAS_1 * 0.514444
-V_C_2 = IAS_2 * 0.514444
+V_C = IAS * 0.514444
 
 
 # Static Pressures [Pa]
-p_1 = p_0*((1+a*hp_1/T_0)**(-g_0/(a*R)))
-p_2 = p_0*((1+a*hp_2/T_0)**(-g_0/(a*R)))
+p = p_0*((1+a*hp/T_0)**(-g_0/(a*R)))
 
 # Mach numbers [-]
-M_1 = np.sqrt(np.array(((2/(gamma-1))*(((1+(p_0/p_1)*(((1+((gamma-1)/(2*gamma))*(rho_0/p_0)*(V_C_1**2))**(gamma/(gamma-1)))-1))**((gamma-1)/gamma))-1)),dtype= np.float))       
-M_2 = np.sqrt(np.array(((2/(gamma-1))*(((1+(p_0/p_2)*(((1+((gamma-1)/(2*gamma))*(rho_0/p_0)*(V_C_2**2))**(gamma/(gamma-1)))-1))**((gamma-1)/gamma))-1)),dtype= np.float))         
+M = np.sqrt(np.array(((2/(gamma-1))*(((1+(p_0/p)*(((1+((gamma-1)/(2*gamma))*(rho_0/p_0)*(V_C**2))**(gamma/(gamma-1)))-1))**((gamma-1)/gamma))-1)),dtype= np.float))       
 
 # T_ISA in [K], for temperature difference
-T_ISA_1 = hp_1*a + T_0
-T_ISA_2 = hp_2*a + T_0
+T_ISA = hp*a + T_0
 
 # Total temperature in [K]
-TAT_1 = TAT_1+273.15
-TAT_2 = TAT_2+273.15
+TAT = TAT+273.15
 
 # Static temperature in [K]
 # Obtained by correcting the TAT for ram rise
-T_1 = TAT_1/(1+((gamma-1)/2)*(M_1**2))
-T_2 = TAT_2/(1+((gamma-1)/2)*(M_2**2))
+T = TAT/(1+((gamma-1)/2)*(M**2))
 
 # Temperature differences
-delta_T_1 = np.array(T_1 - T_ISA_1)
-delta_T_2 = np.array(T_2 - T_ISA_2)
+delta_T = np.array(T - T_ISA)
 
 # Left engine fuel flows [kg/s]
-FFL_1 = np.array(FFL_1*0.000125998)
-FFL_2 = np.array(FFL_2*0.000125998)
+FFL = np.array(FFL*0.000125998)
 
 # Right engine fuel flows [kg/s]
-FFR_1 = np.array(FFR_1*0.000125998)
-FFR_2 = np.array(FFR_2*0.000125998)
+FFR  = np.array(FFR*0.000125998)
 
 
 # Write .dat file
-lines_1 =[]
-lines_2 = []
+lines =[]
 
-for i in range(len(W_1)):
-    line_1 = str(hp_1[i])+' '+str(M_1[i])+' '+str(delta_T_1[i])+' '+str(FFL_1[i])+' '+str(FFR_1[i])+'\n'
-    line_2 = str(hp_2[i])+' '+str(M_2[i])+' '+str(delta_T_2[i])+' '+str(FFL_2[i])+' '+str(FFR_2[i])+'\n'
-    lines_1.append(line_1)
-    lines_2.append(line_2)
+for i in range(len(W)):
+    line = str(hp[i])+' '+str(M[i])+' '+str(delta_T[i])+' '+str(FFL[i])+' '+str(FFR[i])+'\n'
+    lines.append(line)
 
-all_lines =  lines_1 + lines_2
 
 input_file = open('StationaryData/matlab.dat','w')
-input_file.writelines(all_lines)
+input_file.writelines(lines)
 input_file.close()
 
 
@@ -222,15 +188,12 @@ os.remove('StationaryData/matlab.dat')
 # ------------- Compute C_L -------------
 
 # True airspeed [m/s]
-V_TAS_1 = M_1*np.sqrt(np.array((gamma*R*T_1),dtype=np.float))
-V_TAS_2 = M_2*np.sqrt(np.array((gamma*R*T_2),dtype=np.float))
+V_TAS = M*np.sqrt(np.array((gamma*R*T),dtype=np.float))
 
 # Density [kg/m^3]
-rho_1 = p_1/(R*T_1)
-rho_2 = p_2/(R*T_2)
+rho = p/(R*T)
 
-C_L_1 = W_1/(0.5*rho_1*(V_TAS_1**2)*S)
-C_L_2 = W_2/(0.5*rho_2*(V_TAS_2**2)*S)
+C_L = W/(0.5*rho*(V_TAS**2)*S)
 
 
 # ------------- Compute C_D -------------
