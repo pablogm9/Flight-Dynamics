@@ -7,7 +7,7 @@ import numpy as np
 #eigenmotions
 
 #List of available parameters for aymmetric flight
-# to use a variable from Cit_par > print(Cit_par.CXu)
+
 
 #Aperiodic roll
 lambda_aroll = Clp/(4*mub*KX2)
