@@ -107,12 +107,14 @@ print('The time constants=', taus)
 #----------------------Characteristics-------------------------
 
 #------------Half time-----------------
+#applies to all eigenvalues
 def thalf(x):
     return log(0.5, e) * c / (x * Vh_V) ### The velocity needs to be changed for every eigenmotion, the speed is taken at the beginning of the motion
 for i in lambdas_real:
     t_half.append(thalf(i))
 
 #----------Period---------------------
+#applies to complex eigvalues only
 
 def per(z):
     return 2*pi*c/(z*Vh_V)#again the velocity needs to be appended
