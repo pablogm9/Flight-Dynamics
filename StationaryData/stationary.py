@@ -34,7 +34,7 @@ g_0 = 9.80665 #[m/s^2]
 
 # ------------- Read EXCEL file -------------
 
-datasheet = pd.read_excel('Data/REFERENCE_Post_Flight_Datasheet.xlsx')
+datasheet = pd.read_excel('../Data/REFERENCE_Post_Flight_Datasheet.xlsx')
 datasheet.columns = ['A','B','C','D','E','F','G','H','I','J','K','L','M']
 datasheet.index = range(2,85)
 
@@ -169,7 +169,7 @@ input_file.writelines(lines)
 input_file.close()
 
 #Call thrust.exe
-subprocess.call(['StationaryData/thrust.exe'])
+subprocess.call(['thrust.exe'])
 
 # Extract computed thrust values from new .dat file
 output_file = open('thrust.dat','r')
@@ -194,8 +194,8 @@ thrust_R = np.array(thrust_R)
 '''
 
 
-thrust_L=np.array([3210.26,2774.51,2320.56,1808.74,1654.41,1946.39])
-thrust_R=np.array([3737.29,3018.26,2700.78,2150.14,1935.29,2283.51])
+thrust_L=np.array([3665.28, 2995.58, 2399.84, 1863.53, 1892.36, 2208.98])
+thrust_R=np.array([3771.2,3057.48,2526.29,2016.03,2070.92,2405.45])
 
 thrust_total=thrust_L+thrust_R
 
