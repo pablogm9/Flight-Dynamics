@@ -162,25 +162,23 @@ for i in range(len(W)):
     lines.append(line)
 
 
-input_file = open('StationaryData/matlab.dat','w')
+input_file = open('matlab.dat', 'w')
 input_file.writelines(lines)
 input_file.close()
 
-
-# Call thrust.exe
-
-
+#Call thrust.exe
+subprocess.call(['StationaryData/thrust.exe'])
 
 # Extract computed thrust values from new .dat file
-'''
-output_file = open('StationaryData/thrust.dat','r')
+
+output_file = open('thrust.dat','r')
 thrust = output_file.readlines()
 output_file.close()
-'''
+
 
 # Delete created files, both input and output
-os.remove('StationaryData/matlab.dat')
-#os.remove('StationaryData/thrust.dat')
+os.remove('matlab.dat')
+os.remove('thrust.dat')
 
 
 
