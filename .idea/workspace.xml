@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="5377f238-fd03-4bd2-9ddb-43d6a7551285" name="Default Changelist" comment="">
+    <list default="true" id="5377f238-fd03-4bd2-9ddb-43d6a7551285" name="Default Changelist" comment="Readme Updated">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/stationary.py" beforeDir="false" afterPath="$PROJECT_DIR$/StationaryData/stationary.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,31 +36,7 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
-  <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\cysch\Desktop\TU Delft\Year 3\SVV\FlightDynamicsAssignment\StationaryData" />
-    </key>
-  </component>
-  <component name="RunManager" selected="Python.stationary">
-    <configuration name="Analytical" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="FlightDynamicsAssignment" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Analytical.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="true" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
+  <component name="RunManager" selected="Python.main">
     <configuration name="Cit_par" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="FlightDynamicsAssignment" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -128,7 +103,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="stationary" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="FlightDynamicsAssignment" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -138,7 +113,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="C:\Users\cysch\Desktop\TU Delft\Year 3\SVV\FlightDynamicsAssignment\StationaryData\stationary.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="true" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -149,8 +124,7 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.stationary" />
-        <item itemvalue="Python.Analytical" />
+        <item itemvalue="Python.main" />
         <item itemvalue="Python.Cit_par" />
         <item itemvalue="Python.hello" />
       </list>
@@ -167,8 +141,6 @@
       <option name="presentableId" value="Default" />
       <updated>1583405442000</updated>
       <workItem from="1583420330854" duration="1304000" />
-      <workItem from="1583774734259" duration="7060000" />
-      <workItem from="1583853154387" duration="959000" />
     </task>
     <task id="LOCAL-00001" summary="Readme Updated">
       <created>1583409266618</created>
@@ -192,34 +164,13 @@
       <updated>1583409815930</updated>
     </task>
     <task id="LOCAL-00004" summary="Readme Updated">
-      <created>1583842554829</created>
+      <created>1583770776792</created>
       <option name="number" value="00004" />
       <option name="presentableId" value="LOCAL-00004" />
       <option name="project" value="LOCAL" />
-      <updated>1583842554829</updated>
+      <updated>1583770776792</updated>
     </task>
-    <task id="LOCAL-00005" summary="&#10;Analytical changes">
-      <created>1583842677935</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1583842677935</updated>
-    </task>
-    <task id="LOCAL-00006" summary="&#10;Analytical changes">
-      <created>1583842708915</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1583842708915</updated>
-    </task>
-    <task id="LOCAL-00007" summary="&#10;Analytical changes">
-      <created>1583843085867</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1583843085867</updated>
-    </task>
-    <option name="localTasksCounter" value="8" />
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -228,84 +179,90 @@
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="Readme Updated" />
-    <MESSAGE value="&#10;Analytical changes" />
-    <option name="LAST_COMMIT_MESSAGE" value="&#10;Analytical changes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Readme Updated" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="275" y="22" key="#Notifications" timestamp="1583845548403">
-      <screen x="0" y="0" width="1366" height="728" />
-    </state>
-    <state x="275" y="22" key="#Notifications/0.0.1366.728@0.0.1366.728" timestamp="1583845548403" />
-    <state x="223" y="67" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1583415012308">
-      <screen x="0" y="0" width="1536" height="824" />
+    <state x="209" y="90" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1583767942244">
+      <screen x="0" y="23" width="1440" height="821" />
     </state>
     <state x="223" y="67" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824@0.0.1536.824" timestamp="1583415012308" />
-    <state x="499" y="164" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1583853697518">
-      <screen x="0" y="0" width="1536" height="834" />
+    <state x="209" y="90" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1440.821@0.23.1440.821" timestamp="1583767942244" />
+    <state x="365" y="23" key="CommitChangelistDialog2" timestamp="1583770776572">
+      <screen x="0" y="23" width="1440" height="827" />
     </state>
-    <state x="499" y="164" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1536.834@0.0.1536.834" timestamp="1583853697518" />
-    <state x="346" y="0" key="CommitChangelistDialog2" timestamp="1583843084879">
-      <screen x="0" y="0" width="1366" height="728" />
-    </state>
-    <state x="346" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1583843084879" />
+    <state x="346" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1583420948259" />
     <state x="389" y="7" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1583419796123" />
+    <state x="365" y="23" key="CommitChangelistDialog2/0.23.1440.827@0.23.1440.827" timestamp="1583770776572" />
     <state x="463" y="119" key="FileChooserDialogImpl" timestamp="1583420767348">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="463" y="119" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1583420767348" />
-    <state width="661" height="178" key="GridCell.Tab.0.bottom" timestamp="1583845703083">
-      <screen x="0" y="0" width="1366" height="728" />
+    <state width="1379" height="199" key="GridCell.Tab.0.bottom" timestamp="1583769768576">
+      <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state width="661" height="178" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1583845703083" />
+    <state width="1286" height="163" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1583421838280" />
     <state width="1515" height="210" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1583419800193" />
-    <state width="661" height="178" key="GridCell.Tab.0.center" timestamp="1583845703083">
-      <screen x="0" y="0" width="1366" height="728" />
+    <state width="1379" height="249" key="GridCell.Tab.0.bottom/0.23.1440.821@0.23.1440.821" timestamp="1583767817021" />
+    <state width="1379" height="199" key="GridCell.Tab.0.bottom/0.23.1440.877/1440.23.1920.1057@0.23.1440.877" timestamp="1583769768576" />
+    <state width="1379" height="199" key="GridCell.Tab.0.center" timestamp="1583769768575">
+      <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state width="661" height="178" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1583845703083" />
+    <state width="1286" height="163" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1583421838280" />
     <state width="1515" height="210" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1583419800193" />
-    <state width="661" height="178" key="GridCell.Tab.0.left" timestamp="1583845703083">
-      <screen x="0" y="0" width="1366" height="728" />
+    <state width="1379" height="249" key="GridCell.Tab.0.center/0.23.1440.821@0.23.1440.821" timestamp="1583767817020" />
+    <state width="1379" height="199" key="GridCell.Tab.0.center/0.23.1440.877/1440.23.1920.1057@0.23.1440.877" timestamp="1583769768575" />
+    <state width="1379" height="199" key="GridCell.Tab.0.left" timestamp="1583769768573">
+      <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state width="661" height="178" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1583845703083" />
+    <state width="1286" height="163" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1583421838279" />
     <state width="1515" height="210" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1583419800193" />
-    <state width="661" height="178" key="GridCell.Tab.0.right" timestamp="1583845703083">
-      <screen x="0" y="0" width="1366" height="728" />
+    <state width="1379" height="249" key="GridCell.Tab.0.left/0.23.1440.821@0.23.1440.821" timestamp="1583767817018" />
+    <state width="1379" height="199" key="GridCell.Tab.0.left/0.23.1440.877/1440.23.1920.1057@0.23.1440.877" timestamp="1583769768573" />
+    <state width="1379" height="199" key="GridCell.Tab.0.right" timestamp="1583769768575">
+      <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state width="661" height="178" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1583845703083" />
+    <state width="1286" height="163" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1583421838280" />
     <state width="1515" height="210" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1583419800193" />
+    <state width="1379" height="249" key="GridCell.Tab.0.right/0.23.1440.821@0.23.1440.821" timestamp="1583767817021" />
+    <state width="1379" height="199" key="GridCell.Tab.0.right/0.23.1440.877/1440.23.1920.1057@0.23.1440.877" timestamp="1583769768575" />
+    <state width="1379" height="249" key="GridCell.Tab.1.bottom" timestamp="1583769737274">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state width="1379" height="249" key="GridCell.Tab.1.bottom/0.23.1440.821@0.23.1440.821" timestamp="1583767818749" />
+    <state width="1379" height="249" key="GridCell.Tab.1.bottom/0.23.1440.877/1440.23.1920.1057@0.23.1440.877" timestamp="1583769737274" />
+    <state width="1379" height="249" key="GridCell.Tab.1.center" timestamp="1583769737273">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state width="1379" height="249" key="GridCell.Tab.1.center/0.23.1440.821@0.23.1440.821" timestamp="1583767818748" />
+    <state width="1379" height="249" key="GridCell.Tab.1.center/0.23.1440.877/1440.23.1920.1057@0.23.1440.877" timestamp="1583769737273" />
+    <state width="1379" height="249" key="GridCell.Tab.1.left" timestamp="1583769737272">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state width="1379" height="249" key="GridCell.Tab.1.left/0.23.1440.821@0.23.1440.821" timestamp="1583767818747" />
+    <state width="1379" height="249" key="GridCell.Tab.1.left/0.23.1440.877/1440.23.1920.1057@0.23.1440.877" timestamp="1583769737272" />
+    <state width="1379" height="249" key="GridCell.Tab.1.right" timestamp="1583769737273">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state width="1379" height="249" key="GridCell.Tab.1.right/0.23.1440.821@0.23.1440.821" timestamp="1583767818748" />
+    <state width="1379" height="249" key="GridCell.Tab.1.right/0.23.1440.877/1440.23.1920.1057@0.23.1440.877" timestamp="1583769737273" />
     <state x="184" y="7" key="SettingsEditor" timestamp="1583420900781">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="184" y="7" key="SettingsEditor/0.0.1366.728@0.0.1366.728" timestamp="1583420900781" />
-    <state x="321" y="128" key="Vcs.Push.Dialog.v2" timestamp="1583843091397">
-      <screen x="0" y="0" width="1366" height="728" />
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1583419784729">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="321" y="128" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1583843091397" />
     <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1583419784729" />
     <state x="379" y="188" key="com.intellij.ide.util.TipDialog" timestamp="1583420330863">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="379" y="188" key="com.intellij.ide.util.TipDialog/0.0.1366.728@0.0.1366.728" timestamp="1583420330863" />
-    <state x="514" y="291" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1583848484241">
-      <screen x="0" y="0" width="1366" height="728" />
+    <state x="542" y="354" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1583854471424">
+      <screen x="0" y="23" width="1440" height="828" />
     </state>
-    <state x="514" y="291" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1366.728@0.0.1366.728" timestamp="1583848484241" />
+    <state x="514" y="291" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1366.728@0.0.1366.728" timestamp="1583421841314" />
     <state x="578" y="329" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1536.824@0.0.1536.824" timestamp="1583419631517" />
-    <state x="463" y="15" width="609" height="804" key="find.popup" timestamp="1583853936809">
-      <screen x="0" y="0" width="1536" height="834" />
-    </state>
-    <state x="463" y="15" width="609" height="804" key="find.popup/0.0.1536.834@0.0.1536.834" timestamp="1583853936809" />
-    <state x="358" y="155" key="git4idea.merge.GitPullDialog" timestamp="1583848492417">
-      <screen x="0" y="0" width="1366" height="728" />
-    </state>
-    <state x="358" y="155" key="git4idea.merge.GitPullDialog/0.0.1366.728@0.0.1366.728" timestamp="1583848492417" />
-    <state x="354" y="212" key="git4idea.ui.GitUnstashDialog" timestamp="1583843064359">
-      <screen x="0" y="0" width="1366" height="728" />
-    </state>
-    <state x="354" y="212" key="git4idea.ui.GitUnstashDialog/0.0.1366.728@0.0.1366.728" timestamp="1583843064359" />
-  </component>
-  <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/FlightDynamicsAssignment$Cit_par.coverage" NAME="Cit_par Coverage Results" MODIFIED="1583845691247" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Resources" />
-    <SUITE FILE_PATH="coverage/FlightDynamicsAssignment$hello.coverage" NAME="hello Coverage Results" MODIFIED="1583841195792" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Resources" />
+    <state x="542" y="354" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.23.1440.827@0.23.1440.827" timestamp="1583770735865" />
+    <state x="542" y="354" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.23.1440.828@0.23.1440.828" timestamp="1583854471424" />
   </component>
 </project>
