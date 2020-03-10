@@ -9,6 +9,7 @@ Created on Mon Mar  9 16:58:44 2020
 
 import numpy as np
 import pandas as pd
+import os
 import subprocess
 
 
@@ -184,7 +185,6 @@ FFR_2 = np.array(FFR_2*0.000125998)
 
 
 # Write .dat file
-
 lines_1 =[]
 lines_2 = []
 
@@ -200,17 +200,22 @@ input_file = open('StationaryData/matlab.dat','w')
 input_file.writelines(all_lines)
 input_file.close()
 
+
 # Call thrust.exe
 
 
 
-
-'''
 # Extract computed thrust values from new .dat file
+'''
 output_file = open('StationaryData/thrust.dat','r')
 thrust = output_file.readlines()
 output_file.close()
 '''
+
+# Delete created files, both input and output
+os.remove('StationaryData/matlab.dat')
+#os.remove('StationaryData/thrust.dat')
+
 
 
 
