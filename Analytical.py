@@ -6,7 +6,7 @@ import numpy as np
 
 
 
-#empy lists to fill with values
+#empty lists to fill with values
 lambdas     = []
 lambdas_real = []
 lambdas_imag = []
@@ -48,7 +48,7 @@ Eig_val_phugoid_2 = complex(Eig_val_phugoid_real, -1*Eig_val_phugoid_img)
 lambdas.append(Eig_val_phugoid_1)
 lambdas.append(Eig_val_phugoid_2)
 lambdas_real.append(Eig_val_phugoid_real)
-lambdas_imag.append(Eig_val_phugoid_img)
+lambdas_imag.append(abs(Eig_val_phugoid_img))
 
 
 
@@ -59,8 +59,9 @@ lambdas_imag.append(Eig_val_phugoid_img)
 
 #--------------------Aperiodic roll----------------------
 lambda_aroll = Clp/(4*mub*KX2)
-print('Eigenvalue corresponding to aperiodic roll=', lambda_aroll)
-lambdas.append(lambda_aroll)
+lambda_aroll_comp = complex(Clp/(4*mub*KX2))
+print('Eigenvalue corresponding to aperiodic roll=', lambda_aroll_comp)
+lambdas.append(lambda_aroll_comp)
 lambdas_real.append(lambda_aroll)
 
 
@@ -79,11 +80,16 @@ lambda_droll_real = -B_droll/(2*A_droll)
 lambda_droll_imag = cmath.sqrt(disc_droll)/(2*A_droll)
 print('Eigenvalues corresponding to dutch roll=', [lambda_droll_real+lambda_droll_imag])
 lambdas.append(lambda_droll_real+lambda_droll_imag)
+lambdas.append(lambda_droll_real-lambda_droll_imag)
 lambdas_real.append(lambda_droll_real)
+
+lambdas_imag.append(abs(lambda_droll_imag))
 #----------------------Spiral motion----------------------------------
 lambda_spiral= (2*Cl*(Clb*Cnr-Cnb*Clr))/(Clp*(CYb*Cnr+4*mub*Cnb)-Cnp*(CYb*Clr+4*mub*Clb))
+
+lambda_spiral_comp= complex((2*Cl*(Clb*Cnr-Cnb*Clr))/(Clp*(CYb*Cnr+4*mub*Cnb)-Cnp*(CYb*Clr+4*mub*Clb)))
 print('Eigenvalues corresponding to spiral motion=', lambda_spiral)
-lambdas.append(lambda_spiral)
+lambdas.append(lambda_spiral_comp)
 lambdas_real.append(lambda_spiral)
 #--------------Time to half the amplitude---------------
 
@@ -98,10 +104,7 @@ for i in lambdas:
 print('Times to reach half amplitude=',t_half)
 print('The time constants=', taus)
 
-# #----------------------Characteristics------------------------------------------------------------
-
-
-#---------For short period------------
+#----------------------Characteristics-------------------------
 
 #------------Half time-----------------
 def thalf(x):
@@ -110,6 +113,48 @@ for i in lambdas_real:
     t_half.append(thalf(i))
 
 #----------Period---------------------
+
+def per(z):
+    return 2*pi*c/(z*Vh_V)#again the velocity needs to be appended
+for j in lambdas_imag:
+    periods.append(per(j))
+
+#-----------Time constant------------------
+#only applies to real eigenvalues
+tau_aperiod = -1*c/lambda_aroll
+tau_spiral = -1*c/lambda_spiral
+taus.append(tau_aperiod)
+taus.append(tau_spiral)
+
+#----------C half values--------------
+#only applies to motions that have an imaginary part
+c_half_shawty = t_half[0]/periods[0]
+c_half_phugoid= t_half[1]/periods[1]
+c_half_droll = t_half[3]/periods[2]
+no_per_half.append(c_half_shawty)
+no_per_half.append(c_half_phugoid)
+no_per_half.append(c_half_droll)
+
+#-----------Logarithmic decrement---------
+#only applies to motions that have an imaginary part
+dec_shawty = lambdas_real[0]*Vh_V*periods[0]/c
+dec_phugoid = lambdas_real[1]*Vh_V*periods[1]/c
+dec_droll = lambdas_real[3]*Vh_V*periods[2]/c
+log_decr.append(dec_shawty)
+log_decr.append(dec_phugoid)
+log_decr.append(dec_droll)
+
+#-----------Damping ratio------------------
+#only applies to motions that have an imaginary part
+damp_shawty = -1*lambdas[0].real/abs(lambdas[0])
+damp_phugoid = -1*lambdas[2].real/abs(lambdas[2])
+damp_droll = -1*lambda_droll_real/abs(lambda_droll_real+lambda_droll_imag)
+damp_ratio.append(damp_shawty)
+damp_ratio.append(damp_phugoid)
+damp_ratio.append(damp_droll)
+
+
+
 
 
 

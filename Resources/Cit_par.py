@@ -1,5 +1,6 @@
 # Citation 550 - Linear simulation
 from math import *
+import cmath
 c = 2.0569
 xcg = 0.25 * c
 
@@ -86,10 +87,15 @@ CZa    = -5.74340
 CZadot = -0.00350
 CZq    = -5.66290
 CZde   = -0.69612
+CZ0 = 0.15 #####replace with the correct value, this is for testing purposes
 
 Cmu    = +0.06990
 Cmadot = +0.17800
 Cmq    = -8.79415
+Cma= -0.5626
+Cmadot = 0.1780
+Cmq= -8.7941
+Cmd= -1.1642
 
 CYb    = -0.7500
 CYbdot =  0     
