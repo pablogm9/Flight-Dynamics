@@ -2,6 +2,7 @@ from Resources.Cit_par import *
 import scipy as np
 import control.matlab as ml
 
+
 ########## ASYMMETRIC EQUATIONS OF MOTION IN STATE-SPACE FORM ##########
 
 y = [(V0/b) * (CYb/(2 * mub)),
@@ -33,6 +34,8 @@ C1 = np.identity(4)
 
 D1 = np.array([[0], [0], [0], [0]])
 
+[e1, v1] = np.linalg.eig(A1)
+
 
 ########## SYMMETRIC EQUATIONS OF MOTION IN STATE-SPACE FORM ##########
 
@@ -62,11 +65,8 @@ C2 = np.identity(4)
 
 D2 = np.array([[0], [0], [0], [0]])
 
-[e, v] = np.linalg.eig(A1)
-#print(y)
-#print(l)
-#print(n)
-#print(A)
-#print(B)
+[e2, v2] = np.linalg.eig(A1)
 
-print(e)
+
+print(e1, v2)
+print(e2, v2)
