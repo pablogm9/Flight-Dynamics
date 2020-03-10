@@ -9,6 +9,8 @@ Created on Mon Mar  9 16:58:44 2020
 
 import numpy as np
 import pandas as pd
+from scipy import stats
+import matplotlib.pyplot as plt
 import os
 import subprocess
 
@@ -16,6 +18,8 @@ import subprocess
 # ------------- A/C Parameters -------------
 BEM = 13600*0.453592  #Basic Empty Mass [kg]
 S = 30.00 #[m^2]
+b = 15.911 #[m]
+A = (b**2)/S #[-]
 
 # ------------- Constants -------------
 p_0 = 101325. #[Pa]
@@ -30,13 +34,12 @@ g_0 = 9.80665 #[m/s^2]
 
 # ------------- Read EXCEL file -------------
 
-datasheet = pd.read_excel('Data/TESTFLIGHT2_Post_Flight_Datasheet.xlsx')
+datasheet = pd.read_excel('Data/REFERENCE_Post_Flight_Datasheet.xlsx')
 datasheet.columns = ['A','B','C','D','E','F','G','H','I','J','K','L','M']
 datasheet.index = range(2,85)
 
 
 # ------------- Extract parameters -------------
-
 
 # --- Names, masses, blockfuel ---
 passenger_names = datasheet.loc[[8,9,10,11,12,13,14,15,16],'D']
@@ -45,7 +48,7 @@ block_fuel = datasheet.loc[18,'D']*0.453592 #[kg]
 
 
 # --- CL_CD SERIES ---
-series = datasheet.loc[[28,29,30,31,32,33,34],['B','C','D','E','F','G','H','I','J']]
+series = datasheet.loc[[28,29,30,31,32,33],['B','C','D','E','F','G','H','I','J']]
 time = series['B'] #[hh:mm:ss]
 et = series['C'] #[sec]
 h_p = series['D'] #[ft]
@@ -112,7 +115,7 @@ Payload = np.sum(passenger_masses)
 rampmass=(BEM+Payload+BlockFuel)
 
 # Weights [N]
-W = np.ones(7)
+W = np.ones(6)
 
 for i in range(len(W)):
     W[i]=(rampmass - F_used[i])*g_0
@@ -129,7 +132,7 @@ V_C = IAS * 0.514444
 
 
 # Static Pressures [Pa]
-p = p_0*((1+a*hp/T_0)**(-g_0/(a*R)))
+p = p_0*((1+T_a*hp/T_0)**(-g_0/(T_a*R)))
 
 # Mach numbers [-]
 M = np.sqrt(np.array(((2/(gamma-1))*(((1+(p_0/p)*(((1+((gamma-1)/(2*gamma))*(rho_0/p_0)*(V_C**2))**(gamma/(gamma-1)))-1))**((gamma-1)/gamma))-1)),dtype= np.float))       
@@ -138,7 +141,7 @@ M = np.sqrt(np.array(((2/(gamma-1))*(((1+(p_0/p)*(((1+((gamma-1)/(2*gamma))*(rho
 T_ISA = (hp*T_a + T_0-273.15)+273.15
 
 # Total temperature in [K]
-TAT = TAT+273.15
+TAT = np.array(TAT,dtype=np.float)+273.15
 
 # Static temperature in [K]
 # Obtained by correcting the TAT for ram rise
@@ -160,7 +163,6 @@ lines =[]
 for i in range(len(W)):
     line = str(hp[i])+' '+str(M[i])+' '+str(delta_T[i])+' '+str(FFL[i])+' '+str(FFR[i])+'\n'
     lines.append(line)
-
 
 input_file = open('matlab.dat', 'w')
 input_file.writelines(lines)
@@ -190,16 +192,12 @@ for line in thrust_lines:
 thrust_L = np.array(thrust_L)
 thrust_R = np.array(thrust_R)
 '''
-thrust_L=np.array([3210.26,2774.51,2320.56,1808.74,1654.41,1946.39,1946.39])
-thrust_R=np.array([3737.29,3018.26,2700.78,2150.14,1935.29,2283.51,2283.51])
+
+
+thrust_L=np.array([3210.26,2774.51,2320.56,1808.74,1654.41,1946.39])
+thrust_R=np.array([3737.29,3018.26,2700.78,2150.14,1935.29,2283.51])
 
 thrust_total=thrust_L+thrust_R
-
-
-
-
-
-
 
 
 # ------------- Compute C_L -------------
@@ -210,15 +208,53 @@ V_TAS = M*np.sqrt(np.array((gamma*R*T),dtype=np.float))
 # Density [kg/m^3]
 rho = p/(R*T)
 
-C_L = W/(0.5*rho*(V_TAS**2)*S)
+C_L = np.array(W/(0.5*rho*(V_TAS**2)*S),dtype=np.float)
 
 
 # ------------- Compute C_D -------------
-
-C_D = thrust_total/(0.5*rho*(V_TAS**2)*S)
-
+C_D = np.array(thrust_total/(0.5*rho*(V_TAS**2)*S),dtype=np.float)
 
 
-# ------------- Return C_L, C_D, Weight -------------
+# ------------- Calculation of C_D_0 and e -------------
+
+# Linear regression of C_D vs C_L^2
+C_L_squared = C_L**2
+z = np.polyfit(C_L_squared,C_D,1) #Coefficients, highest power first
+
+# C_D_0 and e
+e = 1/(np.pi*A*z[0])
+C_D_0 = z[1]
+
+
+# Plot regression as sanity check
+z_p = np.poly1d(z)
+
+C_L_range = np.linspace(C_L_squared[0],C_L_squared[-1],1000)
+z_line = z_p(C_L_range)
+
+plt.plot(C_L_squared,C_D,'rD')
+plt.plot(C_L_range,z_line,'b-')
+plt.show()
+
+
+
+# ------------- Linear interpolation of C_L vs alpha -------------
+
+
+
+
+# ------------- Quadratic interpolation of C_D vs alpha -------------
+
+
+
+
+
+
+
+
+
+
+
+
 
 
