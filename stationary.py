@@ -9,6 +9,22 @@ Created on Mon Mar  9 16:58:44 2020
 
 import numpy as np
 import pandas as pd
+import os
+import subprocess
+
+
+# ------------- A/C Parameters -------------
+BEM = 13600*0.453592  #Basic Empty Mass [kg]
+S = 30.00 #[m^2]
+
+# ------------- Constants -------------
+p_0 = 101325. #[Pa]
+rho_0 = 1.225 #[kg/m^3]
+gamma = 1.4 #[-]
+R = 287.058 #[J/(kg K)]
+a = -6.5/1000 #[deg C / m]
+T_0 = 273.15+15 #[K]
+g_0 = 9.80665 #[m/s^2]
 
 
 
@@ -21,36 +37,25 @@ datasheet.index = range(2,85)
 
 # ------------- Extract parameters -------------
 
+
 # --- Names, masses, blockfuel ---
 passenger_names = datasheet.loc[[8,9,10,11,12,13,14,15,16],'D']
 passenger_masses = datasheet.loc[[8,9,10,11,12,13,14,15,16],'H'] #[kg]
-block_fuel = datasheet.loc[18,'D']*0.453592
+block_fuel = datasheet.loc[18,'D']*0.453592 #[kg]
 
 
-# --- SERIES 1 ---
-series1 = datasheet.loc[[28,29,39,31,32,33,34],['B','C','D','E','F','G','H','I','J']]
-time_1 = series1['B'] #[hh:mm:ss]
-et_1 = series1['C'] #[sec]
-h_p_1 = series1['D'] #[ft]
-IAS_1 = series1['E'] #[kts]
-a_1 = series1['F'] #[deg]
-FFL_1 = series1['G'] #[lbs/hr]
-FFR_1 = series1['H'] #[lbs/hr]
-F_used_1 = series1['I'] #[lbs]
-TAT_1 = series1['J'] #[deg C]
+# --- CL_CD SERIES ---
+series = datasheet.loc[[28,29,30,31,32,33,34],['B','C','D','E','F','G','H','I','J']]
+time = series['B'] #[hh:mm:ss]
+et = series['C'] #[sec]
+h_p = series['D'] #[ft]
+IAS = series['E'] #[kts]
+a = series['F'] #[deg]
+FFL = series['G'] #[lbs/hr]
+FFR = series['H'] #[lbs/hr]
+F_used = np.array(series['I'])*0.453592 #[kg]
+TAT = series['J'] #[deg C]
 
-
-# --- SERIES 2 ---
-series2 = datasheet.loc[[44,45,46,47,48,49,50],['B','C','D','E','F','G','H','I','J']]
-time_2 = series2['B'] #[hh:mm:ss]
-et_2 = series2['C'] #[sec]
-h_p_2 = series2['D'] #[ft]
-IAS_2 = series2['E'] #[kts]
-a_2 = series2['F'] #[deg]
-FFL_2 = series2['G'] #[lbs/hr]
-FFR_2 = series2['H'] #[lbs/hr]
-F_used_2 = series2['I'] #[lbs]
-TAT_2 = series2['J'] #[deg C]
 
 
 # --- ELEVATOR TRIM CURVE ---
@@ -97,111 +102,98 @@ spiral_time = datasheet.loc[[84],['J']] #[hh:mm:ss]
 
 # ------------- Compute Weight -------------
 
+#BlockFuel = Block_fuel #Block Fuel mass in kg [kg]
+BlockFuel = block_fuel
 
+#Total Payload mass in kg [kg]
+Payload = np.sum(passenger_masses)
 
+# Ramp weight [kg]
+rampmass=(BEM+Payload+BlockFuel)
+
+# Weights [N]
+W = np.ones(7)
+
+for i in range(len(W)):
+    W[i]=(rampmass - F_used[i])*g_0
 
 
 # ------------- Compute Thrust -------------
 
 # Pressure altitudes in [m]
-hp_1 = h_p_1 * 0.3048
-hp_2 = h_p_2 * 0.3048
-
+hp = np.array(h_p * 0.3048)
 
 # Calibrated airspeed in [m/s]
 # V_C = V_IAS (neglecting instrument and position errors)
-V_C_1 = IAS_1 * 0.514444
-V_C_2 = IAS_2 * 0.514444
+V_C = IAS * 0.514444
 
 
-# Constants
-p_0 = 101325. #[Pa]
-rho_0 = 1.225 #[kg/m^3]
-gamma = 1.4 #[-]
-g_0 = 9.80665  #[m/s^2]
-R = 287.058 #[J/(kg K)]
-a = -6.5/1000 #[deg C / m]
-T_0 = 273.15+15 #[K]
-
-# Pressures
-p_1 = p_0*((1+a*hp_1/T_0)**(-g_0/(a*R)))
-p_2 = p_0*((1+a*hp_2/T_0)**(-g_0/(a*R)))
+# Static Pressures [Pa]
+p = p_0*((1+a*hp/T_0)**(-g_0/(a*R)))
 
 # Mach numbers [-]
-M_1 = np.sqrt((2/(gamma-1))*(((1+(p_0/p_1)*(((1+((gamma-1)/(2*gamma))*(rho_0/p_0)*(V_C_1**2))**(gamma/(gamma-1)))-1))**((gamma-1)/gamma))-1))         
-M_2 = np.sqrt((2/(gamma-1))*(((1+(p_0/p_2)*(((1+((gamma-1)/(2*gamma))*(rho_0/p_0)*(V_C_2**2))**(gamma/(gamma-1)))-1))**((gamma-1)/gamma))-1))         
+M = np.sqrt(np.array(((2/(gamma-1))*(((1+(p_0/p)*(((1+((gamma-1)/(2*gamma))*(rho_0/p_0)*(V_C**2))**(gamma/(gamma-1)))-1))**((gamma-1)/gamma))-1)),dtype= np.float))       
 
 # T_ISA in [K], for temperature difference
-T_ISA_1 = hp_1*a + T_0
-T_ISA_2 = hp_2*a + T_0
+T_ISA = hp*a + T_0
 
-# Total temperature in [K], corrected for ram rise
-TAT_1 = TAT_1+273.15
-TAT_2 = TAT_2+273.15
+# Total temperature in [K]
+TAT = TAT+273.15
 
-T_1 = TAT_1/(1+((gamma-1)/2)*(M_1**2))
-T_2 = TAT_2/(1+((gamma-1)/2)*(M_2**2))
+# Static temperature in [K]
+# Obtained by correcting the TAT for ram rise
+T = TAT/(1+((gamma-1)/2)*(M**2))
 
 # Temperature differences
-delta_T_1 = T_1 - T_ISA_1
-delta_T_2 = T_2 - T_ISA_2
+delta_T = np.array(T - T_ISA)
 
 # Left engine fuel flows [kg/s]
-FFL_1 = FFL_1*0.000125998
-FFL_2 = FFL_2*0.000125998
+FFL = np.array(FFL*0.000125998)
 
 # Right engine fuel flows [kg/s]
-FFR_1 = FFR_1*0.000125998
-FFR_2 = FFR_2*0.000125998
+FFR  = np.array(FFR*0.000125998)
 
-# Write .mat file
+
+# Write .dat file
+lines =[]
+
+for i in range(len(W)):
+    line = str(hp[i])+' '+str(M[i])+' '+str(delta_T[i])+' '+str(FFL[i])+' '+str(FFR[i])+'\n'
+    lines.append(line)
+
+
+input_file = open('StationaryData/matlab.dat','w')
+input_file.writelines(lines)
+input_file.close()
+
 
 # Call thrust.exe
 
 
-# Extract computed thrust values
 
-
-
+# Extract computed thrust values from new .dat file
 '''
-# Pressure altitude [m]
-h_p_index = np.where(reference_headers=='Dadc1_alt [ft]')[0].flat[0]
-h_p = np.array(reference_data[reference_headers[h_p_index]])*0.3048
-
-# Mach Number [-]
-M_index = np.where(reference_headers=='Dadc1_mach [mach]')[0].flat[0]
-M = np.array(reference_data[reference_headers[M_index]])
-
-# Left engine fuel flow [kg/s]
-left_fuelflow_index = np.where(reference_headers=='lh_engine_FMF [lbs/hr]')[0].flat[0]
-left_fuelflow = np.array(reference_data[reference_headers[left_fuelflow_index]])
-
-# Right engine fuel flow [kg/s]
-right_fuelflow_index = np.where(reference_headers=='rh_engine_FMF [lbs/hr]')[0].flat[0]
-right_fuelflow = np.array(reference_data[reference_headers[right_fuelflow_index]])
-
-# Static temperature converted to [K]
-T_static_index = np.where(reference_headers=='Dadc1_sat [deg C]')[0].flat[0]
-T_static = np.array(reference_data[reference_headers[T_static_index]])+273.15
-
-# ISA temperature [K]
-T0 = 273.15+15 #[K]
-a = -6.5/1000 #[deg C / m]
-T_ISA = h_p*a + T0
-
-# Temperature difference
-delta_T = T_static - T_ISA
-
-# Write parameters to .mat file
-
-
-# Call thrust.exe 
+output_file = open('StationaryData/thrust.dat','r')
+thrust = output_file.readlines()
+output_file.close()
 '''
+
+# Delete created files, both input and output
+os.remove('StationaryData/matlab.dat')
+#os.remove('StationaryData/thrust.dat')
+
+
 
 
 # ------------- Compute C_L -------------
 
+# True airspeed [m/s]
+V_TAS = M*np.sqrt(np.array((gamma*R*T),dtype=np.float))
 
+# Density [kg/m^3]
+rho = p/(R*T)
+
+C_L = W/(0.5*rho*(V_TAS**2)*S)
 
 
 # ------------- Compute C_D -------------

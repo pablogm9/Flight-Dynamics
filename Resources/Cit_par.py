@@ -1,16 +1,16 @@
 # Citation 550 - Linear simulation
-import math as m
-# xcg = 0.25 * c
+from math import *
+c = 2.0569
+xcg = 0.25 * c
 
 # Stationary flight condition
-
-#hp0    =       	      # pressure altitude in the stationary flight condition [m]
+hp0    =      2000 	      # pressure altitude in the stationary flight condition [m]
 #V0     =             # true airspeed in the stationary flight condition [m/sec]
 #alpha0 =             # angle of attack in the stationary flight condition [rad]
 #th0    =             # pitch angle in the stationary flight condition [rad]
 
 # Aircraft mass
-#m      =             # mass [kg]
+m      =   6168          # mass [kg]
 
 # aerodynamic properties
 #e      =             # Oswald factor [ ]
@@ -34,7 +34,7 @@ bh     = 5.791	          # stabilser span [m]
 A      = b ** 2 / S      # wing aspect ratio [ ]
 Ah     = bh ** 2 / Sh    # stabilser aspect ratio [ ]
 Vh_V   = 1	          # [ ]
-ih     = -2 * m.pi / 180   # stabiliser angle of incidence [rad]
+ih     = -2 * pi / 180   # stabiliser angle of incidence [rad]
 
 # Constant values concerning atmosphere and gravity
 
@@ -46,12 +46,14 @@ g      = 9.81            # [m/sec^2] (gravity constant)
 
 # air density [kg/m^3]  
 #rho    = rho0 * power( ((1+(lamda * hp0 / Temp0))), (-((g / (lamda*R)) + 1)))
-#W      = m * g            # [N]       (aircraft weight)
+#rho    = rho0 ** (((1+(lamda * hp0 / Temp0))), (-((g / (lamda*R)) + 1)))
+rho = 1.225
+W      = m * g  # [N]       (aircraft weight)
 
 # Constant values concerning aircraft inertia
 
-#muc    = m / (rho * S * c)
-#mub    = m / (rho * S * b)
+muc    = m / (rho * S * c)
+mub    = m / (rho * S * b)
 KX2    = 0.019
 KZ2    = 0.042
 KXZ    = 0.002
@@ -61,7 +63,7 @@ KY2    = 1.25 * 1.114
 
 Cmac   = 0                      # Moment coefficient about the aerodynamic centre [ ]
 #CNwa   = CLa                    # Wing normal force slope [ ]
-CNha   = 2 * m.pi * Ah / (Ah + 2) # Stabiliser normal force slope [ ]
+CNha   = 2 * pi * Ah / (Ah + 2) # Stabiliser normal force slope [ ]
 depsda = 4 / (A + 2)            # Downwash gradient [ ]
 
 # Lift and drag coefficient
