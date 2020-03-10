@@ -9,6 +9,7 @@ Created on Mon Mar  9 16:58:44 2020
 
 import numpy as np
 import pandas as pd
+import subprocess
 
 
 # ------------- A/C Parameters -------------
@@ -138,8 +139,8 @@ for i in range(len(W_1)):
 # ------------- Compute Thrust -------------
 
 # Pressure altitudes in [m]
-hp_1 = h_p_1 * 0.3048
-hp_2 = h_p_2 * 0.3048
+hp_1 = np.array(h_p_1 * 0.3048)
+hp_2 = np.array(h_p_2 * 0.3048)
 
 
 # Calibrated airspeed in [m/s]
@@ -170,27 +171,46 @@ T_1 = TAT_1/(1+((gamma-1)/2)*(M_1**2))
 T_2 = TAT_2/(1+((gamma-1)/2)*(M_2**2))
 
 # Temperature differences
-delta_T_1 = T_1 - T_ISA_1
-delta_T_2 = T_2 - T_ISA_2
+delta_T_1 = np.array(T_1 - T_ISA_1)
+delta_T_2 = np.array(T_2 - T_ISA_2)
 
 # Left engine fuel flows [kg/s]
-FFL_1 = FFL_1*0.000125998
-FFL_2 = FFL_2*0.000125998
+FFL_1 = np.array(FFL_1*0.000125998)
+FFL_2 = np.array(FFL_2*0.000125998)
 
 # Right engine fuel flows [kg/s]
-FFR_1 = FFR_1*0.000125998
-FFR_2 = FFR_2*0.000125998
+FFR_1 = np.array(FFR_1*0.000125998)
+FFR_2 = np.array(FFR_2*0.000125998)
 
 
-# Write .mat file
+# Write .dat file
 
+lines_1 =[]
+lines_2 = []
+
+for i in range(len(W_1)):
+    line_1 = str(hp_1[i])+' '+str(M_1[i])+' '+str(delta_T_1[i])+' '+str(FFL_1[i])+' '+str(FFR_1[i])+'\n'
+    line_2 = str(hp_2[i])+' '+str(M_2[i])+' '+str(delta_T_2[i])+' '+str(FFL_2[i])+' '+str(FFR_2[i])+'\n'
+    lines_1.append(line_1)
+    lines_2.append(line_2)
+
+all_lines =  lines_1 + lines_2
+
+input_file = open('StationaryData/matlab.dat','w')
+input_file.writelines(all_lines)
+input_file.close()
 
 # Call thrust.exe
 
 
 
-# Extract computed thrust values
 
+'''
+# Extract computed thrust values from new .dat file
+output_file = open('StationaryData/thrust.dat','r')
+thrust = output_file.readlines()
+output_file.close()
+'''
 
 
 
