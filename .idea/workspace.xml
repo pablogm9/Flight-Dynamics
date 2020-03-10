@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="5377f238-fd03-4bd2-9ddb-43d6a7551285" name="Default Changelist" comment="Readme Updated">
+    <list default="true" id="5377f238-fd03-4bd2-9ddb-43d6a7551285" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Analytical.py" beforeDir="false" afterPath="$PROJECT_DIR$/Analytical.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Resources/Cit_par.py" beforeDir="false" afterPath="$PROJECT_DIR$/Resources/Cit_par.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -146,7 +144,7 @@
       <option name="presentableId" value="Default" />
       <updated>1583405442000</updated>
       <workItem from="1583420330854" duration="1304000" />
-      <workItem from="1583774734259" duration="1873000" />
+      <workItem from="1583774734259" duration="2137000" />
     </task>
     <task id="LOCAL-00001" summary="Readme Updated">
       <created>1583409266618</created>
@@ -169,7 +167,14 @@
       <option name="project" value="LOCAL" />
       <updated>1583409815930</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Readme Updated">
+      <created>1583842554829</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1583842554829</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -185,10 +190,10 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="223" y="67" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824@0.0.1536.824" timestamp="1583415012308" />
-    <state x="346" y="0" key="CommitChangelistDialog2" timestamp="1583842496091">
+    <state x="346" y="0" key="CommitChangelistDialog2" timestamp="1583420948259">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="346" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1583842496091" />
+    <state x="346" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1583420948259" />
     <state x="389" y="7" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1583419796123" />
     <state x="463" y="119" key="FileChooserDialogImpl" timestamp="1583420767348">
       <screen x="0" y="0" width="1366" height="728" />
@@ -214,14 +219,6 @@
     </state>
     <state width="1323" height="178" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1583841232357" />
     <state width="1515" height="210" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1583419800193" />
-    <state x="129" y="55" key="MergeDialog" timestamp="1583842511708">
-      <screen x="0" y="0" width="1366" height="728" />
-    </state>
-    <state x="129" y="55" key="MergeDialog/0.0.1366.728@0.0.1366.728" timestamp="1583842511708" />
-    <state x="395" y="80" key="MultipleFileMergeDialog" timestamp="1583842511708">
-      <screen x="0" y="0" width="1366" height="728" />
-    </state>
-    <state x="395" y="80" key="MultipleFileMergeDialog/0.0.1366.728@0.0.1366.728" timestamp="1583842511708" />
     <state x="184" y="7" key="SettingsEditor" timestamp="1583420900781">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -234,15 +231,19 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="379" y="188" key="com.intellij.ide.util.TipDialog/0.0.1366.728@0.0.1366.728" timestamp="1583420330863" />
-    <state x="514" y="291" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1583842544927">
+    <state x="514" y="291" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1583842577669">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="514" y="291" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1366.728@0.0.1366.728" timestamp="1583842544927" />
+    <state x="514" y="291" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1366.728@0.0.1366.728" timestamp="1583842577669" />
     <state x="578" y="329" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1536.824@0.0.1536.824" timestamp="1583419631517" />
-    <state x="354" y="212" key="git4idea.ui.GitUnstashDialog" timestamp="1583842525624">
+    <state x="358" y="155" key="git4idea.merge.GitPullDialog" timestamp="1583842587687">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="354" y="212" key="git4idea.ui.GitUnstashDialog/0.0.1366.728@0.0.1366.728" timestamp="1583842525624" />
+    <state x="358" y="155" key="git4idea.merge.GitPullDialog/0.0.1366.728@0.0.1366.728" timestamp="1583842587687" />
+    <state x="354" y="212" key="git4idea.ui.GitUnstashDialog" timestamp="1583842571564">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="354" y="212" key="git4idea.ui.GitUnstashDialog/0.0.1366.728@0.0.1366.728" timestamp="1583842571564" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/FlightDynamicsAssignment$Cit_par.coverage" NAME="Cit_par Coverage Results" MODIFIED="1583421686081" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Resources" />
