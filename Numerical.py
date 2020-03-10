@@ -1,5 +1,6 @@
 from Resources.Cit_par import *
-import numpy as np
+import scipy as np
+import control.matlab as ml
 
 ########## ASYMMETRIC EQUATIONS OF MOTION IN STATE-SPACE FORM ##########
 
@@ -61,8 +62,11 @@ C2 = np.identity(4)
 
 D2 = np.array([[0], [0], [0], [0]])
 
+[e, v] = np.linalg.eig(A1)
 #print(y)
 #print(l)
 #print(n)
 #print(A)
 #print(B)
+
+print(e)
