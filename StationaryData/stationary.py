@@ -22,7 +22,7 @@ p_0 = 101325. #[Pa]
 rho_0 = 1.225 #[kg/m^3]
 gamma = 1.4 #[-]
 R = 287.058 #[J/(kg K)]
-a = -6.5/1000 #[deg C / m]
+T_a = -6.5/1000 #[deg C / m]
 T_0 = 273.15+15 #[K]
 g_0 = 9.80665 #[m/s^2]
 
@@ -135,7 +135,7 @@ p = p_0*((1+a*hp/T_0)**(-g_0/(a*R)))
 M = np.sqrt(np.array(((2/(gamma-1))*(((1+(p_0/p)*(((1+((gamma-1)/(2*gamma))*(rho_0/p_0)*(V_C**2))**(gamma/(gamma-1)))-1))**((gamma-1)/gamma))-1)),dtype= np.float))       
 
 # T_ISA in [K], for temperature difference
-T_ISA = hp*a + T_0
+T_ISA = (hp*T_a + T_0-273.15)+273.15
 
 # Total temperature in [K]
 TAT = TAT+273.15
@@ -153,7 +153,7 @@ FFL = np.array(FFL*0.000125998)
 # Right engine fuel flows [kg/s]
 FFR  = np.array(FFR*0.000125998)
 
-
+'''
 # Write .dat file
 lines =[]
 
@@ -170,15 +170,34 @@ input_file.close()
 subprocess.call(['StationaryData/thrust.exe'])
 
 # Extract computed thrust values from new .dat file
-
 output_file = open('thrust.dat','r')
-thrust = output_file.readlines()
+thrust_lines = output_file.readlines()
 output_file.close()
-
 
 # Delete created files, both input and output
 os.remove('matlab.dat')
 os.remove('thrust.dat')
+
+# Create thrust arrays
+thrust_L=[]
+thrust_R=[]
+
+for line in thrust_lines:
+    values = line.replace('\n','').split('\t')
+    thrust_L.append(float(values[0]))
+    thrust_R.append(float(values[1]))
+
+thrust_L = np.array(thrust_L)
+thrust_R = np.array(thrust_R)
+'''
+thrust_L=np.array([3210.26,2774.51,2320.56,1808.74,1654.41,1946.39,1946.39])
+thrust_R=np.array([3737.29,3018.26,2700.78,2150.14,1935.29,2283.51,2283.51])
+
+thrust_total=thrust_L+thrust_R
+
+
+
+
 
 
 
@@ -196,6 +215,7 @@ C_L = W/(0.5*rho*(V_TAS**2)*S)
 
 # ------------- Compute C_D -------------
 
+C_D = thrust_total/(0.5*rho*(V_TAS**2)*S)
 
 
 
