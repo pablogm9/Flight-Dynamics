@@ -105,10 +105,10 @@ spiral_time = datasheet.loc[[84],['J']] #[hh:mm:ss]
 
 # ------------- Compute Weight -------------
 
-#BlockFuel = Block_fuel #Block Fuel mass in kg [kg]
+#BlockFuel = Block_fuel #Block Fuel mass in [kg]
 BlockFuel = block_fuel
 
-#Total Payload mass in kg [kg]
+#Total Payload mass in [kg]
 Payload = np.sum(passenger_masses)
 
 # Ramp weight [kg]
