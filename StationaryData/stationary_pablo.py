@@ -102,6 +102,11 @@ aper_roll_time = datasheet.loc[[83],['J']] #[hh:mm:ss]
 spiral_time = datasheet.loc[[84],['J']] #[hh:mm:ss]
 
 
+# -----------------------------------------------
+# ---------- FIRST STATIC MEASUREMENTS ----------
+# -----------------------------------------------
+
+
 
 # ------------- Compute Weight -------------
 
@@ -130,7 +135,6 @@ hp = np.array(h_p * 0.3048)
 # V_C = V_IAS (neglecting instrument and position errors)
 V_C = IAS * 0.514444
 
-
 # Static Pressures [Pa]
 p = p_0*((1+T_a*hp/T_0)**(-g_0/(T_a*R)))
 
@@ -156,7 +160,7 @@ FFL = np.array(FFL*0.000125998)
 # Right engine fuel flows [kg/s]
 FFR  = np.array(FFR*0.000125998)
 
-
+'''
 # Write .dat file
 lines =[]
 
@@ -169,7 +173,7 @@ input_file.writelines(lines)
 input_file.close()
 
 #Call thrust.exe
-subprocess.call(['java','-jar','Thrust.jar'])
+subprocess.call(['thrust.exe'])
 
 # Extract computed thrust values from new .dat file
 output_file = open('thrust.dat','r')
@@ -177,8 +181,8 @@ thrust_lines = output_file.readlines()
 output_file.close()
 
 # Delete created files, both input and output
-#os.remove('matlab.dat')
-#os.remove('thrust.dat')
+os.remove('matlab.dat')
+os.remove('thrust.dat')
 
 # Create thrust arrays
 thrust_L=[]
@@ -192,9 +196,9 @@ for line in thrust_lines:
 thrust_L = np.array(thrust_L)
 thrust_R = np.array(thrust_R)
 
-
-#thrust_L=np.array([3665.28, 2995.58, 2399.84, 1863.53, 1892.36, 2208.98])
-#thrust_R=np.array([3771.2,3057.48,2526.29,2016.03,2070.92,2405.45])
+'''
+thrust_L=np.array([3665.28, 2995.58, 2399.84, 1863.53, 1892.36, 2208.98])
+thrust_R=np.array([3771.2,3057.48,2526.29,2016.03,2070.92,2405.45])
 
 thrust_total=thrust_L+thrust_R
 
@@ -224,7 +228,7 @@ z = np.polyfit(C_L_squared,C_D,1) #Coefficients, highest power first
 e = 1/(np.pi*A*z[0])
 C_D_0 = z[1]
 
-
+'''
 # Plot regression as sanity check
 z_p = np.poly1d(z)
 
@@ -234,15 +238,10 @@ z_line = z_p(C_L_range)
 plt.plot(C_L_squared,C_D,'rD')
 plt.plot(C_L_range,z_line,'b-')
 plt.show()
+'''
 
 
-
-# ------------- Linear interpolation of C_L vs alpha -------------
-
-
-
-
-# ------------- Quadratic interpolation of C_D vs alpha -------------
+# ------------- Plot C_D vs C_L using C_D_0 (and e?) -------------
 
 
 
@@ -253,6 +252,238 @@ plt.show()
 
 
 
+
+
+# -----------------------------------------------
+# ---------- SECOND STATIC MEASUREMENTS ---------
+# -----------------------------------------------
+
+
+# ------------- Compute Weight -------------
+
+# Weights [N]
+W_elevator = np.ones(7)
+
+for i in range(len(W_elevator)):
+    W_elevator[i]=(rampmass - F_used_elevator[i])*g_0
+
+
+# ------------- Compute Thrust -------------
+
+# Pressure altitudes in [m]
+hp_elevator = np.array(h_p_elevator * 0.3048)
+
+# Calibrated airspeed in [m/s]
+# V_C = V_IAS (neglecting instrument and position errors)
+V_C_elevator = IAS_elevator * 0.514444
+
+# Static Pressures [Pa]
+p_elevator = p_0*((1+T_a*hp_elevator/T_0)**(-g_0/(T_a*R)))
+
+# Mach numbers [-]
+M_elevator = np.sqrt(np.array(((2/(gamma-1))*(((1+(p_0/p_elevator)*(((1+((gamma-1)/(2*gamma))*(rho_0/p_0)*(V_C_elevator**2))**(gamma/(gamma-1)))-1))**((gamma-1)/gamma))-1)),dtype= np.float))       
+
+# T_ISA in [K], for temperature difference
+T_ISA_elevator = (hp_elevator*T_a + T_0-273.15)+273.15
+
+# Total temperature in [K]
+TAT_elevayor = np.array(TAT_elevator,dtype=np.float)+273.15
+
+# Static temperature in [K]
+# Obtained by correcting the TAT for ram rise
+T_elevator = TAT_elevator/(1+((gamma-1)/2)*(M_elevator**2))
+
+# Temperature differences
+delta_T_elevator = np.array(T_elevator - T_ISA_elevator)
+
+# Left engine fuel flows [kg/s]
+FFL_elevator = np.array(FFL_elevator*0.000125998)
+
+# Right engine fuel flows [kg/s]
+FFR_elevayor  = np.array(FFR_elevator*0.000125998)
+
+
+# Write .dat file
+lines_elevator =[]
+
+for i in range(len(W)):
+    line = str(hp_elevator[i])+' '+str(M_elevator[i])+' '+str(delta_T_elevator[i])+' '+str(FFL_elevator[i])+' '+str(FFR_elevator[i])+'\n'
+    lines_elevator.append(line)
+
+input_file = open('matlab.dat', 'w')
+input_file.writelines(lines_elevator)
+input_file.close()
+
+#Call thrust.exe
+subprocess.call(['thrust.exe'])
+
+# Extract computed thrust values from new .dat file
+output_file = open('thrust.dat','r')
+thrust_lines_elevator = output_file.readlines()
+output_file.close()
+
+# Delete created files, both input and output
+os.remove('matlab.dat')
+os.remove('thrust.dat')
+
+# Create thrust arrays 
+thrust_L_elevator=[]
+thrust_R_elevator=[]
+
+for line in thrust_lines_elevator:
+    values = line.replace('\n','').split('\t')
+    thrust_L_elevator.append(float(values[0]))
+    thrust_R_elevator.append(float(values[1]))
+
+thrust_L_elevator = np.array(thrust_L_elevator)
+thrust_R_elevator = np.array(thrust_R_elevator)
+
+
+thrust_total_elevator = thrust_L_elevator+thrust_R_elevator
+
+
+# ------------- True airspeed [m/s] -------------
+V_TAS_elevator = M_elevator*np.sqrt(np.array((gamma*R*T_elevator),dtype=np.float))
+
+# ------------- Density [kg/m^3] -------------
+rho_elevator = p_elevator/(R*T_elevator)
+
+
+
+# ------------- Shift in c.g. -------------
+
+
+
+
+
+
+
+
+# ------------- Elevator trim curve -------------
+
+# --- Elevator effectiveness ---
+# This value should be changed to the one found from the c.g. shift 
+C_m_delta = -1.1642 #[-]
+
+# --- Dimensionless thrust moment arm (from Table C.2) ---
+C_m_T_c = -0.0064  #[-]
+
+
+# --- Engine inlet diameter ---
+# (arbitrary value since apparently it doesn't matter, see page 8)
+D = 1.
+
+# --- Thrust coefficient --- 
+T_c = np.array([])
+
+for i in range(len(thrust_total)):
+    T_c_i = thrust_total_elevator[i]/(rho_elevator[i]*(V_TAS_elevator[i]**2)*(D**2))
+    T_c = np.append(T_c,T_c_i)
+
+
+# --- Standard thrust coefficients --- 
+# To calculate it, first calculate the standard thrust T_s 
+# by rerunning thrust.exe using the value of m_f_s instead of FFL and FFR
+
+# Standard engine fuel flow (from Table B.1)
+m_f_s = 0.048 #[kg/s]
+
+
+# Rerunning thrust.exe
+
+standard_lines =[]
+
+for i in range(len(W)):
+    line = str(hp_elevator[i])+' '+str(M_elevator[i])+' '+str(delta_T_elevator[i])+' '+str(m_f_s)+' '+str(m_f_s)+'\n'
+    standard_lines.append(line)
+
+input_file = open('matlab.dat', 'w')
+input_file.writelines(standard_lines)
+input_file.close()
+
+subprocess.call(['thrust.exe'])
+
+output_file = open('thrust.dat','r')
+standard_thrust_lines = output_file.readlines()
+output_file.close()
+
+os.remove('matlab.dat')
+os.remove('thrust.dat')
+
+standard_thrust_L = []
+standard_thrust_R = []
+
+for line in standard_thrust_lines:
+    values = line.replace('\n','').split('\t')
+    standard_thrust_L.append(float(values[0]))
+    standard_thrust_R.append(float(values[1]))
+
+standard_thrust_L = np.array(standard_thrust_L)
+standard_thrust_R = np.array(standard_thrust_R)
+
+standard_thrust = standard_thrust_L + standard_thrust_R
+
+
+# Calculating standard thrust coefficients
+T_c_s = np.array([])
+
+for i in range(len(standard_thrust)):
+    T_c_s_i = standard_thrust[i]/(rho[i]*(V_TAS[i]**2)*(D**2))
+    T_c_s = np.append(T_c_s,T_c_s_i)
+
+
+# --- Reduced elevator deflection --- 
+    
+d_e_reduced = np.array([])
+    
+for i in range(len(standard_thrust)): 
+    a = delta_e[i]-((1/C_m_delta)*C_m_T_c *(T_c_s[i]-T_c[i]))
+    d_e_reduced = np.append(d_e_reduced,a)
+
+
+# --- Reduced EAS --- 
+    
+# Standard A/C weight (from Table B.1)
+W_s = 60500 #[N]
+
+# EAS
+V_EAS_elevator = V_TAS_elevator*np.sqrt(rho_elevator/rho_0)
+
+# Reduced EAS
+V_EAS_reduced = V_EAS_elevator*np.sqrt(W_s/W_elevator)
+
+
+'''
+# --- Plot elevator trim curve ---
+plt.plot(V_EAS_reduced,delta_e_reduced)
+plt.xlabel('Reduced equivalent airspeed [m/s]')
+plt.ylabel('Reduced elevator deflection for equilibrium [deg]')
+plt.title('Elevator trim curve')
+plt.grid()
+plt.show()
+'''
+
+
+# ------------- Elevator control force curve -------------
+
+
+# Reduced elevator force
+F_e_reduced = np.array([])
+    
+for i in range(len(standard_thrust)): 
+    a = F_e*(W_s/W_elevator[i])
+    F_e_reduced = np.append(F_e_reduced,a)
+
+
+'''
+# --- Plot elevator control force curve ---
+plt.plot(V_EAS_reduced,F_e_reduced)
+plt.xlabel('Reduced equivalent airspeed [m/s]')
+plt.ylabel('Reduced elevator control force [N]')
+plt.title('Elevator control force curve')
+plt.grid()
+plt.show()
+'''
 
 
 
