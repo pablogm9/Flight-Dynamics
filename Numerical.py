@@ -65,8 +65,19 @@ C2 = np.identity(4)
 
 D2 = np.array([[0], [0], [0], [0]])
 
+########## Eigenvalues and Eigenvectors ##########
+
 [e2, v2] = np.linalg.eig(A1)
 
+########## Continuous time-state-space Model ##########
+
+t = np.arange(0 , 100, 1)
+
+sys1 = ml.ss(A1, B1, C1, D1)
+
+sys2 = ml.ss(A2, B2, C2, D2)
+
+########## Print Commands ##########
 
 print(e1, v2)
 print(e2, v2)
