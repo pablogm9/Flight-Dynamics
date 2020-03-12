@@ -370,8 +370,9 @@ C_m_T_c = -0.0064  #[-]
 
 
 # --- Engine inlet diameter ---
-# (arbitrary value since apparently it doesn't matter, see page 8)
-D = 1.
+# Engine model: Pratt & Whitney Canada JT15D-4
+# Value taken from all-aero.com
+D = 0.686 #[m]
 
 # --- Thrust coefficient --- 
 T_c = np.array([])
