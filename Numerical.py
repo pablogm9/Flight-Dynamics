@@ -1,6 +1,7 @@
 from Resources.Cit_par import *
 import scipy as np
 import control.matlab as ml
+import matplotlib.pyplot as plt
 
 
 ########## ASYMMETRIC EQUATIONS OF MOTION IN STATE-SPACE FORM ##########
@@ -32,7 +33,7 @@ B1 = np.array([[0, y[5]], [0, 0], [l[4], l[5]], [n[4], n[5]]])
 
 C1 = np.identity(4)
 
-D1 = np.array([[0], [0], [0], [0]])
+D1 = np.array([[0,0], [0,0], [0,0], [0,0]])
 
 [e1, v1] = np.linalg.eig(A1)
 
@@ -71,13 +72,17 @@ D2 = np.array([[0], [0], [0], [0]])
 
 ########## Continuous time-state-space Model ##########
 
-t = np.arange(0 , 100, 1)
+#t = np.arange(0 , 100, 1)
 
 sys1 = ml.ss(A1, B1, C1, D1)
 
 sys2 = ml.ss(A2, B2, C2, D2)
 
+
+#ml.pzmap(sys1) #eigenvalues plot
+#ml.pzmap(sys2)
 ########## Print Commands ##########
 
-print(e1, v2)
-print(e2, v2)
+#print(e1, v2)
+
+#print(e2, v2)
