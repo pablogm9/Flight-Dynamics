@@ -10,7 +10,6 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import Read
-from Thrust import thrust
 
 
 
@@ -24,7 +23,7 @@ parameters =  np.array(['vane_AOA', 'elevator_dte', 'column_fe', 'lh_engine_FMF'
                 'Dadc1_altRate', 'measurement_running', 'measurement_n_rdy', 'display_graph_state', 'display_active_screen', 'time'])
 
 reference_data,reference_headers,reference_descriptions = Read.get_data('ref_data')
-#flight_data,flight_headers,flight_descriptions = Read.get_data('testflight2')
+flight_data,flight_headers,flight_descriptions = Read.get_data('testflight2')
 
 
 
@@ -37,7 +36,7 @@ reference_data,reference_headers,reference_descriptions = Read.get_data('ref_dat
 
 
 
-'''
+
 # ---------------- SAMPLE PLOTS ----------------
 
 # Sample plot, AOA vs t
@@ -78,7 +77,7 @@ plt.ylabel('Delta_e [deg]')
 plt.title('Elevator deflection over time',pad=10)
 
 plt.show()
-'''
+
 
 
 
