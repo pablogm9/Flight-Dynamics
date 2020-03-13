@@ -229,6 +229,7 @@ z = np.polyfit(C_L_squared,C_D,1) #Coefficients, highest power first
 e = 1/(np.pi*A*z[0])
 C_D_0 = z[1]
 
+
 '''
 # Plot regression as sanity check
 z_p = np.poly1d(z)
@@ -241,7 +242,37 @@ plt.plot(C_L_range,z_line,'b-')
 plt.show()
 '''
 
-# ------------- Plot C_D vs C_L using C_D_0 (and e?) -------------
+# ------------- Calculating C_L_alpha, alpha_O -------------
+
+
+C_L_alpha_coefficients = np.polyfit(np.array(a,dtype=np.float),C_L,1)
+C_L_alpha_polynomial = np.poly1d(C_L_alpha_coefficients)
+
+alpha_range = np.linspace(-5,10,10000)
+C_L_range = C_L_alpha_polynomial(alpha_range)
+
+# Slope of C_L vs alpha curve
+C_L_alpha = C_L_alpha_coefficients[0]
+
+# Alpha_0 
+idx = np.where(C_L_range==np.abs(C_L_range).min())
+alpha_0 = alpha_range[idx][0]
+
+
+# ------------- Calculating C_D_alpha -------------
+
+C_D_alpha_coefficients = np.polyfit(np.array(a,dtype=np.float),C_D,1)
+C_D_alpha_polynomial = np.poly1d(C_D_alpha_coefficients)
+
+C_D_range = C_D_alpha_polynomial(alpha_range)
+
+# Slope of C_D vs alpha curve
+C_D_alpha = C_D_alpha_coefficients[0]
+
+
+
+
+
 
 
 # -----------------------------------------------
@@ -494,8 +525,8 @@ for i in range(len(standard_thrust)):
 delta_e_reduced = np.array([])
 
 for i in range(len(standard_thrust)):
-    a = delta_e[i] - ((1 / C_m_delta) * C_m_T_c * (T_c_s[i] - T_c[i]))
-    delta_e_reduced = np.append(delta_e_reduced, a)
+    b = delta_e[i] - ((1 / C_m_delta) * C_m_T_c * (T_c_s[i] - T_c[i]))
+    delta_e_reduced = np.append(delta_e_reduced, b)
 
 # --- Reduced EAS ---
 
@@ -564,8 +595,8 @@ C_m_alpha = elevator_slope*-C_m_delta
 F_e_reduced = np.array([])
 
 for i in range(len(standard_thrust)):
-    a = F_e * (W_s / W_elevator[i])
-    F_e_reduced = np.append(F_e_reduced, a)
+    b = F_e * (W_s / W_elevator[i])
+    F_e_reduced = np.append(F_e_reduced, b)
 
 '''
 # --- Plot elevator control force curve ---
