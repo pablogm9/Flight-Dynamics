@@ -287,7 +287,7 @@ M_elevator = np.sqrt(np.array(((2/(gamma-1))*(((1+(p_0/p_elevator)*(((1+((gamma-
 T_ISA_elevator = (hp_elevator*T_a + T_0-273.15)+273.15
 
 # Total temperature in [K]
-TAT_elevayor = np.array(TAT_elevator,dtype=np.float)+273.15
+TAT_elevator = np.array(TAT_elevator,dtype=np.float)+273.15
 
 # Static temperature in [K]
 # Obtained by correcting the TAT for ram rise
@@ -300,7 +300,7 @@ delta_T_elevator = np.array(T_elevator - T_ISA_elevator)
 FFL_elevator = np.array(FFL_elevator*0.000125998)
 
 # Right engine fuel flows [kg/s]
-FFR_elevayor  = np.array(FFR_elevator*0.000125998)
+FFR_elevator  = np.array(FFR_elevator*0.000125998)
 
 
 # Write .dat file
