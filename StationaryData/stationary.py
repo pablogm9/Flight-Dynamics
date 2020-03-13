@@ -13,6 +13,7 @@ from scipy import stats
 import matplotlib.pyplot as plt
 import os
 import subprocess
+import itertools
 
 
 # ------------- A/C Parameters -------------
@@ -198,11 +199,9 @@ thrust_L = np.array(thrust_L)
 thrust_R = np.array(thrust_R)
 '''
 
+#thrust_total = thrust_L + thrust_R
 
-thrust_L=np.array([3665.28, 2995.58, 2399.84, 1863.53, 1892.36, 2208.98])
-thrust_R=np.array([3771.2,3057.48,2526.29,2016.03,2070.92,2405.45])
-
-thrust_total=thrust_L+thrust_R
+thrust_total = np.array([7436.48, 6053.06, 4926.13, 3879.56, 3963.28, 4614.43])
 
 
 # ------------- Compute C_L -------------
@@ -294,6 +293,7 @@ FFL_elevator = np.array(FFL_elevator * 0.000125998)
 # Right engine fuel flows [kg/s]
 FFR_elevator = np.array(FFR_elevator * 0.000125998)
 
+'''
 # Write .dat file
 lines_elevator = []
 
@@ -329,8 +329,10 @@ for line in thrust_lines_elevator:
 
 thrust_L_elevator = np.array(thrust_L_elevator)
 thrust_R_elevator = np.array(thrust_R_elevator)
+'''
 
-thrust_total_elevator = thrust_L_elevator + thrust_R_elevator
+#thrust_total_elevator = thrust_L_elevator + thrust_R_elevator
+thrust_total_elevator = np.array([4009.72, 4103.43, 4173.47, 4256.74, 3943.49, 3941.25, 3882.84])
 
 # ------------- True airspeed [m/s] -------------
 V_TAS_elevator = M_elevator * np.sqrt(np.array((gamma * R * T_elevator), dtype=np.float))
@@ -443,6 +445,7 @@ for i in range(len(thrust_total_elevator)):
 # Standard engine fuel flow (from Table B.1)
 m_f_s = 0.048  # [kg/s]
 
+'''
 # Rerunning thrust.exe
 standard_lines = []
 
@@ -473,8 +476,11 @@ for line in standard_thrust_lines:
 
 standard_thrust_L = np.array(standard_thrust_L)
 standard_thrust_R = np.array(standard_thrust_R)
+'''
 
-standard_thrust = standard_thrust_L + standard_thrust_R
+#standard_thrust = standard_thrust_L + standard_thrust_R
+standard_thrust = np.array([2678.12, 2801.7 , 2914.08, 3040.54, 2593., 2508.48, 2355.64])
+
 
 # Calculating standard thrust coefficients
 T_c_s = np.array([])
@@ -503,23 +509,43 @@ V_EAS_elevator = V_TAS_elevator * np.sqrt(np.array(rho_elevator,dtype=np.float) 
 V_EAS_reduced = V_EAS_elevator * np.sqrt(W_s / W_elevator)
 
 
-# --- Plot elevator trim curve ---
+# --- Plot elevator trim curve (VELOCITY) ---
 
 # C_m_0 (from Table C.2)
-#
+C_m_0 = 0.0297
 
+'''
 plt.scatter(V_EAS_reduced,delta_e_reduced)
 plt.xlabel('Reduced equivalent airspeed [m/s]')
 plt.ylabel('Reduced elevator deflection for equilibrium [deg]')
-plt.ylim((np.max(delta_e_reduced)*1.1,np.min(delta_e_reduced)*1.1))
-plt.hlines(-)
-plt.title('Elevator trim curve')
+plt.ylim((np.max(delta_e_reduced)*1.5,np.min(delta_e_reduced)*1.1))
+plt.hlines(-C_m_0/C_m_delta,np.min(V_EAS_reduced),np.max(V_EAS_reduced),colors='r',linestyles='dashed',label='delta_e_eq for neutral stability')
+plt.title('Elevator trim curve (vs V_EAS')
+plt.legend()
 plt.grid()
 plt.show()
+'''
 
+# --- Plot elevator trim curve (AOA) ---
+
+new_x, new_y = zip(*sorted(zip(a_elevator, delta_e_reduced)))
+
+'''
+plt.scatter(new_x,new_y)
+plt.xlabel('Angle of Attack [deg]')
+plt.ylabel('Reduced elevator deflection for equilibrium [deg]')
+#plt.xlim((0.,float(max(new_x))*1.1))
+plt.ylim((float(max(new_y))*1.5,float(min(new_y))*1.1))
+plt.hlines(-C_m_0/C_m_delta,float(min(new_x)),float(max(new_x)),colors='r',linestyles='dashed',label='delta_e_eq for neutral stability')
+plt.title('Elevator trim curve (vs. AOA)')
+plt.legend()
+plt.grid()
+plt.show()
+'''
 
 # ------------- Compute C_m_alpha -------------
 # (from trim curve slope and C_m_delta)
+
 
 
 
