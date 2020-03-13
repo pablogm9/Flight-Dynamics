@@ -345,7 +345,7 @@ rho_elevator = p_elevator / (R * T_elevator)
 #--- Calculating C N ----
 
 #Total Mass in [kg]
-W_cg=rampmass-F_used_cg*0.453592
+W_cg = rampmass-F_used_cg*0.453592
 
 # Pressure altitudes in [m]
 hp_cg = np.array(h_p_cg * 0.3048)
@@ -380,38 +380,38 @@ C_N_cg_av=np.mean(C_N_cg)
 
 # --- Shift in CG Calculations ----
 #Value of BEM Moment in [lbs*inch]
-moment_BEM=2672953.5
+moment_BEM = 2672953.5
 
 #Array of x_cg of each passenger in [inches]
-x_cg_payload=np.array([131,131,170,214,214,251,251,288,288])
+x_cg_payload = np.array([131,131,170,214,214,251,251,288,288])
 
 #Array of moment of each passenger in [lbs*inch]
-moment_payload=x_cg_payload*np.array(passenger_masses)*2.20462
+moment_payload = x_cg_payload*np.array(passenger_masses)*2.20462
 
 #Value of total moment of all passengers in [lbs*inch]
-moment_total_payload=np.sum(moment_payload)
+moment_total_payload = np.sum(moment_payload)
 
 #Array of 2 fuel loads in [lbs]
-fuel_load_cg=np.array([block_fuel,block_fuel])*2.20462-F_used_cg # Pounds
+fuel_load_cg = np.array([block_fuel,block_fuel])*2.20462-F_used_cg # Pounds
 
 #Array of 2 moment of fuel loads [lbs*inch]
-moment_fuel_load=np.array([9036.2144,8953.344]) # Choose this Value according to the value of fuel_load_cg from E.2 [Inch*pounds]
+moment_fuel_load = np.array([9036.2144,8953.344]) # Choose this Value according to the value of fuel_load_cg from E.2 [Inch*pounds]
 
 #Total moment of aircraft [lbs*inch]
-moment_total_aircraft=np.array([moment_BEM,moment_BEM])+moment_fuel_load+np.array([moment_total_payload,moment_total_payload])
+moment_total_aircraft = np.array([moment_BEM,moment_BEM])+moment_fuel_load+np.array([moment_total_payload,moment_total_payload])
 
 #Array of 2 cg locations [inches] from the datum line
-x_cg_max=(moment_BEM+moment_total_payload+11451.85)/(rampmass*2.20462) #Once again choose the last value according to your Fuel Load
-x_cg=moment_total_aircraft/(W_cg*2.20462)
+x_cg_max = (moment_BEM+moment_total_payload+11451.85)/(rampmass*2.20462) #Once again choose the last value according to your Fuel Load
+x_cg = moment_total_aircraft/(W_cg*2.20462)
 
 #Change in Elevator deflection
-Delta_e_cg=np.array(delta_e_cg)[1]-np.array(delta_e_cg)[0]
+Delta_e_cg = np.array(delta_e_cg)[1]-np.array(delta_e_cg)[0]
 
 
 # --- Calculating C_m_delta ---
 
 # Change in Elevator deflection
-Delta_e_cg=np.array(delta_e_cg)[1]-np.array(delta_e_cg)[0]
+Delta_e_cg = np.array(delta_e_cg)[1]-np.array(delta_e_cg)[0]
 
 # C_m_delta
 C_m_delta = (1/Delta_e_cg)*C_N_cg_av*((x_cg[1]-x_cg[0])/c)
@@ -529,6 +529,10 @@ plt.show()
 # --- Plot elevator trim curve (AOA) ---
 
 new_x, new_y = zip(*sorted(zip(a_elevator, delta_e_reduced)))
+new_x = np.array(new_x,dtype=np.float)
+new_y = np.array(new_y,dtype=np.float)
+
+
 
 '''
 plt.scatter(new_x,new_y)
@@ -546,8 +550,11 @@ plt.show()
 # ------------- Compute C_m_alpha -------------
 # (from trim curve slope and C_m_delta)
 
+# Linear regression of delta_e_reduced vs a_elevator
+v = np.polyfit(new_x,new_y,1) #Coefficients, highest power first
 
-
+elevator_slope = v[0]
+C_m_alpha = elevator_slope*-C_m_delta
 
 
 # ------------- Elevator control force curve -------------
