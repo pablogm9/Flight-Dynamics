@@ -16,10 +16,11 @@ import subprocess
 
 
 # ------------- A/C Parameters -------------
-BEM = 13600*0.453592  #Basic Empty Mass [kg]
+BEM = 9165*0.453592  #Basic Empty Mass [kg]
 S = 30.00 #[m^2]
 b = 15.911 #[m]
 A = (b**2)/S #[-]
+c=2.0569 #[m]
 
 # ------------- Constants -------------
 p_0 = 101325. #[Pa]
@@ -245,9 +246,69 @@ plt.show()
 
 # ------------- Quadratic interpolation of C_D vs alpha -------------
 
-# ------------- New Weight Calculations for Cm delta -------------
-W_cg_0=rampmass-np.array(F_used_cg)[0]
-W_cg_1=rampmass-np.array(F_used_cg)[1]
+# ------------- Shift in cg ~ C_m_delta calculations -------------
+
+#---Calculating C N----
+
+#Total Mass in [kg]
+W_cg=rampmass-np.array(F_used_cg)*0.453592
+# Pressure altitudes in [m]
+hp_cg = np.array(h_p_cg * 0.3048)
+# Calibrated airspeed in [m/s]
+V_C_cg = IAS_cg* 0.514444
+# Static Pressures [Pa]
+p_cg = p_0*((1+T_a*hp_cg/T_0)**(-g_0/(T_a*R)))
+# Mach numbers [-]
+M_cg = np.sqrt(np.array(((2/(gamma-1))*(((1+(p_0/p_cg)*(((1+((gamma-1)/(2*gamma))*(rho_0/p_0)*(V_C_cg**2))**(gamma/(gamma-1)))-1))**((gamma-1)/gamma))-1)),dtype= np.float))
+# Total temperature in [K]
+TAT_cg= np.array(TAT_cg,dtype=np.float)+273.15
+# Static temperature in [K] - Obtained by correcting the TAT for ram rise
+T_cg = TAT_cg/(1+((gamma-1)/2)*(M_cg**2))
+# True airspeed [m/s]
+V_TAS_cg = M_cg*np.sqrt(np.array((gamma*R*T_cg),dtype=np.float))
+# Density [kg/m^3]
+rho_cg = p_cg/(R*T_cg)
+# Coefficient of normal Force:C N
+C_N_cg = np.array(W_cg/(0.5*rho_cg*(V_TAS_cg**2)*S),dtype=np.float)
+#Averaging out the C_N at both points:
+C_N_cg_av=np.mean(C_N_cg)
+
+
+#---Shift in CG Calculations----
+#Value of BEM Moment in [lbs*inch]
+moment_BEM=2672953.5
+
+#Array of x_cg of each passenger in [inches]
+x_cg_payload=np.array([131,131,170,214,214,251,251,288,288])
+#Array of moment of each passenger in [lbs*inch]
+moment_payload=x_cg_payload*np.array(passenger_masses)*2.20462
+#Value of total moment of all passengers in [lbs*inch]
+moment_total_payload=np.sum(moment_payload)
+#Array of 2 fuel loads in [lbs]
+fuel_load_cg=np.array([block_fuel,block_fuel])*2.20462-np.array(F_used_cg) # Pounds
+
+#Array of 2 moment of fuel loads [lbs*inch]
+moment_fuel_load=np.array([9036.2144,8953.344]) # Choose this Value according to the value of fuel_load_cg from E.2 [Inch*pounds]
+
+#Total moment of aircraft [lbs*inch]
+moment_total_aircraft=np.array([moment_BEM,moment_BEM])+moment_fuel_load+np.array([moment_total_payload,moment_total_payload])
+
+#Array of 2 cg locations [inches] from the datum line
+x_cg_max=(moment_BEM+moment_total_payload+11451.85)/(rampmass*2.20462) #Once again choose the last value according to your Fuel Load
+x_cg=moment_total_aircraft/(W_cg*2.20462)
+
+#Change in Elevator deflection
+Delta_e_cg=np.array(delta_e_cg)[1]-np.array(delta_e_cg)[0]
+
+
+#---Calculating C_m_delta Calculations-------
+#Change in Elevator deflection
+Delta_e_cg=np.array(delta_e_cg)[1]-np.array(delta_e_cg)[0]
+
+C_m_delta=(1/Delta_e_cg)*C_N_cg_av*((x_cg[1]-x_cg[0])/c)
+
+
+
 
 
 
