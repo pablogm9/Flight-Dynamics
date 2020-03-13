@@ -70,12 +70,12 @@ et_elevator = elevator_series['C'] #[sec]
 h_p_elevator = elevator_series['D'] #[ft]
 IAS_elevator  = elevator_series['E'] #[kts]
 a_elevator = elevator_series['F'] #[deg]
-delta_e = elevator_series['G'] #[deg]
+delta_e = np.array(elevator_series['G']) #[deg]
 delta_e_t = elevator_series['H'] #[deg]
 F_e = elevator_series['I'] #[N]
 FFL_elevator = elevator_series['J'] #[lbs/hr]
 FFR_elevator = elevator_series['K'] #[lbs/hr]
-F_used_elevator = elevator_series['L'] #[lbs]
+F_used_elevator = np.array(elevator_series['L'])*0.453592 #[kg]
 TAT_elevator = elevator_series['M'] #[deg C]
 
 
@@ -91,7 +91,7 @@ delta_e_t_cg = cg_series['H'] #[deg]
 F_e = cg_series['I'] #[N]
 FFL_cg = cg_series['J'] #[lbs/hr]
 FFR_cg = cg_series['K'] #[lbs/hr]
-F_used_cg = cg_series['L'] #[lbs]
+F_used_cg = np.array(cg_series['L']) #[lbs]
 TAT_cg = cg_series['M'] #[deg C]
 
 
@@ -279,7 +279,7 @@ M_elevator = np.sqrt(np.array(((2 / (gamma - 1)) * (((1 + (p_0 / p_elevator) * (
 T_ISA_elevator = (hp_elevator * T_a + T_0 - 273.15) + 273.15
 
 # Total temperature in [K]
-TAT_elevayor = np.array(TAT_elevator, dtype=np.float) + 273.15
+TAT_elevator = np.array(TAT_elevator, dtype=np.float) + 273.15
 
 # Static temperature in [K]
 # Obtained by correcting the TAT for ram rise
@@ -297,7 +297,7 @@ FFR_elevator = np.array(FFR_elevator * 0.000125998)
 # Write .dat file
 lines_elevator = []
 
-for i in range(len(W)):
+for i in range(len(W_elevator)):
     line = str(hp_elevator[i]) + ' ' + str(M_elevator[i]) + ' ' + str(delta_T_elevator[i]) + ' ' + str(
         FFL_elevator[i]) + ' ' + str(FFR_elevator[i]) + '\n'
     lines_elevator.append(line)
@@ -343,7 +343,7 @@ rho_elevator = p_elevator / (R * T_elevator)
 #--- Calculating C N ----
 
 #Total Mass in [kg]
-W_cg=rampmass-np.array(F_used_cg)*0.453592
+W_cg=rampmass-F_used_cg*0.453592
 
 # Pressure altitudes in [m]
 hp_cg = np.array(h_p_cg * 0.3048)
@@ -390,7 +390,7 @@ moment_payload=x_cg_payload*np.array(passenger_masses)*2.20462
 moment_total_payload=np.sum(moment_payload)
 
 #Array of 2 fuel loads in [lbs]
-fuel_load_cg=np.array([block_fuel,block_fuel])*2.20462-np.array(F_used_cg) # Pounds
+fuel_load_cg=np.array([block_fuel,block_fuel])*2.20462-F_used_cg # Pounds
 
 #Array of 2 moment of fuel loads [lbs*inch]
 moment_fuel_load=np.array([9036.2144,8953.344]) # Choose this Value according to the value of fuel_load_cg from E.2 [Inch*pounds]
@@ -432,7 +432,7 @@ D = 0.686  # [m]
 # --- Thrust coefficient ---
 T_c = np.array([])
 
-for i in range(len(thrust_total)):
+for i in range(len(thrust_total_elevator)):
     T_c_i = thrust_total_elevator[i] / (rho_elevator[i] * (V_TAS_elevator[i] ** 2) * (D ** 2))
     T_c = np.append(T_c, T_c_i)
 
@@ -446,7 +446,7 @@ m_f_s = 0.048  # [kg/s]
 # Rerunning thrust.exe
 standard_lines = []
 
-for i in range(len(W)):
+for i in range(len(W_elevator)):
     line = str(hp_elevator[i]) + ' ' + str(M_elevator[i]) + ' ' + str(delta_T_elevator[i]) + ' ' + str(m_f_s) + ' ' + str(m_f_s) + '\n'
     standard_lines.append(line)
 
@@ -480,16 +480,16 @@ standard_thrust = standard_thrust_L + standard_thrust_R
 T_c_s = np.array([])
 
 for i in range(len(standard_thrust)):
-    T_c_s_i = standard_thrust[i] / (rho[i] * (V_TAS[i] ** 2) * (D ** 2))
+    T_c_s_i = standard_thrust[i] / (rho_elevator[i] * (V_TAS_elevator[i] ** 2) * (D ** 2))
     T_c_s = np.append(T_c_s, T_c_s_i)
 
 # --- Reduced elevator deflection ---
 
-d_e_reduced = np.array([])
+delta_e_reduced = np.array([])
 
 for i in range(len(standard_thrust)):
     a = delta_e[i] - ((1 / C_m_delta) * C_m_T_c * (T_c_s[i] - T_c[i]))
-    d_e_reduced = np.append(d_e_reduced, a)
+    delta_e_reduced = np.append(delta_e_reduced, a)
 
 # --- Reduced EAS ---
 
@@ -497,20 +497,26 @@ for i in range(len(standard_thrust)):
 W_s = 60500  # [N]
 
 # EAS
-V_EAS_elevator = V_TAS_elevator * np.sqrt(rho_elevator / rho_0)
+V_EAS_elevator = V_TAS_elevator * np.sqrt(np.array(rho_elevator,dtype=np.float) / rho_0)
 
 # Reduced EAS
 V_EAS_reduced = V_EAS_elevator * np.sqrt(W_s / W_elevator)
 
-'''
+
 # --- Plot elevator trim curve ---
-plt.plot(V_EAS_reduced,delta_e_reduced)
+
+# C_m_0 (from Table C.2)
+#
+
+plt.scatter(V_EAS_reduced,delta_e_reduced)
 plt.xlabel('Reduced equivalent airspeed [m/s]')
 plt.ylabel('Reduced elevator deflection for equilibrium [deg]')
+plt.ylim((np.max(delta_e_reduced)*1.1,np.min(delta_e_reduced)*1.1))
+plt.hlines(-)
 plt.title('Elevator trim curve')
 plt.grid()
 plt.show()
-'''
+
 
 # ------------- Compute C_m_alpha -------------
 # (from trim curve slope and C_m_delta)
