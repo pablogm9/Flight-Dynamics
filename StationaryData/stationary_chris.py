@@ -245,6 +245,9 @@ plt.show()
 
 # ------------- Quadratic interpolation of C_D vs alpha -------------
 
+# ------------- New Weight Calculations for Cm delta -------------
+W_cg_0=rampmass-np.array(F_used_cg)[0]
+W_cg_1=rampmass-np.array(F_used_cg)[1]
 
 
 
