@@ -73,7 +73,7 @@ IAS_elevator  = elevator_series['E'] #[kts]
 a_elevator = elevator_series['F'] #[deg]
 delta_e = np.array(elevator_series['G']) #[deg]
 delta_e_t = elevator_series['H'] #[deg]
-F_e = elevator_series['I'] #[N]
+F_e_elevator = np.array(elevator_series['I'],dtype=np.float) #[N]
 FFL_elevator = elevator_series['J'] #[lbs/hr]
 FFR_elevator = elevator_series['K'] #[lbs/hr]
 F_used_elevator = np.array(elevator_series['L'])*0.453592 #[kg]
@@ -532,7 +532,7 @@ V_EAS_elevator = V_TAS_elevator * np.sqrt(np.array(rho_elevator,dtype=np.float) 
 # Reduced EAS
 V_EAS_reduced = V_EAS_elevator * np.sqrt(W_s / W_elevator)
 
-
+'''
 # --- Plot elevator trim curve (VELOCITY) ---
 
 # C_m_0 (from Table C.2)
@@ -548,37 +548,18 @@ plt.title('Elevator trim curve (vs V_EAS')
 plt.legend()
 plt.grid()
 plt.show()
-
-
-# --- Plot elevator trim curve (AOA) ---
-
-new_x, new_y = zip(*sorted(zip(a_elevator, delta_e_reduced)))
-new_x = np.array(new_x,dtype=np.float)
-new_y = np.array(new_y,dtype=np.float)
-
-
-
 '''
-plt.scatter(new_x,new_y)
-plt.xlabel('Angle of Attack [deg]')
-plt.ylabel('Reduced elevator deflection for equilibrium [deg]')
-#plt.xlim((0.,float(max(new_x))*1.1))
-plt.ylim((float(max(new_y))*1.5,float(min(new_y))*1.1))
-plt.hlines(-C_m_0/C_m_delta,float(min(new_x)),float(max(new_x)),colors='r',linestyles='dashed',label='delta_e_eq for neutral stability')
-plt.title('Elevator trim curve (vs. AOA)')
-plt.legend()
-plt.grid()
-plt.show()
-'''
+
 
 # ------------- Compute C_m_alpha -------------
 # (from trim curve slope and C_m_delta)
 
 # Linear regression of delta_e_reduced vs a_elevator
-v = np.polyfit(new_x,new_y,1) #Coefficients, highest power first
+v = np.polyfit(np.array(a_elevator,dtype=np.float),np.array(delta_e_reduced,dtype=np.float),1) #Coefficients, highest power first
 
-elevator_slope = v[0]
-C_m_alpha = elevator_slope*-C_m_delta
+elevator_alpha_slope = v[0]
+elevator_alpha_intercept = v[1]
+C_m_alpha = elevator_alpha_slope*-C_m_delta
 
 
 # ------------- Elevator control force curve -------------
@@ -588,18 +569,9 @@ C_m_alpha = elevator_slope*-C_m_delta
 F_e_reduced = np.array([])
 
 for i in range(len(standard_thrust)):
-    b = F_e * (W_s / W_elevator[i])
+    b = F_e_elevator[i] * (W_s / W_elevator[i])
     F_e_reduced = np.append(F_e_reduced, b)
 
-'''
-# --- Plot elevator control force curve ---
-plt.plot(V_EAS_reduced,F_e_reduced)
-plt.xlabel('Reduced equivalent airspeed [m/s]')
-plt.ylabel('Reduced elevator control force [N]')
-plt.title('Elevator control force curve')
-plt.grid()
-plt.show()
-'''
 
 
 
@@ -607,8 +579,8 @@ plt.show()
 # ------------------- PLOTS ---------------------
 # -----------------------------------------------
 
-# ------------- Cl-Alpha -------------
-
+# ------------- C_L vs Alpha -------------
+'''
 angle_of_attack=np.array(a,dtype = np.float)
 
 plt.plot(alpha_range,C_L_range,'r--',label=r'Constructed C$_L$ vs. $\alpha$ curve',zorder=1)
@@ -623,7 +595,11 @@ plt.title(r'C$_L$ vs. $\alpha$ (linear part)',fontsize=17,pad=25)
 plt.legend()
 plt.grid()
 plt.show()
+'''
 
+
+# ------------- C_D vs Alpha -------------
+'''
 plt.plot(alpha_range,C_D_range,'r--',label=r'Constructed C$_D$ vs. $\alpha$ curve',zorder=1)
 plt.scatter(angle_of_attack,C_D,label='Measurement points',marker='D',color='g',zorder=2,s=75,facecolors='None')
 plt.scatter(alpha_0,C_D_range[idx],marker='o',label=r'Zero-lift drag coefficient, $C_{D_0}$',zorder=3,s=75,color='b')
@@ -636,7 +612,11 @@ plt.title(r'C$_D$ vs. $\alpha$',fontsize=17,pad=25)
 plt.legend()
 plt.grid()
 plt.show()
+'''
 
+
+# ------------- Drag polar, C_L vs C_D -------------
+'''
 plt.plot(C_D_range,C_L_range,'r--',label=r'Constructed C$_L$ vs. C$_D$ curve',zorder=1)
 plt.scatter(C_D,C_L,label='Measurement points',marker='D',color='g',zorder=2,s=75,facecolors='None')
 plt.scatter(C_D_range[idx],C_L_range[idx],marker='o',label=r'Zero-lift drag coefficient, $C_{D_0}$',zorder=3,s=75,color='b')
@@ -649,5 +629,106 @@ plt.title(r'Drag polar (C$_L$ vs. C$_D$)',fontsize=17,pad=25)
 plt.legend(loc='upper left')
 plt.grid()
 plt.show()
+'''
+
+# --- Plot elevator trim curve (0.5*rho*V_EAS_reduced) ---
+
+# C_m_0 (from Table C.2)
+C_m_0 = 0.0297
+
+'''
+delta_range = elevator_alpha_intercept + elevator_alpha_slope*alpha_range
+
+plt.plot(alpha_range,delta_range,'r--',label=r'Constructed trim curve',zorder=1)
+plt.scatter(np.array(a_elevator,dtype=np.float),delta_e_reduced,label='Measurement points',marker='D',color='g',zorder=2,s=75,facecolors='None')
+
+plt.ylim((-2.5,2.5))
+plt.gca().invert_yaxis()
+
+plt.axvline(0,color='k')
+plt.axhline(0,color='k')
+#plt.axhline(C_m_0/1.2,color='k',linestyle='--')
+
+plt.xlim((0,10))
+
+plt.xlabel(r'Angle of Attack, $\alpha$ [deg]',fontsize=13)
+plt.ylabel(r'Reduced elevator deflection, $\delta^*_{e_{eq}}$ [deg]',fontsize=13)
+plt.title(r'Elevator trim curve (vs. $\alpha$)',fontsize=17,pad=25)
+
+plt.grid()
+plt.legend()
+plt.show()
+
+'''
+
+# --- Plot elevator trim curve (V_EAS_reduced) ---
+
+
+# Stall speed in clean cruise configuration
+# From all-aero.com, 95 kts. Could be ISA but it does NOT matter, 
+# since it is only used as an indication in the graph
+
+V_stall = 48.87 #[m/s] 
+
+
+'''
+w = np.polyfit((1/(V_EAS_reduced**2)),delta_e_reduced,1)
+
+V_range = np.linspace(V_stall,100,10000)
+delta_V_range = (1/(V_range**2))*w[0] + w[1]
+
+plt.plot(V_range,delta_V_range,'r--',label=r'Constructed trim curve',zorder=1)
+plt.scatter(V_EAS_reduced,delta_e_reduced,label='Measurement points',marker='D',color='g',zorder=2,s=75,facecolors='None')
+plt.ylim((-3,3))
+
+plt.gca().invert_yaxis()
+
+plt.axhline(0,color='k')
+plt.axvline(V_stall,color='b',linestyle='--',label='Stall speed (clean configuration)')
+
+plt.xlabel(r'Reduced equivalent airspeed, $\tilde{V}_{EAS}$ [m/s]',fontsize=13)
+plt.ylabel(r'Reduced elevator deflection, $\delta^*_{e_{eq}}$ [deg]',fontsize=13)
+plt.title(r'Elevator trim curve (vs. $\tilde{V}_{EAS}$)',fontsize=17,pad=25)
+
+plt.grid()
+plt.legend(loc='lower center')
+plt.show()
+'''
+
+
+
+# --- Plot elevator force curve (V_EAS_reduced) ---
+
+'''
+t = np.polyfit(V_EAS_reduced**2,F_e_reduced,1)
+V_range = np.linspace(V_stall,100,10000)
+F_range = (V_range**2)*t[0] + t[1]
+
+
+plt.plot(V_range,F_range,'r--',label=r'Constructed control force curve',zorder=1)
+plt.scatter(V_EAS_reduced,np.array(F_e_reduced,dtype=np.float),label='Measurement points',marker='D',color='g',zorder=2,s=75,facecolors='None')
+
+
+plt.axhline(0,color='k')
+plt.axvline(V_stall,color='b',linestyle='--',label='Stall speed (clean configuration)')
+
+plt.ylim((-60,100))
+plt.gca().invert_yaxis()
+
+
+plt.xlabel(r'Reduced equivalent airspeed, $\tilde{V}_{EAS}$ [m/s]',fontsize=13)
+plt.ylabel(r'Reduced stick force, $F^*_e$ [N]',fontsize=13)
+plt.title(r'Elevator control force curve (vs. $\tilde{V}_{EAS}$)',fontsize=17,pad=25)
+
+plt.grid()
+plt.legend(loc='lower center')
+plt.show()
+
+'''
+
+
+
+
+
 
 
