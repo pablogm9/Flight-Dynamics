@@ -1,6 +1,6 @@
 from Resources.Cit_par import *
 from math import *
-
+import cmath
 Cl=1
 import numpy as np
 
@@ -154,14 +154,4 @@ damp_droll = -1*lambda_droll_real/abs(lambda_droll_real+lambda_droll_imag)
 damp_ratio.append(damp_shawty)
 damp_ratio.append(damp_phugoid)
 damp_ratio.append(damp_droll)
-
-
-
-
-
-
-
-
-
-
 

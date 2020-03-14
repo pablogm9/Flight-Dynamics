@@ -1,17 +1,19 @@
 # Citation 550 - Linear simulation
 from math import *
-import cmath
-c = 2.0569
-xcg = 0.25 * c
-
+# xcg = 0.25 * c
+rho = 1.225
+m = 1200
+Cma = 0.001
+CZ0 = 0.001
 # Stationary flight condition
-hp0    =      2000 	      # pressure altitude in the stationary flight condition [m]
+
+#hp0    =       	      # pressure altitude in the stationary flight condition [m]
 #V0     =             # true airspeed in the stationary flight condition [m/sec]
 #alpha0 =             # angle of attack in the stationary flight condition [rad]
 #th0    =             # pitch angle in the stationary flight condition [rad]
 
 # Aircraft mass
-m      =   6168          # mass [kg]
+#m      =             # mass [kg]
 
 # aerodynamic properties
 #e      =             # Oswald factor [ ]
@@ -47,9 +49,7 @@ g      = 9.81            # [m/sec^2] (gravity constant)
 
 # air density [kg/m^3]  
 #rho    = rho0 * power( ((1+(lamda * hp0 / Temp0))), (-((g / (lamda*R)) + 1)))
-#rho    = rho0 ** (((1+(lamda * hp0 / Temp0))), (-((g / (lamda*R)) + 1)))
-rho = 1.225
-W      = m * g  # [N]       (aircraft weight)
+#W      = m * g            # [N]       (aircraft weight)
 
 # Constant values concerning aircraft inertia
 
@@ -87,15 +87,10 @@ CZa    = -5.74340
 CZadot = -0.00350
 CZq    = -5.66290
 CZde   = -0.69612
-CZ0 = 0.15 #####replace with the correct value, this is for testing purposes
 
 Cmu    = +0.06990
 Cmadot = +0.17800
 Cmq    = -8.79415
-Cma= -0.5626
-Cmadot = 0.1780
-Cmq= -8.7941
-Cmd= -1.1642
 
 CYb    = -0.7500
 CYbdot =  0     
