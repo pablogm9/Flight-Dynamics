@@ -13,7 +13,6 @@ from scipy import stats
 import matplotlib.pyplot as plt
 import os
 import subprocess
-import itertools
 
 
 # ------------- A/C Parameters -------------
@@ -631,7 +630,7 @@ plt.grid()
 plt.show()
 '''
 
-# --- Plot elevator trim curve (0.5*rho*V_EAS_reduced) ---
+# --- Plot elevator trim curve (AOA) ---
 
 # C_m_0 (from Table C.2)
 C_m_0 = 0.0297
@@ -642,12 +641,12 @@ delta_range = elevator_alpha_intercept + elevator_alpha_slope*alpha_range
 plt.plot(alpha_range,delta_range,'r--',label=r'Constructed trim curve',zorder=1)
 plt.scatter(np.array(a_elevator,dtype=np.float),delta_e_reduced,label='Measurement points',marker='D',color='g',zorder=2,s=75,facecolors='None')
 
-plt.ylim((-2.5,2.5))
+plt.ylim((-5,5))
 plt.gca().invert_yaxis()
 
 plt.axvline(0,color='k')
 plt.axhline(0,color='k')
-#plt.axhline(C_m_0/1.2,color='k',linestyle='--')
+plt.axhline(-C_m_0/C_m_delta,color='k',linestyle='--')
 
 plt.xlim((0,10))
 
@@ -658,8 +657,8 @@ plt.title(r'Elevator trim curve (vs. $\alpha$)',fontsize=17,pad=25)
 plt.grid()
 plt.legend()
 plt.show()
-
 '''
+
 
 # --- Plot elevator trim curve (V_EAS_reduced) ---
 
@@ -693,8 +692,8 @@ plt.title(r'Elevator trim curve (vs. $\tilde{V}_{EAS}$)',fontsize=17,pad=25)
 plt.grid()
 plt.legend(loc='lower center')
 plt.show()
-'''
 
+'''
 
 
 # --- Plot elevator force curve (V_EAS_reduced) ---
