@@ -46,7 +46,7 @@ C1 = np.identity(4)
 
 D1 = np.array([[0,0], [0,0], [0,0], [0,0]])
 
-[e1, v1] = np.linalg.eig(A1)
+
 
 
 ########## SYMMETRIC EQUATIONS OF MOTION IN STATE-SPACE FORM ##########
@@ -79,11 +79,12 @@ D2 = np.array([[0], [0], [0], [0]])
 
 ########## Eigenvalues and Eigenvectors ##########
 
-[e2, v2] = np.linalg.eig(A1)
+[e2, v2] = np.linalg.eig(A2)
+[e1, v1] = np.linalg.eig(A1)
 
 ########## Continuous time-state-space Model ##########
 
-#t = np.arange(0 , 100, 1)
+
 
 sys1 = ml.ss(A1, B1, C1, D1)
 
@@ -96,22 +97,22 @@ sys2 = ml.ss(A2, B2, C2, D2)
 
 ########### Simulation of Eigen Motions########
 dt= 0.1
-t = np.arange(0 , 100, dt)
+t = np.arange(0 , 10, dt)
 
 #Short Period
 
-t_delta = int(10/dt) #time the elevator is deflected
+t_delta = int(0.1/dt) #time the elevator is deflected
 s_def = -0.031 #angle of deflection[rad]
 s_e = np.ones((t_delta,1))
 s_en = np.array([i*s_def for i in s_e])
-zeros = np.zeros((900,1))
+zeros = np.zeros((99,1))
 s_e = np.vstack((s_en,zeros))
 
-#y , T, x = ml.lsim(sys2, s_e, t)
+y , T, x = ml.lsim(sys2, s_e, t)
 
 
-#plt.plot(T, y[:,1])
-#plt.show()
+plt.plot(T, y[:,3])
+plt.show()
 
 # Phugoid
 t = np.arange(0 , 7000, dt)
@@ -129,15 +130,15 @@ zeros_phu = np.zeros((1,missing))
 s_e_phu_n = np.hstack((s_e_phun,zeros_phu))
 s_e_phu_n = np.transpose(s_e_phu_n)
 
-y , T, x = ml.lsim(sys2, s_e_phu_n, t)
-plt.plot(T[1:300], y[:,0][1:300])
-plt.show()
+#y , T, x = ml.lsim(sys2, s_e_phu_n, t)
+#plt.plot(T[1:300], y[:,0][1:300])
+#plt.show()
 
 ####Dutch Roll###########
 
 u = [-0.130899,0] #deflection
 
-#T, y = ctr.impulse_response(sys2,t)
+T, y = ctr.impulse_response(sys2,t)
 #plt.plot(T[1:300], y[1][1:300])
 
 ########## Print Commands ##########
