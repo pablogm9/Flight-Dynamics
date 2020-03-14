@@ -21,7 +21,7 @@ BEM = 9165*0.453592  #Basic Empty Mass [kg]
 S = 30.00 #[m^2]
 b = 15.911 #[m]
 A = (b**2)/S #[-]
-c=2.0569 #[m]
+c = 2.0569 #[m]
 
 
 # ------------- Constants -------------
@@ -141,7 +141,7 @@ V_C = IAS * 0.514444
 p = p_0*((1+T_a*hp/T_0)**(-g_0/(T_a*R)))
 
 # Mach numbers [-]
-M = np.sqrt(np.array(((2/(gamma-1))*(((1+(p_0/p)*(((1+((gamma-1)/(2*gamma))*(rho_0/p_0)*(V_C**2))**(gamma/(gamma-1)))-1))**((gamma-1)/gamma))-1)),dtype= np.float))       
+M = np.sqrt(np.array(((2/(gamma-1))*(((1+(p_0/p)*(((1+((gamma-1)/(2*gamma))*(rho_0/p_0)*(V_C**2))**(gamma/(gamma-1)))-1))**((gamma-1)/gamma))-1)),dtype= np.float))
 
 # T_ISA in [K], for temperature difference
 T_ISA = (hp*T_a + T_0-273.15)+273.15
@@ -248,7 +248,7 @@ plt.show()
 C_L_alpha_coefficients = np.polyfit(np.array(a,dtype=np.float),C_L,1)
 C_L_alpha_polynomial = np.poly1d(C_L_alpha_coefficients)
 
-alpha_range = np.linspace(-5,10,10000)
+alpha_range = np.linspace(-3,12,10000)
 C_L_range = C_L_alpha_polynomial(alpha_range)
 
 # Slope of C_L vs alpha curve
@@ -261,13 +261,9 @@ alpha_0 = alpha_range[idx][0]
 
 # ------------- Calculating C_D_alpha -------------
 
-C_D_alpha_coefficients = np.polyfit(np.array(a,dtype=np.float),C_D,1)
-C_D_alpha_polynomial = np.poly1d(C_D_alpha_coefficients)
-
-C_D_range = C_D_alpha_polynomial(alpha_range)
+C_D_range = C_D_0 + (1/(np.pi*A*e))*(C_L_range**2)
 
 # Slope of C_D vs alpha curve
-C_D_alpha = C_D_alpha_coefficients[0]
 
 
 
@@ -403,7 +399,7 @@ V_TAS_cg = M_cg*np.sqrt(np.array((gamma*R*T_cg),dtype=np.float))
 rho_cg = p_cg/(R*T_cg)
 
 # Coefficient of normal Force:C N
-C_N_cg = np.array(W_cg/(0.5*rho_cg*(V_TAS_cg**2)*S),dtype=np.float)
+C_N_cg = np.array((W_cg*g_0)/(0.5*rho_cg*(V_TAS_cg**2)*S),dtype=np.float)
 
 # Averaging out the C_N at both points:
 C_N_cg_av=np.mean(C_N_cg)
@@ -411,7 +407,7 @@ C_N_cg_av=np.mean(C_N_cg)
 
 # --- Shift in CG Calculations ----
 #Value of BEM Moment in [lbs*inch]
-moment_BEM = 2672953.5
+moment_BEM = 2672972.25
 
 #Array of x_cg of each passenger in [inches]
 x_cg_payload = np.array([131,131,170,214,214,251,251,288,288])
@@ -423,7 +419,7 @@ moment_payload = x_cg_payload*np.array(passenger_masses)*2.20462
 moment_total_payload = np.sum(moment_payload)
 
 #Array of 2 fuel loads in [lbs]
-fuel_load_cg = np.array([block_fuel,block_fuel])*2.20462-F_used_cg # Pounds
+fuel_load_cg = np.array([block_fuel,block_fuel])*2.20462-F_used_cg
 
 #Array of 2 moment of fuel loads [lbs*inch]
 moment_fuel_load = np.array([9036.2144,8953.344]) # Choose this Value according to the value of fuel_load_cg from E.2 [Inch*pounds]
@@ -434,9 +430,6 @@ moment_total_aircraft = np.array([moment_BEM,moment_BEM])+moment_fuel_load+np.ar
 #Array of 2 cg locations [inches] from the datum line
 x_cg_max = (moment_BEM+moment_total_payload+11451.85)/(rampmass*2.20462) #Once again choose the last value according to your Fuel Load
 x_cg = moment_total_aircraft/(W_cg*2.20462)
-
-#Change in Elevator deflection
-Delta_e_cg = np.array(delta_e_cg)[1]-np.array(delta_e_cg)[0]
 
 
 # --- Calculating C_m_delta ---
@@ -545,7 +538,7 @@ V_EAS_reduced = V_EAS_elevator * np.sqrt(W_s / W_elevator)
 # C_m_0 (from Table C.2)
 C_m_0 = 0.0297
 
-'''
+
 plt.scatter(V_EAS_reduced,delta_e_reduced)
 plt.xlabel('Reduced equivalent airspeed [m/s]')
 plt.ylabel('Reduced elevator deflection for equilibrium [deg]')
@@ -555,7 +548,7 @@ plt.title('Elevator trim curve (vs V_EAS')
 plt.legend()
 plt.grid()
 plt.show()
-'''
+
 
 # --- Plot elevator trim curve (AOA) ---
 
@@ -610,16 +603,51 @@ plt.show()
 
 
 
+# -----------------------------------------------
+# ------------------- PLOTS ---------------------
+# -----------------------------------------------
 
+# ------------- Cl-Alpha -------------
 
+angle_of_attack=np.array(a,dtype = np.float)
 
+plt.plot(alpha_range,C_L_range,'r--',label=r'Constructed C$_L$ vs. $\alpha$ curve',zorder=1)
+plt.scatter(angle_of_attack,C_L,label='Measurement points',marker='D',color='g',zorder=2,s=75,facecolors='None')
+plt.scatter(alpha_0,C_L_range[idx],marker='o',label=r'Zero-lift angle of attack, $\alpha_0$',zorder=3,s=75,color='b')
+plt.axvline(0,color='k')
+plt.axhline(0,color='k')
+plt.xlabel(r'Angle of Attack, $\alpha$ [deg]',fontsize=13)
+plt.ylabel(r'Coefficient of Lift, C$_L$ [-]',fontsize=13)
+plt.xlim((-3,12))
+plt.title(r'C$_L$ vs. $\alpha$ (linear part)',fontsize=17,pad=25)
+plt.legend()
+plt.grid()
+plt.show()
 
+plt.plot(alpha_range,C_D_range,'r--',label=r'Constructed C$_D$ vs. $\alpha$ curve',zorder=1)
+plt.scatter(angle_of_attack,C_D,label='Measurement points',marker='D',color='g',zorder=2,s=75,facecolors='None')
+plt.scatter(alpha_0,C_D_range[idx],marker='o',label=r'Zero-lift drag coefficient, $C_{D_0}$',zorder=3,s=75,color='b')
+plt.axvline(0,color='k')
+plt.axhline(0,color='k')
+plt.xlabel(r'Angle of Attack, $\alpha$ [deg]',fontsize=13)
+plt.ylabel(r'Coefficient of Drag, C$_D$ [-]',fontsize=13)
+plt.xlim((-3,12))
+plt.title(r'C$_D$ vs. $\alpha$',fontsize=17,pad=25)
+plt.legend()
+plt.grid()
+plt.show()
 
-
-
-
-
-
-
+plt.plot(C_D_range,C_L_range,'r--',label=r'Constructed C$_L$ vs. C$_D$ curve',zorder=1)
+plt.scatter(C_D,C_L,label='Measurement points',marker='D',color='g',zorder=2,s=75,facecolors='None')
+plt.scatter(C_D_range[idx],C_L_range[idx],marker='o',label=r'Zero-lift drag coefficient, $C_{D_0}$',zorder=3,s=75,color='b')
+plt.axvline(0,color='k')
+plt.axhline(0,color='k')
+plt.xlabel(r'Coefficient of Drag, C$_D$ [-]',fontsize=13)
+plt.ylabel(r'Coefficient of Lift, C$_L$ [-]',fontsize=13)
+#plt.xlim((-3,12))
+plt.title(r'Drag polar (C$_L$ vs. C$_D$)',fontsize=17,pad=25)
+plt.legend(loc='upper left')
+plt.grid()
+plt.show()
 
 
