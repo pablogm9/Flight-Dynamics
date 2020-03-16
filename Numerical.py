@@ -42,28 +42,16 @@ time = np.array(reference_data[[reference_headers[time_index]]])
 
 
 ########## ASYMMETRIC EQUATIONS OF MOTION IN STATE-SPACE FORM ##########
+A1 = np.array([[(V0/b)*(CYb/2/mub), (V0/b)*(Cl/2/mub), (V0/b)*(CYp/2/mub),(V0/b)*(CYr - 4*mub)/2/mub],
+               [   0                     ,     0           ,        2*V0/b      ,           0   ],
+               [(V0/b)*((Clb*KZ2+Cnb*KXZ)/(4*mub*(KX2*KZ2-KXZ**2))), 0 , (V0/b)*((Clp*KZ2+Cnp*KXZ)/(4*mub*(KX2*KZ2-KXZ**2))) , (V0/b)*((Clr*KZ2+Cnr*KXZ)/(4*mub*(KX2*KZ2-KXZ**2)))],
+               [(V0/b)*((Clb*KXZ+Cnb*KX2)/(4*mub*(KX2*KZ2-KXZ**2))), 0 , (V0/b)*((Clp*KXZ+Cnp*KX2)/(4*mub*(KX2*KZ2-KXZ**2))) , (V0/b)*((Clr*KXZ+Cnr*KX2)/(4*mub*(KX2*KZ2-KXZ**2)))]])
 
-P1 = np.array([[(CYb - 2 * mub) * (c/V0), 0, 0, 0],
-               [0, -(1/2), 0, 0],
-               [0, 0, - 4 * mub * KX2 * (c/V0), 4 * mub * KXZ * (c/V0)],
-               [Cnbdot * (c/V0), 0, 4 * mub * KXZ * (c/V0), - 4 * mub * KZ2 * (c/V0)]])
+B1 = np.array([[0          ,    (V0/b) * (CYdr/(2*mub))],
+               [0          ,             0],
+               [(V0/b)*((Clda*KZ2+Cnda*KXZ)/(4*mub*(KX2*KZ2-KXZ**2)))  ,  (V0/b)*((Cldr*KZ2+Cndr*KXZ)/(4*mub*(KX2*KZ2-KXZ**2)))],
+               [(V0/b)*((Clda*KXZ+Cnda*KX2)/(4*mub*(KX2*KZ2-KXZ**2)))  ,  (V0/b)*((Cldr*KXZ+Cndr*KX2)/(4*mub*(KX2*KZ2-KXZ**2)))]])
 
-Q1 = np.array([[-CYb, -CL, -CYp, 4 * mub - CYr],
-               [0, 0, -1, 0],
-               [-Clb, 0, -Clp, -Clr],
-               [-Cnb, 0, -Cnp, -Cnr]])
-
-P11 = np.linalg.inv(P1)
-
-R1 = np.array([[-CYda, -CYdr],
-               [0, 0],
-               [-Clda, -Cldr],
-               [-Cnda, -Cndr]])
-
-A1 = np.matmul(P11, Q1)
-
-
-B1 = np.matmul(P11, R1)
 
 C1 = np.identity(4)
 
@@ -71,30 +59,6 @@ D1 = np.array([[0, 0], [0, 0], [0, 0], [0, 0]])
 
 
 ########## SYMMETRIC EQUATIONS OF MOTION IN STATE-SPACE FORM ##########
-
-P2 = np.array([[- 2 * muc * (c/V0), 0, 0, 0],
-              [0, (CZadot - 2 * muc) * (c/V0), 0, 0],
-              [0, 0, - (c/V0), 0],
-              [0, Cmadot * (c/V0), 0, - 2 * muc * KY2 * (c/V0)]])
-
-Q2 = np.array([[-CXu, -CXa, -CZ0, -CXq],
-               [-CZu, -CZa, CX0, -(CZadot + 2 * muc)],
-               [0, 0, 0, -1],
-               [-Cmu, -Cma, 0, -Cmq]])
-
-P21 = np.linalg.inv(P2)
-
-R2 = np.array([[-CXde],
-               [-CZde],
-               [0],
-               [-Cmde]])
-
-
-#print(np.shape(P21))
-#print(np.shape(Q2))
-#print(np.shape(R2))
-
-
 A2 = np.array([[(V0/c)*CXu/(2*muc)   , (V0/c)*CXa/(2*muc) , (V0/c)*CZO/(2*muc) , (V0/c)*CXq/(2*muc)],
                 [(V0/c)*CZu/(2*muc-CZadot)   , (V0/c)*CZa/(2*muc-CZadot)  , -(V0/c)*CX0/(2*muc-CZadot) , (V0/c)*(2*muc + CZq)/(2*muc-CZadot)],
                [        0                  ,                0           ,           0               ,           V0/c                     ],

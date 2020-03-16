@@ -36,7 +36,7 @@ lambdas.append(Eig_val_short_period_1)
 lambdas.append(Eig_val_short_period_2)
 lambdas_real.append(Eig_val_short_period_real)
 lambdas_imag.append(abs(Eig_val_short_period_imag))
-#print('Eigenvalues corresponding to short period=', Eig_val_short_period_1, Eig_val_short_period_2)
+print('Eigenvalues corresponding to short period=', Eig_val_short_period_1, Eig_val_short_period_2)
 
 
 #--------------------------PHUGOID---------------------------------------------------------
@@ -53,7 +53,7 @@ lambdas.append(Eig_val_phugoid_1)
 lambdas.append(Eig_val_phugoid_2)
 lambdas_real.append(Eig_val_phugoid_real)
 lambdas_imag.append(abs(Eig_val_phugoid_img))
-#print('Eigenvalues corresponding to phugoid=', Eig_val_phugoid_1, Eig_val_phugoid_2)
+print('Eigenvalues corresponding to phugoid=', Eig_val_phugoid_1, Eig_val_phugoid_2)
 
 
 
@@ -64,7 +64,7 @@ lambdas_imag.append(abs(Eig_val_phugoid_img))
 
 #--------------------Aperiodic roll----------------------
 lambda_aroll = Clp/(4*mub*KX2)
-#print('Eigenvalue corresponding to aperiodic roll=', lambda_aroll)
+print('Eigenvalue corresponding to aperiodic roll=', lambda_aroll)
 lambdas.append(lambda_aroll)
 lambdas_real.append(lambda_aroll)
 
@@ -79,7 +79,7 @@ lambda_droll_real = - B_droll / (2 * A_droll)
 lambda_droll_imag = cmath.sqrt(disc_droll)/(2*A_droll)
 Eig_val_droll_1 = lambda_droll_real + lambda_droll_imag
 Eig_val_droll_2 = lambda_droll_real - lambda_droll_imag
-#print('Eigenvalues corresponding to dutch roll=', Eig_val_droll_1, Eig_val_droll_2)
+print('Eigenvalues corresponding to dutch roll=', Eig_val_droll_1, Eig_val_droll_2)
 lambdas.append(Eig_val_droll_1)
 lambdas.append(Eig_val_droll_2)
 lambdas_real.append(lambda_droll_real)
@@ -91,17 +91,16 @@ lambdas_imag.append(abs(lambda_droll_imag))
 #----------------------Spiral motion----------------------------------
 lambda_spiral= (2 * Cl * (Clb * Cnr - Cnb * Clr))/(Clp * (CYb * Cnr + 4*mub * Cnb) - Cnp * (CYb * Clr + 4*mub * Clb))
 disc_spiral = Cl * (Clb * Cnr - Cnb * Clr)
-#print('Eigenvalues corresponding to spiral motion=', lambda_spiral)
+print('Eigenvalues corresponding to spiral motion=', lambda_spiral)
 lambdas.append(lambda_spiral)
 lambdas_real.append(lambda_spiral)
 
 
 x = [i.real for i in lambdas]
 y = [i.imag for i in lambdas]
-print(x, y)
 # plt.scatter(x, y)
 # plt.show()
-print(lambdas)
+#print(lambdas)
 
 
 
