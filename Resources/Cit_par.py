@@ -125,5 +125,5 @@ A1 = np.array([[(V0/b)*(CYb/2/mub), (V0/b)*(Cl/2/mub), (V0/b)*(CYp/2/mub),(V0/b)
                [(V0/b)*((Clb*KXZ+Cnb*KX2)/(4*mub*(KX2*KZ2-KXZ**2))), 0 , (V0/b)*((Clp*KXZ+Cnp*KX2)/(4*mub*(KX2*KZ2-KXZ**2))) , (V0/b)*((Clr*KXZ+Cnr*KX2)/(4*mub*(KX2*KZ2-KXZ**2)))]])
 
 
-[e2, v2] = np.linalg.eig(A1)
-print(e2)
+# [e2, v2] = np.linalg.eig(A1)
+# print(e2)

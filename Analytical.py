@@ -28,9 +28,9 @@ B_sp = - 2 * muc * KY2 * CZa - (2 * muc + CZq) * Cmadot - (2 * muc - CZadot) * C
 C_sp = CZa * Cmq - (2 * muc + CZq) * Cma
 
 Eig_val_short_period_real = (-B_sp) / (2 * A_sp)
-Eig_val_short_period_imag = cmath.sqrt(4 * A_sp * C_sp - B_sp**2) / (2 * A_sp)
-Eig_val_short_period_1 = Eig_val_short_period_real + Eig_val_short_period_imag
-Eig_val_short_period_2 = Eig_val_short_period_real - Eig_val_short_period_imag
+Eig_val_short_period_imag = cmath.sqrt(- 4 * A_sp * C_sp + B_sp**2) / (2 * A_sp)
+Eig_val_short_period_1 = (Eig_val_short_period_real + Eig_val_short_period_imag) * V0/c
+Eig_val_short_period_2 = (Eig_val_short_period_real - Eig_val_short_period_imag) * V0/c
 
 lambdas.append(Eig_val_short_period_1)
 lambdas.append(Eig_val_short_period_2)
@@ -45,9 +45,9 @@ B_ph = 2 * muc * (CXu * Cma - Cmu * CXa) + Cmq * (CZu * CXa - CXu * CZa)
 C_ph = CZ0 * (Cmu * CZa - CZu * Cma)
 
 Eig_val_phugoid_real = (-B_ph) / (2 * A_ph)
-Eig_val_phugoid_img = cmath.sqrt(4 * A_ph * C_ph - B_ph**2) / (2 * A_ph)
-Eig_val_phugoid_1 = Eig_val_phugoid_real + Eig_val_phugoid_img
-Eig_val_phugoid_2 = Eig_val_phugoid_real - Eig_val_phugoid_img
+Eig_val_phugoid_img = cmath.sqrt(- 4 * A_ph * C_ph + B_ph**2) / (2 * A_ph)
+Eig_val_phugoid_1 = (Eig_val_phugoid_real + Eig_val_phugoid_img) * V0/c
+Eig_val_phugoid_2 = (Eig_val_phugoid_real - Eig_val_phugoid_img) * V0/c
 
 lambdas.append(Eig_val_phugoid_1)
 lambdas.append(Eig_val_phugoid_2)
@@ -63,7 +63,7 @@ print('Eigenvalues corresponding to phugoid=', Eig_val_phugoid_1, Eig_val_phugoi
 
 
 #--------------------Aperiodic roll----------------------
-lambda_aroll = Clp/(4*mub*KX2)
+lambda_aroll = Clp/(4*mub*KX2)* V0/b
 print('Eigenvalue corresponding to aperiodic roll=', lambda_aroll)
 lambdas.append(lambda_aroll)
 lambdas_real.append(lambda_aroll)
@@ -77,8 +77,8 @@ C_droll = 4 * mub * Cnb + CYb * Cnr
 disc_droll = B_droll**2 - 4 * A_droll * C_droll
 lambda_droll_real = - B_droll / (2 * A_droll)
 lambda_droll_imag = cmath.sqrt(disc_droll)/(2*A_droll)
-Eig_val_droll_1 = lambda_droll_real + lambda_droll_imag
-Eig_val_droll_2 = lambda_droll_real - lambda_droll_imag
+Eig_val_droll_1 = (lambda_droll_real + lambda_droll_imag) * V0/b
+Eig_val_droll_2 = (lambda_droll_real - lambda_droll_imag) * V0/b
 print('Eigenvalues corresponding to dutch roll=', Eig_val_droll_1, Eig_val_droll_2)
 lambdas.append(Eig_val_droll_1)
 lambdas.append(Eig_val_droll_2)
@@ -89,7 +89,7 @@ lambdas_imag.append(abs(lambda_droll_imag))
 
 
 #----------------------Spiral motion----------------------------------
-lambda_spiral= (2 * Cl * (Clb * Cnr - Cnb * Clr))/(Clp * (CYb * Cnr + 4*mub * Cnb) - Cnp * (CYb * Clr + 4*mub * Clb))
+lambda_spiral= ((2 * Cl * (Clb * Cnr - Cnb * Clr))/(Clp * (CYb * Cnr + 4*mub * Cnb) - Cnp * (CYb * Clr + 4*mub * Clb))) * V0/b
 disc_spiral = Cl * (Clb * Cnr - Cnb * Clr)
 print('Eigenvalues corresponding to spiral motion=', lambda_spiral)
 lambdas.append(lambda_spiral)
@@ -100,7 +100,6 @@ x = [i.real for i in lambdas]
 y = [i.imag for i in lambdas]
 # plt.scatter(x, y)
 # plt.show()
-#print(lambdas)
 
 
 
