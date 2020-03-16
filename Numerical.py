@@ -4,6 +4,7 @@ import control.matlab as ml
 import matplotlib.pyplot as plt
 import control as ctr
 import Read
+Cl = 1.3
 
 #####DEFINITIONS######
 
@@ -59,12 +60,15 @@ D1 = np.array([[0, 0], [0, 0], [0, 0], [0, 0]])
 
 
 ########## SYMMETRIC EQUATIONS OF MOTION IN STATE-SPACE FORM ##########
-A2 = np.array([[(V0/c)*CXu/(2*muc)   , (V0/c)*CXa/(2*muc) , (V0/c)*CZO/(2*muc) , (V0/c)*CXq/(2*muc)],
+A2 = np.array([[(V0/c)*CXu/(2*muc)   , (V0/c)*CXa/(2*muc) , (V0/c)*CZ0/(2*muc) , (V0/c)*CXq/(2*muc)],
                 [(V0/c)*CZu/(2*muc-CZadot)   , (V0/c)*CZa/(2*muc-CZadot)  , -(V0/c)*CX0/(2*muc-CZadot) , (V0/c)*(2*muc + CZq)/(2*muc-CZadot)],
                [        0                  ,                0           ,           0               ,           V0/c                     ],
-               [(V0/c)*(Cmu+CZu*(Cmadot/(2*muc-CZadot)))/(2*muc*KY2), (V0/c)*(Cma + CZa*(Cmadot/(2*muc-CZadot)))/(2*muc*KY2), -(V0/c)*CX0*(Cmadot/(2*muc-CZadot))/(2*muc*KY2) , (V0/c)* (Cmq + Cmadot((2*muc + CZq)/(2*muc - CZadot)))/(2*muc*KY2)]])
+               [(V0/c)*(Cmu+CZu*(Cmadot/(2*muc-CZadot)))/(2*muc*KY2), (V0/c)*(Cma + CZa*(Cmadot/(2*muc-CZadot)))/(2*muc*KY2), -(V0/c)*CX0*(Cmadot/(2*muc-CZadot))/(2*muc*KY2) , (V0/c)* (Cmq + Cmadot*((2*muc + CZq)/(2*muc - CZadot)))/(2*muc*KY2)]])
 
-B2 = np.array()
+B2 = np.array([[(V0/c)*CXde/(2*muc)],
+             [(V0/c)*CZde/(2*muc -CZadot)],
+              [0],
+              [(V0/c)*(Cmde + CZde*(Cmadot/(2*muc-CZadot)))/(2*muc*KY2)]])
 
 C2 = np.identity(4)
 
@@ -100,8 +104,10 @@ dt= 0.1
 
 #Short Period
 t1 = np.arange(0 , 10, dt)
+t_ini = 3634
+t_fin = 3636
 
-u1 = inputcr(reference_delta_e, time, t1, 3634, 3636)
+u1 = inputcr(reference_delta_e, time, t1, t_ini , t_fin)
 
 y1_r , T1_r, x1_r = ml.lsim(sys2, u1, t1)
 
@@ -119,7 +125,7 @@ t3 = np.arange(0 , 100, dt)
 
 u3_t = inputcr(reference_delta_r, time, t3, 3717, 3718.8)
 
-u3 = np.hstack((u3_t, np.zeros((len(t3), 1))))
+u3 = np.hstack((np.zeros((len(t3), 1)), u3_t))
 
 y3_r , T3_r, x3_r = ml.lsim(sys1, u3, t3)
 
@@ -129,7 +135,7 @@ t4 = np.arange(0 , 12, dt)
 
 u4_t = inputcr(reference_delta_a, time, t4, 3550, 3551)
 
-u4 = np.hstack((np.zeros((len(t4), 1)), u4_t))
+u4 = np.hstack((u4_t, np.zeros((len(t4), 1))))
 
 y4_r , T4_r, x4_r = ml.lsim(sys1, u4, t4)
 
@@ -138,7 +144,7 @@ t5 = np.arange(0, 100,dt)
 
 u5_t = inputcr(reference_delta_a, time, t5, 3912, 3920)
 
-u5 = np.hstack((np.zeros((len(t5), 1)), u5_t))
+u5 = np.hstack((u5_t, np.zeros((len(t5), 1))))
 
 y5_r , T5_r, x5_r = ml.lsim(sys1, u5, t5)
 

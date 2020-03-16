@@ -23,7 +23,7 @@ th0    =     0        # pitch angle in the stationary flight condition [rad]
 #CLa    =             # Slope of CL-alpha curve [ ]
 
 # Longitudinal stability
-Cma    = -0.8            # longitudinal stabilty [ ]
+Cma    = -1.2           # longitudinal stabilty [ ]
 Cmde   =   -0.02          # elevator effectiveness [ ]
 
 # Aircraft geometry

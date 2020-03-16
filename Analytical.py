@@ -2,7 +2,7 @@ from Resources.Cit_par import *
 from math import *
 import cmath
 #import matplotlib.pyplot as plt
-Cl=1
+Cl=1.3
 
 
 
