@@ -10,7 +10,8 @@ import numpy as np
 lambdas     = []
 lambdas_real = []
 lambdas_imag = []
-t_half      = []
+t_half_sym      = []
+t_half_asym      = []
 taus        = []
 periods     = []
 no_per_half = []
@@ -93,7 +94,7 @@ lambdas.append(lambda_spiral_comp)
 lambdas_real.append(lambda_spiral)
 #--------------Time to half the amplitude---------------
 
-
+#for symmetric motions
 def tau(y):
     return -1*c/(Vh_V*y)
 #def per(z):
@@ -101,18 +102,25 @@ def tau(y):
 
 for i in lambdas:
     taus.append(tau(i))
-print('Times to reach half amplitude=',t_half)
+
 print('The time constants=', taus)
 
 #----------------------Characteristics-------------------------
 
 #------------Half time-----------------
 #applies to all eigenvalues
-def thalf(x):
+def thalf_sym(x):
     return log(0.5, e) * c / (x * Vh_V) ### The velocity needs to be changed for every eigenmotion, the speed is taken at the beginning of the motion
-for i in lambdas_real:
-    t_half.append(thalf(i))
+def thalf_asym(x):
+    return log(0.5, e) * b / (x * Vh_V) ### The velocity needs to be changed for every eigenmotion, the speed is taken at the beginning of the motion
 
+
+
+for k in range(2):
+        t_half_sym.append(thalf_sym(lambdas_real[k]))
+for k1 in range(2,5):
+        t_half_asym.append(thalf_asym(lambdas_real[k1]))
+print('Times to reach half amplitude for asymmetric motions=',t_half_asym)
 #----------Period---------------------
 #applies to complex eigvalues only
 
@@ -130,9 +138,9 @@ taus.append(tau_spiral)
 
 #----------C half values--------------
 #only applies to motions that have an imaginary part
-c_half_shawty = t_half[0]/periods[0]
-c_half_phugoid= t_half[1]/periods[1]
-c_half_droll = t_half[3]/periods[2]
+c_half_shawty = t_half_sym[0]/periods[0]
+c_half_phugoid= t_half_sym[1]/periods[1]
+c_half_droll = t_half_asym[1]/periods[2]
 no_per_half.append(c_half_shawty)
 no_per_half.append(c_half_phugoid)
 no_per_half.append(c_half_droll)

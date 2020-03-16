@@ -35,7 +35,6 @@ delta_e_index = np.where(parameters=='delta_e')[0].flat[0]
 delta_r_index = np.where(parameters=='delta_r')[0].flat[0]
 delta_a_index = np.where(parameters=='delta_a')[0].flat[0]
 time_index = np.where(parameters=='time')[0].flat[0]
-
 reference_delta_e = np.array(reference_data[reference_headers[delta_e_index]])
 reference_delta_r = np.array(reference_data[reference_headers[delta_r_index]])
 reference_delta_a = np.array(reference_data[reference_headers[delta_a_index]])
@@ -108,7 +107,7 @@ D2 = np.array([[0], [0], [0], [0]])
 #print(C2)
 #print(D2)
 
-########## Eigenvalues and Eigenvectors ##########
+########## EIGENVALUES ##########
 
 [e1, v1] = np.linalg.eig(A1)
 [e2, v2] = np.linalg.eig(A2)
@@ -116,47 +115,36 @@ D2 = np.array([[0], [0], [0], [0]])
 #print(e1, v1)
 #print(e2, v2)
 
-########## Continuous time-state-space Model ##########
-
-#t = np.arange(0 , 100, 1)
+########## STATE SPACE MODEL ##########
 
 sys1 = ml.ss(A1, B1, C1, D1)
 
 sys2 = ml.ss(A2, B2, C2, D2)
 
 
-ml.pzmap(sys1) #eigenvalues plot
-ml.pzmap(sys2)
+#ml.pzmap(sys1) #eigenvalues plot
+#ml.pzmap(sys2)
 
 
-########### Simulation of Eigen Motions########
+########### SIMULATION OF EIGENMOTIONS########
 dt= 0.1
-t = np.arange(0 , 100, dt)
+
 
 #Short Period
+t1 = np.arange(0 , 10, dt)
 
-t_delta = int(10/dt) #time the elevator is deflected
-s_def = -0.031 #angle of deflection[rad]
-s_e = np.ones((t_delta,1))
-s_en = np.array([i*s_def for i in s_e])
-zeros = np.zeros((900,1))
-s_e = np.vstack((s_en,zeros))
+u1 = inputcr(reference_delta_e, time, t1, 3634, 3636)
 
-y , T, x = ml.lsim(sys2, s_e, t)
+y1_r , T1_r, x1_r = ml.lsim(sys2, u1, t1)
 
-
-#plt.plot(T, y[:,1])
-#plt.show()
 
 # Phugoid
 t2 = np.arange(0 , 1000, dt)
 
 u2 = inputcr(reference_delta_e, time, t2, 3237, 3247)
 
+y2_r , T2_r, x2_r = ml.lsim(sys2, u2, t2)
 
-y , T, x = ml.lsim(sys2, u2, t2)
-#plt.plot(T, y[:,0])
-#plt.show()
 
 #Dutch Roll
 t3 = np.arange(0 , 100, dt)
@@ -165,9 +153,8 @@ u3_t = inputcr(reference_delta_r, time, t3, 3717, 3718.8)
 
 u3 = np.hstack((u3_t, np.zeros((len(t3), 1))))
 
-y , T, x = ml.lsim(sys1, u3, t3)
-#plt.plot(T, y[:,0])
-#plt.show()
+y3_r , T3_r, x3_r = ml.lsim(sys1, u3, t3)
+
 
 #Aperiodic roll
 t4 = np.arange(0 , 12, dt)
@@ -176,27 +163,127 @@ u4_t = inputcr(reference_delta_a, time, t4, 3550, 3551)
 
 u4 = np.hstack((np.zeros((len(t4), 1)), u4_t))
 
-y , T, x = ml.lsim(sys1, u4, t4)
-#plt.plot(T, y[:,0])
-#plt.show()
+y4_r , T4_r, x4_r = ml.lsim(sys1, u4, t4)
 
 #Spiral
 t5 = np.arange(0, 100,dt)
 
 u5_t = inputcr(reference_delta_a, time, t5, 3912, 3920)
 
-
 u5 = np.hstack((np.zeros((len(t5), 1)), u5_t))
 
-y , T, x = ml.lsim(sys1, u5, t5)
-#plt.plot(T, y[:,1])
-#plt.show()
+y5_r , T5_r, x5_r = ml.lsim(sys1, u5, t5)
 
 
 
+##########PLOTS OF RESPONSES###########
+#Short Period
+f1 = plt.figure(1)
+plt.plot(T1_r,y1_r[:,0],'r',label='Reference Data')
+#plt.plot(T1_f,y1_r,'b',label='Flight Data')
 
+plt.legend()
+plt.grid()
+plt.xlabel('Time [sec]')
+plt.ylabel('Absoulte Velocity')
+plt.title('Short Period Response - velocity',pad=10)
 
+f2 = plt.figure(2)
+plt.plot(T1_r,y1_r[:,1],'r',label='Reference Data')
+#plt.plot(T1_f,y1_r,'b',label='Flight Data')
+
+plt.legend()
+plt.grid()
+plt.xlabel('Time [sec]')
+plt.ylabel('Angle of Attack[-]')
+plt.title('Short Period Response - Angle of Attack',pad=10)
+
+#Phugoid
+f3 = plt.figure(3)
+plt.plot(T2_r,y2_r[:,0],'r',label='Reference Data')
+#plt.plot(T1_f,y1_r,'b',label='Flight Data')
+
+plt.legend()
+plt.grid()
+plt.xlabel('Time [sec]')
+plt.ylabel('Absoulte Velocity')
+plt.title('Phugoid Response - velocity',pad=10)
+
+f4 = plt.figure(4)
+plt.plot(T2_r,y2_r[:,1],'r',label='Reference Data')
+#plt.plot(T1_f,y1_r,'b',label='Flight Data')
+
+plt.legend()
+plt.grid()
+plt.xlabel('Time [sec]')
+plt.ylabel('Angle of Attack[-]')
+plt.title('Phugoid Response - Angle of Attack',pad=10)
+
+#Dutch Roll
+f5 = plt.figure(5)
+plt.plot(T3_r,y3_r[:,0],'r',label='Reference Data')
+#plt.plot(T1_f,y1_r,'b',label='Flight Data')
+
+plt.legend()
+plt.grid()
+plt.xlabel('Time [sec]')
+plt.ylabel('Side Slip [-]')
+plt.title('Dutch Roll Repsonse - Sideslip',pad=10)
+
+f6 = plt.figure(6)
+plt.plot(T3_r,y3_r[:,1],'r',label='Reference Data')
+#plt.plot(T1_f,y1_r,'b',label='Flight Data')
+
+plt.legend()
+plt.grid()
+plt.xlabel('Time [sec]')
+plt.ylabel('Roll Angle [-]')
+plt.title('Dutch Roll Repsonse - Roll Angle',pad=10)
+
+#Aperiodic Roll
+f7 = plt.figure(7)
+plt.plot(T4_r,y4_r[:,0],'r',label='Reference Data')
+#plt.plot(T1_f,y1_r,'b',label='Flight Data')
+
+plt.legend()
+plt.grid()
+plt.xlabel('Time [sec]')
+plt.ylabel('Side Slip [-]')
+plt.title('Aperiodic Roll Repsonse - Sideslip',pad=10)
+
+f8 = plt.figure(8)
+plt.plot(T4_r,y4_r[:,1],'r',label='Reference Data')
+#plt.plot(T1_f,y1_r,'b',label='Flight Data')
+
+plt.legend()
+plt.grid()
+plt.xlabel('Time [sec]')
+plt.ylabel('Roll Angle [-]')
+plt.title('Aperiodic Roll Repsonse - Roll Angle',pad=10)
+
+#Spiral
+
+f9 = plt.figure(8)
+plt.plot(T5_r,y5_r[:,0],'r',label='Reference Data')
+#plt.plot(T1_f,y1_r,'b',label='Flight Data')
+
+plt.legend()
+plt.grid()
+plt.xlabel('Time [sec]')
+plt.ylabel('Side Slip [-]')
+plt.title('Spiral Repsonse - Sideslip',pad=10)
+
+f10 = plt.figure(10)
+plt.plot(T5_r,y5_r[:,1],'r',label='Reference Data')
+#plt.plot(T1_f,y1_r,'b',label='Flight Data')
+
+plt.legend()
+plt.grid()
+plt.xlabel('Time [sec]')
+plt.ylabel('Roll Angle [-]')
+plt.title('Spiral Repsonse - Roll Angle',pad=10)
 ########## Print Commands ##########
+
 
 
 #print(e1, v2)
