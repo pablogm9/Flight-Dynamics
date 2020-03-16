@@ -3,8 +3,8 @@ from math import *
 # xcg = 0.25 * c
 rho = 1.225
 m = 1200
-Cma = 0.001
-CZ0 = 0.001
+Cma = -0.8
+CZ0 = 0.002
 # Stationary flight condition
 
 #hp0    =       	      # pressure altitude in the stationary flight condition [m]
