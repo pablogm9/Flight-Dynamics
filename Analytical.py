@@ -1,8 +1,9 @@
 from Resources.Cit_par import *
 from math import *
 import cmath
+#import matplotlib.pyplot as plt
 Cl=1
-import numpy as np
+
 
 
 
@@ -22,19 +23,20 @@ damp_ratio  = []
 #========================SYMMETRIC-MOTIONS=============================
 
 #--------------------------SHORT-PERIOD----------------------------
-A_sp = 2 * muc * KY2**2 * (2 * muc - CZadot)
-B_sp = - 2 * muc * KY2**2 * CZa - (2 * muc + CZq) * Cmadot - (2 * muc - CZadot) * Cmq
+A_sp = 2 * muc * KY2 * (2 * muc - CZadot)
+B_sp = - 2 * muc * KY2 * CZa - (2 * muc + CZq) * Cmadot - (2 * muc - CZadot) * Cmq
 C_sp = CZa * Cmq - (2 * muc + CZq) * Cma
 
 Eig_val_short_period_real = (-B_sp) / (2 * A_sp)
-Eig_val_short_period_imag = sqrt(4 * A_sp * C_sp - B_sp**2) / (2 * A_sp)
-Eig_val_short_period_1 = complex(Eig_val_short_period_real, Eig_val_short_period_imag)
-Eig_val_short_period_2 = complex(Eig_val_short_period_real, -1*Eig_val_short_period_imag)
+Eig_val_short_period_imag = cmath.sqrt(4 * A_sp * C_sp - B_sp**2) / (2 * A_sp)
+Eig_val_short_period_1 = Eig_val_short_period_real + Eig_val_short_period_imag
+Eig_val_short_period_2 = Eig_val_short_period_real - Eig_val_short_period_imag
+
 lambdas.append(Eig_val_short_period_1)
 lambdas.append(Eig_val_short_period_2)
 lambdas_real.append(Eig_val_short_period_real)
-lambdas_imag.append(Eig_val_short_period_imag)
-
+lambdas_imag.append(abs(Eig_val_short_period_imag))
+#print('Eigenvalues corresponding to short period=', Eig_val_short_period_1, Eig_val_short_period_2)
 
 
 #--------------------------PHUGOID---------------------------------------------------------
@@ -44,12 +46,14 @@ C_ph = CZ0 * (Cmu * CZa - CZu * Cma)
 
 Eig_val_phugoid_real = (-B_ph) / (2 * A_ph)
 Eig_val_phugoid_img = cmath.sqrt(4 * A_ph * C_ph - B_ph**2) / (2 * A_ph)
-Eig_val_phugoid_1 = complex(Eig_val_phugoid_real, Eig_val_phugoid_img)
-Eig_val_phugoid_2 = complex(Eig_val_phugoid_real, -1*Eig_val_phugoid_img)
+Eig_val_phugoid_1 = Eig_val_phugoid_real + Eig_val_phugoid_img
+Eig_val_phugoid_2 = Eig_val_phugoid_real - Eig_val_phugoid_img
+
 lambdas.append(Eig_val_phugoid_1)
 lambdas.append(Eig_val_phugoid_2)
 lambdas_real.append(Eig_val_phugoid_real)
 lambdas_imag.append(abs(Eig_val_phugoid_img))
+#print('Eigenvalues corresponding to phugoid=', Eig_val_phugoid_1, Eig_val_phugoid_2)
 
 
 
@@ -60,38 +64,47 @@ lambdas_imag.append(abs(Eig_val_phugoid_img))
 
 #--------------------Aperiodic roll----------------------
 lambda_aroll = Clp/(4*mub*KX2)
-lambda_aroll_comp = complex(Clp/(4*mub*KX2))
-print('Eigenvalue corresponding to aperiodic roll=', lambda_aroll_comp)
-lambdas.append(lambda_aroll_comp)
+#print('Eigenvalue corresponding to aperiodic roll=', lambda_aroll)
+lambdas.append(lambda_aroll)
 lambdas_real.append(lambda_aroll)
 
 
 
 #---------------------Dutch roll--------------------------
-#lambda_droll_1=(2*(Cnr+2*KZ2*CYb)+ sqrt(64*KZ2*(4*mub*Cnb+CYb*Cnr)-4*(Cnr+2*KZ2*CYb)**2))/(16*mub*KZ2)
-#lambda_droll_2= (2*(Cnr+2*KZ2*CYb)- sqrt(64*KZ2*(4*mub*Cnb+CYb*Cnr)-4*(Cnr+2*KZ2*CYb)**2))/(16*mub*KZ2)
-
-#lambdas.append(lambda_droll_1)
-#lambdas.append(lambda_droll_2)
-A_droll= 8*mub**2*KZ2
-B_droll = -2*mub*(Cnr+ 2*KZ2*CYb)
-C_droll = 4*mub*Cnb+CYb*Cnr
-disc_droll = B_droll**2-4*A_droll*C_droll
-lambda_droll_real = -B_droll/(2*A_droll)
+A_droll=  8 * mub**2 * KZ2
+B_droll = -2 * mub * (Cnr + 2 * KZ2 * CYb)
+C_droll = 4 * mub * Cnb + CYb * Cnr
+disc_droll = B_droll**2 - 4 * A_droll * C_droll
+lambda_droll_real = - B_droll / (2 * A_droll)
 lambda_droll_imag = cmath.sqrt(disc_droll)/(2*A_droll)
-print('Eigenvalues corresponding to dutch roll=', [lambda_droll_real+lambda_droll_imag])
-lambdas.append(lambda_droll_real+lambda_droll_imag)
-lambdas.append(lambda_droll_real-lambda_droll_imag)
+Eig_val_droll_1 = lambda_droll_real + lambda_droll_imag
+Eig_val_droll_2 = lambda_droll_real - lambda_droll_imag
+#print('Eigenvalues corresponding to dutch roll=', Eig_val_droll_1, Eig_val_droll_2)
+lambdas.append(Eig_val_droll_1)
+lambdas.append(Eig_val_droll_2)
 lambdas_real.append(lambda_droll_real)
-
 lambdas_imag.append(abs(lambda_droll_imag))
-#----------------------Spiral motion----------------------------------
-lambda_spiral= (2*Cl*(Clb*Cnr-Cnb*Clr))/(Clp*(CYb*Cnr+4*mub*Cnb)-Cnp*(CYb*Clr+4*mub*Clb))
 
-lambda_spiral_comp= complex((2*Cl*(Clb*Cnr-Cnb*Clr))/(Clp*(CYb*Cnr+4*mub*Cnb)-Cnp*(CYb*Clr+4*mub*Clb)))
-print('Eigenvalues corresponding to spiral motion=', lambda_spiral)
-lambdas.append(lambda_spiral_comp)
+
+
+
+#----------------------Spiral motion----------------------------------
+lambda_spiral= (2 * Cl * (Clb * Cnr - Cnb * Clr))/(Clp * (CYb * Cnr + 4*mub * Cnb) - Cnp * (CYb * Clr + 4*mub * Clb))
+disc_spiral = Cl * (Clb * Cnr - Cnb * Clr)
+#print('Eigenvalues corresponding to spiral motion=', lambda_spiral)
+lambdas.append(lambda_spiral)
 lambdas_real.append(lambda_spiral)
+
+
+x = [i.real for i in lambdas]
+y = [i.imag for i in lambdas]
+print(x, y)
+# plt.scatter(x, y)
+# plt.show()
+print(lambdas)
+
+
+
 #--------------Time to half the amplitude---------------
 
 #for symmetric motions
@@ -103,7 +116,7 @@ def tau(y):
 for i in lambdas:
     taus.append(tau(i))
 
-print('The time constants=', taus)
+# print('The time constants=', taus)
 
 #----------------------Characteristics-------------------------
 
@@ -120,7 +133,7 @@ for k in range(2):
         t_half_sym.append(thalf_sym(lambdas_real[k]))
 for k1 in range(2,5):
         t_half_asym.append(thalf_asym(lambdas_real[k1]))
-print('Times to reach half amplitude for asymmetric motions=',t_half_asym)
+# print('Times to reach half amplitude for asymmetric motions=',t_half_asym)
 #----------Period---------------------
 #applies to complex eigvalues only
 
@@ -162,4 +175,3 @@ damp_droll = -1*lambda_droll_real/abs(lambda_droll_real+lambda_droll_imag)
 damp_ratio.append(damp_shawty)
 damp_ratio.append(damp_phugoid)
 damp_ratio.append(damp_droll)
-
