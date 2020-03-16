@@ -6,7 +6,6 @@ Cl=1
 
 
 
-
 #empty lists to fill with values
 lambdas     = []
 lambdas_real = []
@@ -43,7 +42,6 @@ print('Eigenvalues corresponding to short period=', Eig_val_short_period_1, Eig_
 A_ph = 2 * muc * (CZa * Cmq - 2 * muc * Cma)
 B_ph = 2 * muc * (CXu * Cma - Cmu * CXa) + Cmq * (CZu * CXa - CXu * CZa)
 C_ph = CZ0 * (Cmu * CZa - CZu * Cma)
-
 Eig_val_phugoid_real = (-B_ph) / (2 * A_ph)
 Eig_val_phugoid_img = cmath.sqrt(- 4 * A_ph * C_ph + B_ph**2) / (2 * A_ph)
 Eig_val_phugoid_1 = (Eig_val_phugoid_real + Eig_val_phugoid_img) * V0/c
