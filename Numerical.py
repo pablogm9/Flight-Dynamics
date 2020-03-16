@@ -62,6 +62,7 @@ R1 = np.array([[-CYda, -CYdr],
 
 A1 = np.matmul(P11, Q1)
 
+
 B1 = np.matmul(P11, R1)
 
 C1 = np.identity(4)
@@ -94,9 +95,12 @@ R2 = np.array([[-CXde],
 #print(np.shape(R2))
 
 
-A2 = np.matmul(P21, Q2)
+A2 = np.array([[(V0/c)*CXu/(2*muc)   , (V0/c)*CXa/(2*muc) , (V0/c)*CZO/(2*muc) , (V0/c)*CXq/(2*muc)],
+                [(V0/c)*CZu/(2*muc-CZadot)   , (V0/c)*CZa/(2*muc-CZadot)  , -(V0/c)*CX0/(2*muc-CZadot) , (V0/c)*(2*muc + CZq)/(2*muc-CZadot)],
+               [        0                  ,                0           ,           0               ,           V0/c                     ],
+               [(V0/c)*(Cmu+CZu*(Cmadot/(2*muc-CZadot)))/(2*muc*KY2), (V0/c)*(Cma + CZa*(Cmadot/(2*muc-CZadot)))/(2*muc*KY2), -(V0/c)*CX0*(Cmadot/(2*muc-CZadot))/(2*muc*KY2) , (V0/c)* (Cmq + Cmadot((2*muc + CZq)/(2*muc - CZadot)))/(2*muc*KY2)]])
 
-B2 = np.matmul(P21, R2)
+B2 = np.array()
 
 C2 = np.identity(4)
 
@@ -198,8 +202,29 @@ plt.xlabel('Time [sec]')
 plt.ylabel('Angle of Attack[-]')
 plt.title('Short Period Response - Angle of Attack',pad=10)
 
-#Phugoid
 f3 = plt.figure(3)
+plt.plot(T1_r,y1_r[:,2],'r',label='Reference Data')
+#plt.plot(T1_f,y1_r,'b',label='Flight Data')
+
+plt.legend()
+plt.grid()
+plt.xlabel('Time [sec]')
+plt.ylabel('Theta[-]')
+plt.title('Short Period Response - Theta',pad=10)
+
+f4 = plt.figure(4)
+plt.plot(T1_r,y1_r[:,3],'r',label='Reference Data')
+#plt.plot(T1_f,y1_r,'b',label='Flight Data')
+
+plt.legend()
+plt.grid()
+plt.xlabel('Time [sec]')
+plt.ylabel('qc/V[-]')
+plt.title('Short Period Response - qc/V',pad=10)
+
+
+#Phugoid
+f5 = plt.figure(5)
 plt.plot(T2_r,y2_r[:,0],'r',label='Reference Data')
 #plt.plot(T1_f,y1_r,'b',label='Flight Data')
 
@@ -209,7 +234,7 @@ plt.xlabel('Time [sec]')
 plt.ylabel('Absoulte Velocity')
 plt.title('Phugoid Response - velocity',pad=10)
 
-f4 = plt.figure(4)
+f6 = plt.figure(6)
 plt.plot(T2_r,y2_r[:,1],'r',label='Reference Data')
 #plt.plot(T1_f,y1_r,'b',label='Flight Data')
 
@@ -219,8 +244,28 @@ plt.xlabel('Time [sec]')
 plt.ylabel('Angle of Attack[-]')
 plt.title('Phugoid Response - Angle of Attack',pad=10)
 
+f7 = plt.figure(7)
+plt.plot(T2_r,y2_r[:,2],'r',label='Reference Data')
+#plt.plot(T1_f,y1_r,'b',label='Flight Data')
+
+plt.legend()
+plt.grid()
+plt.xlabel('Time [sec]')
+plt.ylabel('Theta[-]')
+plt.title('Phugoid Response- Theta',pad=10)
+
+f8 = plt.figure(8)
+plt.plot(T2_r,y2_r[:,3],'r',label='Reference Data')
+#plt.plot(T1_f,y1_r,'b',label='Flight Data')
+
+plt.legend()
+plt.grid()
+plt.xlabel('Time [sec]')
+plt.ylabel('qc/V[-]')
+plt.title('Phugoid Response - qc/V',pad=10)
+
 #Dutch Roll
-f5 = plt.figure(5)
+f9 = plt.figure(9)
 plt.plot(T3_r,y3_r[:,0],'r',label='Reference Data')
 #plt.plot(T1_f,y1_r,'b',label='Flight Data')
 
@@ -230,7 +275,7 @@ plt.xlabel('Time [sec]')
 plt.ylabel('Side Slip [-]')
 plt.title('Dutch Roll Repsonse - Sideslip',pad=10)
 
-f6 = plt.figure(6)
+f10 = plt.figure(10)
 plt.plot(T3_r,y3_r[:,1],'r',label='Reference Data')
 #plt.plot(T1_f,y1_r,'b',label='Flight Data')
 
@@ -240,8 +285,28 @@ plt.xlabel('Time [sec]')
 plt.ylabel('Roll Angle [-]')
 plt.title('Dutch Roll Repsonse - Roll Angle',pad=10)
 
+f11 = plt.figure(11)
+plt.plot(T3_r,y3_r[:,2],'r',label='Reference Data')
+#plt.plot(T1_f,y1_r,'b',label='Flight Data')
+
+plt.legend()
+plt.grid()
+plt.xlabel('Time [sec]')
+plt.ylabel('pb/V [-]')
+plt.title('Dutch Roll Repsonse - pb/V',pad=10)
+
+f12 = plt.figure(12)
+plt.plot(T3_r,y3_r[:,3],'r',label='Reference Data')
+#plt.plot(T1_f,y1_r,'b',label='Flight Data')
+
+plt.legend()
+plt.grid()
+plt.xlabel('Time [sec]')
+plt.ylabel('rb/V [-]')
+plt.title('Dutch Roll Repsonse - rb/V',pad=10)
+
 #Aperiodic Roll
-f7 = plt.figure(7)
+f13 = plt.figure(13)
 plt.plot(T4_r,y4_r[:,0],'r',label='Reference Data')
 #plt.plot(T1_f,y1_r,'b',label='Flight Data')
 
@@ -251,7 +316,7 @@ plt.xlabel('Time [sec]')
 plt.ylabel('Side Slip [-]')
 plt.title('Aperiodic Roll Repsonse - Sideslip',pad=10)
 
-f8 = plt.figure(8)
+f14 = plt.figure(14)
 plt.plot(T4_r,y4_r[:,1],'r',label='Reference Data')
 #plt.plot(T1_f,y1_r,'b',label='Flight Data')
 
@@ -261,9 +326,29 @@ plt.xlabel('Time [sec]')
 plt.ylabel('Roll Angle [-]')
 plt.title('Aperiodic Roll Repsonse - Roll Angle',pad=10)
 
+f15 = plt.figure(15)
+plt.plot(T4_r,y4_r[:,2],'r',label='Reference Data')
+#plt.plot(T1_f,y1_r,'b',label='Flight Data')
+
+plt.legend()
+plt.grid()
+plt.xlabel('Time [sec]')
+plt.ylabel('pb/V [-]')
+plt.title('Aperiodic Roll Repsonse - pb/V',pad=10)
+
+f16 = plt.figure(16)
+plt.plot(T4_r,y4_r[:,3],'r',label='Reference Data')
+#plt.plot(T1_f,y1_r,'b',label='Flight Data')
+
+plt.legend()
+plt.grid()
+plt.xlabel('Time [sec]')
+plt.ylabel('rb/V [-]')
+plt.title('Aperiodic Roll Repsonse - rb/V',pad=10)
+
 #Spiral
 
-f9 = plt.figure(8)
+f17 = plt.figure(17)
 plt.plot(T5_r,y5_r[:,0],'r',label='Reference Data')
 #plt.plot(T1_f,y1_r,'b',label='Flight Data')
 
@@ -273,7 +358,7 @@ plt.xlabel('Time [sec]')
 plt.ylabel('Side Slip [-]')
 plt.title('Spiral Repsonse - Sideslip',pad=10)
 
-f10 = plt.figure(10)
+f18 = plt.figure(18)
 plt.plot(T5_r,y5_r[:,1],'r',label='Reference Data')
 #plt.plot(T1_f,y1_r,'b',label='Flight Data')
 
@@ -282,6 +367,29 @@ plt.grid()
 plt.xlabel('Time [sec]')
 plt.ylabel('Roll Angle [-]')
 plt.title('Spiral Repsonse - Roll Angle',pad=10)
+
+f19 = plt.figure(19)
+plt.plot(T5_r,y5_r[:,2],'r',label='Reference Data')
+#plt.plot(T1_f,y1_r,'b',label='Flight Data')
+
+plt.legend()
+plt.grid()
+plt.xlabel('Time [sec]')
+plt.ylabel('pb/V [-]')
+plt.title('Spiral Repsonse - pb/V',pad=10)
+
+f20 = plt.figure(20)
+plt.plot(T5_r,y5_r[:,3],'r',label='Reference Data')
+#plt.plot(T1_f,y1_r,'b',label='Flight Data')
+
+plt.legend()
+plt.grid()
+plt.xlabel('Time [sec]')
+plt.ylabel('rb/V [-]')
+plt.title('Spiral Repsonse - rb/V',pad=10)
+
+
+
 ########## Print Commands ##########
 
 

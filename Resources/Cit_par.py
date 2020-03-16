@@ -1,16 +1,17 @@
 # Citation 550 - Linear simulation
 from math import *
+import numpy as np
 # xcg = 0.25 * c
 rho = 1.225
-m = 1200
+m = 12000
 Cma = -0.8
 CZ0 = 0.002
 # Stationary flight condition
 
-#hp0    =       	      # pressure altitude in the stationary flight condition [m]
-#V0     =             # true airspeed in the stationary flight condition [m/sec]
+hp0    =    2000   	      # pressure altitude in the stationary flight condition [m]
+V0     = 83            # true airspeed in the stationary flight condition [m/sec]
 #alpha0 =             # angle of attack in the stationary flight condition [rad]
-#th0    =             # pitch angle in the stationary flight condition [rad]
+th0    =     0        # pitch angle in the stationary flight condition [rad]
 
 # Aircraft mass
 #m      =             # mass [kg]
@@ -21,8 +22,8 @@ CZ0 = 0.002
 #CLa    =             # Slope of CL-alpha curve [ ]
 
 # Longitudinal stability
-#Cma    =             # longitudinal stabilty [ ]
-#Cmde   =             # elevator effectiveness [ ]
+Cma    = -0.8            # longitudinal stabilty [ ]
+Cmde   =   -0.02          # elevator effectiveness [ ]
 
 # Aircraft geometry
 
@@ -48,8 +49,8 @@ R      = 287.05          # specific gas constant [m^2/sec^2K]
 g      = 9.81            # [m/sec^2] (gravity constant)
 
 # air density [kg/m^3]  
-#rho    = rho0 * power( ((1+(lamda * hp0 / Temp0))), (-((g / (lamda*R)) + 1)))
-#W      = m * g            # [N]       (aircraft weight)
+#rho    = rho0 **( ((1+(lamda * hp0 / Temp0))), (-((g / (lamda*R)) + 1)))
+W      = m * g            # [N]       (aircraft weight)
 
 # Constant values concerning aircraft inertia
 
@@ -74,14 +75,14 @@ depsda = 4 / (A + 2)            # Downwash gradient [ ]
 
 # Stabiblity derivatives
 
-#CX0    = W * sin(th0) / (0.5 * rho * V0 ** 2 * S)
+CX0    = W * sin(th0) / (0.5 * rho * V0 ** 2 * S)
 CXu    = -0.02792
 CXa    = +0.47966		# Positive! (has been erroneously negative since 1993) 
 CXadot = +0.08330
 CXq    = -0.28170
 CXde   = -0.03728
 
-#CZ0    = -W * cos(th0) / (0.5 * rho * V0 ** 2 * S)
+CZ0    = -W * cos(th0) / (0.5 * rho * V0 ** 2 * S)
 CZu    = -0.37616
 CZa    = -5.74340
 CZadot = -0.00350
@@ -111,3 +112,10 @@ Cnp    =  -0.0602
 Cnr    =  -0.2061
 Cnda   =  -0.0120
 Cndr   =  -0.0939
+
+A2 = np.array([[(V0/c)*CXu/(2*muc)   , (V0/c)*CXa/(2*muc) , (V0/c)*CZ0/(2*muc) , (V0/c)*CXq/(2*muc)],
+                [(V0/c)*CZu/(2*muc-CZadot)   , (V0/c)*CZa/(2*muc-CZadot)  , -(V0/c)*CX0/(2*muc-CZadot) , (V0/c)*(2*muc + CZq)/(2*muc-CZadot)],
+               [        0                  ,                0           ,           0               ,           V0/c                     ],
+               [(V0/c)*(Cmu+CZu*(Cmadot/(2*muc-CZadot)))/(2*muc*KY2), (V0/c)*(Cma + CZa*(Cmadot/(2*muc-CZadot)))/(2*muc*KY2), -(V0/c)*CX0*(Cmadot/(2*muc-CZadot))/(2*muc*KY2) , (V0/c)* (Cmq + Cmadot*((2*muc + CZq)/(2*muc - CZadot)))/(2*muc*KY2)]])
+
+[e2, v2] = np.linalg.eig(A2)
