@@ -30,16 +30,23 @@ parameters =  np.array(['vane_AOA', 'elevator_dte', 'column_fe', 'lh_engine_FMF'
                 'Dadc1_altRate', 'measurement_running', 'measurement_n_rdy', 'display_graph_state', 'display_active_screen', 'time'])
 
 reference_data,reference_headers,reference_descriptions = Read.get_data('ref_data')
-flight_data,flight_headers,flight_descriptions = Read.get_data('testflight2')
+flight_data,flight_headers,flight_descriptions = Read.get_data('testflight')
 
 delta_e_index = np.where(parameters=='delta_e')[0].flat[0]
 delta_r_index = np.where(parameters=='delta_r')[0].flat[0]
 delta_a_index = np.where(parameters=='delta_a')[0].flat[0]
 time_index = np.where(parameters=='time')[0].flat[0]
+
 reference_delta_e = np.array(reference_data[reference_headers[delta_e_index]])
 reference_delta_r = np.array(reference_data[reference_headers[delta_r_index]])
 reference_delta_a = np.array(reference_data[reference_headers[delta_a_index]])
 time = np.array(reference_data[[reference_headers[time_index]]])
+
+flight_delta_e = np.array(reference_data[reference_headers[delta_e_index]])
+flight_delta_r = np.array(reference_data[reference_headers[delta_r_index]])
+flight_delta_a = np.array(reference_data[reference_headers[delta_a_index]])
+time = np.array(reference_data[[reference_headers[time_index]]])
+
 
 
 ########## ASYMMETRIC EQUATIONS OF MOTION IN STATE-SPACE FORM ##########
@@ -112,6 +119,10 @@ u1 = inputcr(reference_delta_e, time, t1, t_ini , t_fin)
 y1_r , T1_r, x1_r = ml.lsim(sys2, u1, t1)
 
 
+u1_f = inputcr(flight_delta_e, time, t1, 3158 , 3160)
+
+y1_f , T1_f, x1_f = ml.lsim(sys2, u1_f, t1)
+
 # Phugoid
 t2 = np.arange(0 , 1000, dt)
 
@@ -119,6 +130,10 @@ u2 = inputcr(reference_delta_e, time, t2, 3237, 3247)
 
 y2_r , T2_r, x2_r = ml.lsim(sys2, u2, t2)
 
+
+u2_f = inputcr(flight_delta_e, time, t2, 3230 , 3240)
+
+y2_f , T2_f, x2_f = ml.lsim(sys2, u2_f, t2)
 
 #Dutch Roll
 t3 = np.arange(0 , 100, dt)
@@ -130,6 +145,12 @@ u3 = np.hstack((np.zeros((len(t3), 1)), u3_t))
 y3_r , T3_r, x3_r = ml.lsim(sys1, u3, t3)
 
 
+u3_t_f = inputcr(flight_delta_r, time, t3, 3479, 3480.1)
+
+u3_f = np.hstack((np.zeros((len(t3), 1)), u3_t_f))
+
+y3_f , T3_f, x3_f = ml.lsim(sys1, u3_f, t3)
+
 #Aperiodic roll
 t4 = np.arange(0 , 12, dt)
 
@@ -138,6 +159,14 @@ u4_t = inputcr(reference_delta_a, time, t4, 3550, 3551)
 u4 = np.hstack((u4_t, np.zeros((len(t4), 1))))
 
 y4_r , T4_r, x4_r = ml.lsim(sys1, u4, t4)
+
+
+u4_t_f = inputcr(flight_delta_a, time, t4, 3607, 3608)
+
+u4_f = np.hstack((u4_t, np.zeros((len(t4), 1))))
+
+y4_f , T4_f, x4_f = ml.lsim(sys1, u4_f, t4)
+
 
 #Spiral
 t5 = np.arange(0, 100,dt)
@@ -148,13 +177,19 @@ u5 = np.hstack((u5_t, np.zeros((len(t5), 1))))
 
 y5_r , T5_r, x5_r = ml.lsim(sys1, u5, t5)
 
+u5_t_f = inputcr(flight_delta_a, time, t5, 3675, 3682)
+
+u5_f = np.hstack((u5_t, np.zeros((len(t5), 1))))
+
+y5_f , T5_f, x5_f = ml.lsim(sys1, u5_f, t5)
+
 
 
 ##########PLOTS OF RESPONSES###########
 #Short Period
 f1 = plt.figure(1)
 plt.plot(T1_r,y1_r[:,0],'r',label='Reference Data')
-#plt.plot(T1_f,y1_r,'b',label='Flight Data')
+plt.plot(T1_f,y1_f[:,0],'b',label='Flight Data')
 
 plt.legend()
 plt.grid()
@@ -164,7 +199,7 @@ plt.title('Short Period Response - velocity',pad=10)
 
 f2 = plt.figure(2)
 plt.plot(T1_r,y1_r[:,1],'r',label='Reference Data')
-#plt.plot(T1_f,y1_r,'b',label='Flight Data')
+plt.plot(T1_f,y1_f[:,1],'b',label='Flight Data')
 
 plt.legend()
 plt.grid()
@@ -174,7 +209,7 @@ plt.title('Short Period Response - Angle of Attack',pad=10)
 
 f3 = plt.figure(3)
 plt.plot(T1_r,y1_r[:,2],'r',label='Reference Data')
-#plt.plot(T1_f,y1_r,'b',label='Flight Data')
+plt.plot(T1_f,y1_f[:,2],'b',label='Flight Data')
 
 plt.legend()
 plt.grid()
@@ -184,7 +219,7 @@ plt.title('Short Period Response - Theta',pad=10)
 
 f4 = plt.figure(4)
 plt.plot(T1_r,y1_r[:,3],'r',label='Reference Data')
-#plt.plot(T1_f,y1_r,'b',label='Flight Data')
+plt.plot(T1_f,y1_f[:,3],'b',label='Flight Data')
 
 plt.legend()
 plt.grid()
@@ -196,7 +231,7 @@ plt.title('Short Period Response - qc/V',pad=10)
 #Phugoid
 f5 = plt.figure(5)
 plt.plot(T2_r,y2_r[:,0],'r',label='Reference Data')
-#plt.plot(T1_f,y1_r,'b',label='Flight Data')
+plt.plot(T2_f,y2_f[:,0],'b',label='Flight Data')
 
 plt.legend()
 plt.grid()
@@ -206,7 +241,7 @@ plt.title('Phugoid Response - velocity',pad=10)
 
 f6 = plt.figure(6)
 plt.plot(T2_r,y2_r[:,1],'r',label='Reference Data')
-#plt.plot(T1_f,y1_r,'b',label='Flight Data')
+plt.plot(T2_f,y2_f[:,1],'b',label='Flight Data')
 
 plt.legend()
 plt.grid()
@@ -216,7 +251,7 @@ plt.title('Phugoid Response - Angle of Attack',pad=10)
 
 f7 = plt.figure(7)
 plt.plot(T2_r,y2_r[:,2],'r',label='Reference Data')
-#plt.plot(T1_f,y1_r,'b',label='Flight Data')
+plt.plot(T2_f,y2_f[:,2],'b',label='Flight Data')
 
 plt.legend()
 plt.grid()
@@ -226,7 +261,7 @@ plt.title('Phugoid Response- Theta',pad=10)
 
 f8 = plt.figure(8)
 plt.plot(T2_r,y2_r[:,3],'r',label='Reference Data')
-#plt.plot(T1_f,y1_r,'b',label='Flight Data')
+plt.plot(T2_f,y2_f[:,3],'b',label='Flight Data')
 
 plt.legend()
 plt.grid()
@@ -237,7 +272,7 @@ plt.title('Phugoid Response - qc/V',pad=10)
 #Dutch Roll
 f9 = plt.figure(9)
 plt.plot(T3_r,y3_r[:,0],'r',label='Reference Data')
-#plt.plot(T1_f,y1_r,'b',label='Flight Data')
+plt.plot(T3_f,y3_f[:,0],'b',label='Flight Data')
 
 plt.legend()
 plt.grid()
@@ -247,7 +282,7 @@ plt.title('Dutch Roll Repsonse - Sideslip',pad=10)
 
 f10 = plt.figure(10)
 plt.plot(T3_r,y3_r[:,1],'r',label='Reference Data')
-#plt.plot(T1_f,y1_r,'b',label='Flight Data')
+plt.plot(T3_f,y3_f[:,1],'b',label='Flight Data')
 
 plt.legend()
 plt.grid()
@@ -257,7 +292,7 @@ plt.title('Dutch Roll Repsonse - Roll Angle',pad=10)
 
 f11 = plt.figure(11)
 plt.plot(T3_r,y3_r[:,2],'r',label='Reference Data')
-#plt.plot(T1_f,y1_r,'b',label='Flight Data')
+plt.plot(T3_f,y3_f[:,2],'b',label='Flight Data')
 
 plt.legend()
 plt.grid()
@@ -267,7 +302,7 @@ plt.title('Dutch Roll Repsonse - pb/V',pad=10)
 
 f12 = plt.figure(12)
 plt.plot(T3_r,y3_r[:,3],'r',label='Reference Data')
-#plt.plot(T1_f,y1_r,'b',label='Flight Data')
+plt.plot(T3_f,y3_f[:,3],'b',label='Flight Data')
 
 plt.legend()
 plt.grid()
@@ -278,7 +313,7 @@ plt.title('Dutch Roll Repsonse - rb/V',pad=10)
 #Aperiodic Roll
 f13 = plt.figure(13)
 plt.plot(T4_r,y4_r[:,0],'r',label='Reference Data')
-#plt.plot(T1_f,y1_r,'b',label='Flight Data')
+plt.plot(T4_f,y4_f[:,0],'b',label='Flight Data')
 
 plt.legend()
 plt.grid()
@@ -288,7 +323,7 @@ plt.title('Aperiodic Roll Repsonse - Sideslip',pad=10)
 
 f14 = plt.figure(14)
 plt.plot(T4_r,y4_r[:,1],'r',label='Reference Data')
-#plt.plot(T1_f,y1_r,'b',label='Flight Data')
+plt.plot(T4_f,y4_f[:,1],'b',label='Flight Data')
 
 plt.legend()
 plt.grid()
@@ -298,7 +333,7 @@ plt.title('Aperiodic Roll Repsonse - Roll Angle',pad=10)
 
 f15 = plt.figure(15)
 plt.plot(T4_r,y4_r[:,2],'r',label='Reference Data')
-#plt.plot(T1_f,y1_r,'b',label='Flight Data')
+plt.plot(T4_f,y4_f[:,2],'b',label='Flight Data')
 
 plt.legend()
 plt.grid()
@@ -308,7 +343,7 @@ plt.title('Aperiodic Roll Repsonse - pb/V',pad=10)
 
 f16 = plt.figure(16)
 plt.plot(T4_r,y4_r[:,3],'r',label='Reference Data')
-#plt.plot(T1_f,y1_r,'b',label='Flight Data')
+plt.plot(T4_f,y4_f[:,3],'b',label='Flight Data')
 
 plt.legend()
 plt.grid()
@@ -320,7 +355,7 @@ plt.title('Aperiodic Roll Repsonse - rb/V',pad=10)
 
 f17 = plt.figure(17)
 plt.plot(T5_r,y5_r[:,0],'r',label='Reference Data')
-#plt.plot(T1_f,y1_r,'b',label='Flight Data')
+plt.plot(T5_f,y5_f[:,0],'b',label='Flight Data')
 
 plt.legend()
 plt.grid()
@@ -330,7 +365,7 @@ plt.title('Spiral Repsonse - Sideslip',pad=10)
 
 f18 = plt.figure(18)
 plt.plot(T5_r,y5_r[:,1],'r',label='Reference Data')
-#plt.plot(T1_f,y1_r,'b',label='Flight Data')
+plt.plot(T5_f,y5_f[:,1],'b',label='Flight Data')
 
 plt.legend()
 plt.grid()
@@ -340,7 +375,7 @@ plt.title('Spiral Repsonse - Roll Angle',pad=10)
 
 f19 = plt.figure(19)
 plt.plot(T5_r,y5_r[:,2],'r',label='Reference Data')
-#plt.plot(T1_f,y1_r,'b',label='Flight Data')
+plt.plot(T5_f,y5_f[:,2],'b',label='Flight Data')
 
 plt.legend()
 plt.grid()
@@ -350,7 +385,7 @@ plt.title('Spiral Repsonse - pb/V',pad=10)
 
 f20 = plt.figure(20)
 plt.plot(T5_r,y5_r[:,3],'r',label='Reference Data')
-#plt.plot(T1_f,y1_r,'b',label='Flight Data')
+#plt.plot(T5_f,y5_f[:,3],'b',label='Flight Data')
 
 plt.legend()
 plt.grid()
