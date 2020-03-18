@@ -385,7 +385,7 @@ plt.title('Spiral Repsonse - pb/V',pad=10)
 
 f20 = plt.figure(20)
 plt.plot(T5_r,y5_r[:,3],'r',label='Reference Data')
-#plt.plot(T5_f,y5_f[:,3],'b',label='Flight Data')
+plt.plot(T5_f,y5_f[:,3],'b',label='Flight Data')
 
 plt.legend()
 plt.grid()
