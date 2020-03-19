@@ -8,6 +8,8 @@ Cl = 1.3
 
 #####DEFINITIONS######
 
+
+
 def inputcr(delta_values, time_value, t_array, time_ini, time_fin): #(deflections values, time of flight, time of simulation, start time of input, end time of input)
      cell_ini = np.where(time_value == time_ini)[0][0]
      cell_fin = np.where(time_value == time_fin)[0][0]

@@ -10,10 +10,8 @@ def Cit_par_Values(FlightType,Motion):              #FlightType: Reference Data 
                                                     #Motion: Short Period = 1, Phugoid = 2, Dutch Roll = 3, Aperiodic Roll = 4, Spiral = 5
     # self.xcg = 0.25 * c
     rho = 1.225
-    m = 12000
-    Cma = -0.8
-    CZ0 = 0.002
-    Cl = 1.2
+    m = 4000
+
 
     # Stationary flight condition
     parameters = np.array(
@@ -40,51 +38,51 @@ def Cit_par_Values(FlightType,Motion):              #FlightType: Reference Data 
 
     if Motion == 1:
         if FlightType == 1:
-            time_ini = 3635
+            time_ini = 3634
             reference_V0 = np.array(reference_data[reference_headers[velocity_index]])
             reference_hp0 = np.array(reference_data[reference_headers[hp0_index]])
             reference_th0 = np.array(reference_data[reference_headers[th0_index]])
             cell_V0 = np.where(time == time_ini)[0][0]
             cell_hp0 = np.where(time == time_ini)[0][0]
             cell_th0 = np.where(time == time_ini)[0][0]
-            V0 = reference_V0[cell_V0]
+            V0 = reference_V0[cell_V0]*0.51444
             hp0 = reference_hp0[cell_hp0]
-            th0 = reference_th0[cell_th0]
+            th0 = reference_th0[cell_th0]*pi/180
         elif FlightType == 2:
-            time_ini = 3158
+            time_ini = 3157
             flight_V0 = np.array(flight_data[flight_headers[velocity_index]])
             flight_hp0 = np.array(flight_data[flight_headers[hp0_index]])
             flight_th0 = np.array(flight_data[flight_headers[th0_index]])
             cell_V0 = np.where(time == time_ini)[0][0]
             cell_hp0 = np.where(time == time_ini)[0][0]
             cell_th0 = np.where(time == time_ini)[0][0]
-            V0 = flight_V0[cell_V0]
+            V0 = flight_V0[cell_V0]*0.51444
             hp0 = flight_hp0[cell_hp0]
-            th0 = flight_th0[cell_th0]
+            th0 = flight_th0[cell_th0]*pi/180
 
     elif Motion == 2:
         if FlightType == 1:
-            time_ini = 3237
+            time_ini = 3236
             reference_V0 = np.array(reference_data[reference_headers[velocity_index]])
             reference_hp0 = np.array(reference_data[reference_headers[hp0_index]])
             reference_th0 = np.array(reference_data[reference_headers[th0_index]])
             cell_V0 = np.where(time == time_ini)[0][0]
             cell_hp0 = np.where(time == time_ini)[0][0]
             cell_th0 = np.where(time == time_ini)[0][0]
-            V0 = reference_V0[cell_V0]
+            V0 = reference_V0[cell_V0]*0.51444
             hp0 = reference_hp0[cell_hp0]
-            th0 = reference_th0[cell_th0]
+            th0 = reference_th0[cell_th0]*pi/180
         elif FlightType == 2:
-            time_ini = 3230
+            time_ini = 3228
             flight_V0 = np.array(flight_data[flight_headers[velocity_index]])
             flight_hp0 = np.array(flight_data[flight_headers[hp0_index]])
             flight_th0 = np.array(flight_data[flight_headers[th0_index]])
             cell_V0 = np.where(time == time_ini)[0][0]
             cell_hp0 = np.where(time == time_ini)[0][0]
             cell_th0 = np.where(time == time_ini)[0][0]
-            V0 = flight_V0[cell_V0]
+            V0 = flight_V0[cell_V0]*0.51444
             hp0 = flight_hp0[cell_hp0]
-            th0 = flight_th0[cell_th0]
+            th0 = flight_th0[cell_th0]*pi/180
     elif Motion == 3:
         if FlightType == 1:
             time_ini = 3717
@@ -94,9 +92,9 @@ def Cit_par_Values(FlightType,Motion):              #FlightType: Reference Data 
             cell_V0 = np.where(time == time_ini)[0][0]
             cell_hp0 = np.where(time == time_ini)[0][0]
             cell_th0 = np.where(time == time_ini)[0][0]
-            V0 = reference_V0[cell_V0]
+            V0 = reference_V0[cell_V0]*0.51444
             hp0 = reference_hp0[cell_hp0]
-            th0 = reference_th0[cell_th0]
+            th0 = reference_th0[cell_th0]*pi/180
         elif FlightType == 2:
             time_ini = 3479
             flight_V0 = np.array(flight_data[flight_headers[velocity_index]])
@@ -105,9 +103,9 @@ def Cit_par_Values(FlightType,Motion):              #FlightType: Reference Data 
             cell_V0 = np.where(time == time_ini)[0][0]
             cell_hp0 = np.where(time == time_ini)[0][0]
             cell_th0 = np.where(time == time_ini)[0][0]
-            V0 = flight_V0[cell_V0]
+            V0 = flight_V0[cell_V0]*0.51444
             hp0 = flight_hp0[cell_hp0]
-            th0 = flight_th0[cell_th0]
+            th0 = flight_th0[cell_th0]*pi/180
     elif Motion == 4:
         if FlightType == 1:
             time_ini = 3550
@@ -117,9 +115,9 @@ def Cit_par_Values(FlightType,Motion):              #FlightType: Reference Data 
             cell_V0 = np.where(time == time_ini)[0][0]
             cell_hp0 = np.where(time == time_ini)[0][0]
             cell_th0 = np.where(time == time_ini)[0][0]
-            V0 = reference_V0[cell_V0]
+            V0 = reference_V0[cell_V0]*0.51444
             hp0 = reference_hp0[cell_hp0]
-            th0 = reference_th0[cell_th0]
+            th0 = reference_th0[cell_th0]*pi/180
         elif FlightType == 2:
             time_ini = 3607
             flight_V0 = np.array(flight_data[flight_headers[velocity_index]])
@@ -128,9 +126,9 @@ def Cit_par_Values(FlightType,Motion):              #FlightType: Reference Data 
             cell_V0 = np.where(time == time_ini)[0][0]
             cell_hp0 = np.where(time == time_ini)[0][0]
             cell_th0 = np.where(time == time_ini)[0][0]
-            V0 = flight_V0[cell_V0]
+            V0 = flight_V0[cell_V0]*0.51444
             hp0 = flight_hp0[cell_hp0]
-            th0 = flight_th0[cell_th0]
+            th0 = (flight_th0[cell_th0])*pi/180
     elif Motion == 5:
         if FlightType == 1:
             time_ini = 3920
@@ -140,9 +138,9 @@ def Cit_par_Values(FlightType,Motion):              #FlightType: Reference Data 
             cell_V0 = np.where(time == time_ini)[0][0]
             cell_hp0 = np.where(time == time_ini)[0][0]
             cell_th0 = np.where(time == time_ini)[0][0]
-            V0 = reference_V0[cell_V0]
+            V0 = reference_V0[cell_V0]*0.51444
             hp0 = reference_hp0[cell_hp0]
-            th0 = reference_th0[cell_th0]
+            th0 = reference_th0[cell_th0]*pi/180
         elif FlightType == 2:
             time_ini = 3675
             flight_V0 = np.array(flight_data[flight_headers[velocity_index]])
@@ -151,9 +149,9 @@ def Cit_par_Values(FlightType,Motion):              #FlightType: Reference Data 
             cell_V0 = np.where(time == time_ini)[0][0]
             cell_hp0 = np.where(time == time_ini)[0][0]
             cell_th0 = np.where(time == time_ini)[0][0]
-            V0 = flight_V0[cell_V0]
+            V0 = flight_V0[cell_V0]*0.51444
             hp0 = flight_hp0[cell_hp0]
-            th0 = flight_th0[cell_th0]
+            th0 = flight_th0[cell_th0]*pi/180
     else:
         print("Not a valid input")
         sys.exit()
@@ -174,8 +172,8 @@ def Cit_par_Values(FlightType,Motion):              #FlightType: Reference Data 
     # Longitudinal stability
     if FlightType == 1:
         from StationaryData.stationary_reference_call import C_m_alpha, C_m_delta
-        Cma    = C_m_alpha           # longitudinal stabilty [ ]
-        Cmde   = C_m_delta      # elevator effectiveness [ ]
+        Cma    = C_m_alpha         # longitudinal stabilty [ ]
+        Cmde   = C_m_delta     # elevator effectiveness [ ]
     elif FlightType == 2:
         from StationaryData.stationary_testflight_call import C_m_alpha, C_m_delta
         Cma = C_m_alpha
@@ -208,7 +206,7 @@ def Cit_par_Values(FlightType,Motion):              #FlightType: Reference Data 
     g      = 9.81            # [m/sec^2] (gravity constant)
 
     # air density [kg/m^3]
-    #rho    = rho0 **( ((1+(lamda * hp0 / Temp0))), (-((g / (lamda*R)) + 1)))
+    rho    = rho0 ** (1+(lamda * hp0 / Temp0))
     W      = m * g            # [N]       (aircraft weight)
 
     # Constant values concerning aircraft inertia
@@ -228,11 +226,10 @@ def Cit_par_Values(FlightType,Motion):              #FlightType: Reference Data 
 
     # Lift and drag coefficient
 
-    #CL = 2 * W / (rho * V0 ** 2 * S)              # Lift coefficient [ ]
-    #CD = CD0 + (CLa * alpha0) ** 2 / (pi * A * e) # Drag coefficient [ ]
+    Cl = 2 * W / (rho * V0 ** 2 * S)              # Lift coefficient [ ]
+    #CD = CD0 + (Cla * alpha0) ** 2 / (pi * A * e) # Drag coefficient [ ]
 
     # Stabiblity derivatives
-
     CX0    = W * sin(th0) / (0.5 * rho * V0 ** 2 * S)
     CXu    = -0.02792
     CXa    = +0.47966		# Positive! (has been erroneously negative since 1993)
@@ -272,3 +269,4 @@ def Cit_par_Values(FlightType,Motion):              #FlightType: Reference Data 
     Cndr   =  -0.0939
 
     return rho, m, Cma, CZ0, Cl, hp0, V0, th0, Cmde, S, Sh, Sh_S, lh, c, lh_c, b, bh, A, Ah, Vh_V, ih, rho0, lamda, Temp0, R, g, W, muc, mub, KX2, KZ2, KXZ, KY2, Cmac, CNha, depsda, CX0, CXu, CXa, CXadot, CXq, CXde, CZ0, CZu, CZa, CZadot, CZq, CZde, Cmu, Cmadot, Cmq, CYb, CYbdot, CYp, CYr, CYda, CYdr, Clb, Clp, Clr, Clda, Cldr, Cnb, Cnbdot, Cnp, Cnr, Cnda, Cndr
+
