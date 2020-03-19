@@ -31,10 +31,17 @@ def Cit_par_Values(FlightType,Motion):
     reference_data, reference_headers, reference_descriptions = Read.get_data('ref_data')
     flight_data, flight_headers, flight_descriptions = Read.get_data('testflight')
 
-    if Motion == 1:
-        velocity_index = np.where(parameters=='Dadc1_tas')[0].flat[0]
-        if FlightType == 1:
+    velocity_index = np.where(parameters == 'Dadc1_tas')[0].flat[0]
+    time_index = np.where(parameters=='time')[0].flat[0]
 
+    time = np.array(reference_data[[reference_headers[time_index]]])
+
+    if Motion == 1:
+        if FlightType == 1:
+            time_ini = 3695
+            reference_V0 = np.array(reference_data[reference_headers[velocity_index]])
+            cell_V0 = np.where(time == time_ini)[0][0]
+            V0 = reference_V0[cell_V0]
 
   #  elif Motion == 2:
 

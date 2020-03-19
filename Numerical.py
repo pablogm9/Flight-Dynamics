@@ -42,7 +42,7 @@ reference_delta_r = np.array(reference_data[reference_headers[delta_r_index]])
 reference_delta_a = np.array(reference_data[reference_headers[delta_a_index]])
 time = np.array(reference_data[[reference_headers[time_index]]])
 
-flight_delta_e = np.array(reference_data[reference_headers[delta_e_index]])
+flight_delta_e = np.array(flight_data[reference_headers[delta_e_index]])
 flight_delta_r = np.array(reference_data[reference_headers[delta_r_index]])
 flight_delta_a = np.array(reference_data[reference_headers[delta_a_index]])
 time = np.array(reference_data[[reference_headers[time_index]]])
@@ -52,9 +52,9 @@ time = np.array(reference_data[[reference_headers[time_index]]])
     #def __init__(self):
         #Cit_par_Values(self)
 
-def ABCD():
+def ABCD(flight,motion):
     
-    rho, m, Cma, CZ0, Cl, hp0, V0, th0, Cmde, S, Sh, Sh_S, lh, c, lh_c, b, bh, A, Ah, Vh_V, ih, rho0, lamda, Temp0, R, g, W, muc, mub, KX2, KZ2, KXZ, KY2, Cmac, CNha, depsda, CX0, CXu, CXa, CXadot, CXq, CXde, CZ0, CZu, CZa, CZadot, CZq, CZde, Cmu, Cmadot, Cmq, CYb, CYbdot, CYp, CYr, CYda, CYdr, Clb, Clp, Clr, Clda, Cldr, Cnb, Cnbdot, Cnp, Cnr, Cnda, Cndr = Cit_par_Values()
+    rho, m, Cma, CZ0, Cl, hp0, V0, th0, Cmde, S, Sh, Sh_S, lh, c, lh_c, b, bh, A, Ah, Vh_V, ih, rho0, lamda, Temp0, R, g, W, muc, mub, KX2, KZ2, KXZ, KY2, Cmac, CNha, depsda, CX0, CXu, CXa, CXadot, CXq, CXde, CZ0, CZu, CZa, CZadot, CZq, CZde, Cmu, Cmadot, Cmq, CYb, CYbdot, CYp, CYr, CYda, CYdr, Clb, Clp, Clr, Clda, Cldr, Cnb, Cnbdot, Cnp, Cnr, Cnda, Cndr = Cit_par_Values(flight,motion)
 
     ########## ASYMMETRIC EQUATIONS OF MOTION IN STATE-SPACE FORM ##########
     A1 = np.array([[(V0/b)*(CYb/2/mub), (V0/b)*(Cl/2/mub), (V0/b)*(CYp/2/mub),(V0/b)*(CYr - 4*mub)/2/mub],
