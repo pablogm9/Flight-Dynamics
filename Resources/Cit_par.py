@@ -1,129 +1,166 @@
 # Citation 550 - Linear simulation
 from math import *
+import sys
+import Read
 import numpy as np
-# xcg = 0.25 * c
-rho = 1.225
-m = 12000
-Cma = -0.8
-CZ0 = 0.002
-Cl = 1.2
-# Stationary flight condition
 
-hp0    =    2000   	      # pressure altitude in the stationary flight condition [m]
-V0     = 83            # true airspeed in the stationary flight condition [m/sec]
-#alpha0 =             # angle of attack in the stationary flight condition [rad]
-th0    =     0        # pitch angle in the stationary flight condition [rad]
+#class Cit_par_class:
 
-# Aircraft mass
-#m      =             # mass [kg]
+def Cit_par_Values(FlightType,Motion):
 
-# aerodynamic properties
-#e      =             # Oswald factor [ ]
-#CD0    =             # Zero lift drag coefficient [ ]
-#CLa    =             # Slope of CL-alpha curve [ ]
+    # self.xcg = 0.25 * c
+    rho = 1.225
+    m = 12000
+    Cma = -0.8
+    CZ0 = 0.002
+    Cl = 1.2
 
-# Longitudinal stability
-Cma    = -1.2           # longitudinal stabilty [ ]
-Cmde   =   -0.02          # elevator effectiveness [ ]
+    # Stationary flight condition
+    parameters = np.array(
+        ['vane_AOA', 'elevator_dte', 'column_fe', 'lh_engine_FMF', 'rh_engine_FMF', 'lh_engine_itt', 'rh_engine_itt',
+         'lh_engine_OP', 'rh_engine_OP', 'lh_engine_fan_N1', 'lh_engine_turbine_N2', 'rh_engine_fan_N1',
+         'rh_engine_turbine_N2',
+         'lh_engine_FU', 'rh_engine_FU', 'delta_a', 'delta_e', 'delta_r', 'Gps_date', 'Gps_utcSec', 'Ahrs1_Roll',
+         'Ahrs1_Pitch', 'Fms1_trueHeading', 'Gps_lat', 'Gps_long', 'Ahrs1_bRollRate', 'Ahrs1_bPitchRate',
+         'Ahrs1_bYawRate',
+         'Ahrs1_bLongAcc', 'Ahrs1_bLatAcc', 'Ahrs1_bNormAcc', 'Ahrs1_aHdgAcc', 'Ahrs1_xHdgAcc', 'Ahrs1_VertAcc',
+         'Dadc1_sat', 'Dadc1_tat', 'Dadc1_alt', 'Dadc1_bcAlt', 'Dadc1_bcAltMb', 'Dadc1_mach', 'Dadc1_cas', 'Dadc1_tas',
+         'Dadc1_altRate', 'measurement_running', 'measurement_n_rdy', 'display_graph_state', 'display_active_screen',
+         'time'])
 
-# Aircraft geometry
+    reference_data, reference_headers, reference_descriptions = Read.get_data('ref_data')
+    flight_data, flight_headers, flight_descriptions = Read.get_data('testflight')
 
-S      = 30.00	          # wing area [m^2]
-Sh     = 0.2 * S         # stabiliser area [m^2]
-Sh_S   = Sh / S	          # [ ]
-lh     = 0.71 * 5.968    # tail length [m]
-c      = 2.0569	          # mean aerodynamic cord [m]
-lh_c   = lh / c	          # [ ]
-b      = 15.911	          # wing span [m]
-bh     = 5.791	          # stabilser span [m]
-A      = b ** 2 / S      # wing aspect ratio [ ]
-Ah     = bh ** 2 / Sh    # stabilser aspect ratio [ ]
-Vh_V   = 1	          # [ ]
-ih     = -2 * pi / 180   # stabiliser angle of incidence [rad]
-
-# Constant values concerning atmosphere and gravity
-
-rho0   = 1.2250          # air density at sea level [kg/m^3] 
-lamda = -0.0065         # temperature gradient in ISA [K/m]
-Temp0  = 288.15          # temperature at sea level in ISA [K]
-R      = 287.05          # specific gas constant [m^2/sec^2K]
-g      = 9.81            # [m/sec^2] (gravity constant)
-
-# air density [kg/m^3]  
-#rho    = rho0 **( ((1+(lamda * hp0 / Temp0))), (-((g / (lamda*R)) + 1)))
-W      = m * g            # [N]       (aircraft weight)
-
-# Constant values concerning aircraft inertia
-
-muc    = m / (rho * S * c)
-mub    = m / (rho * S * b)
-KX2    = 0.019
-KZ2    = 0.042
-KXZ    = 0.002
-KY2    = 1.25 * 1.114
-
-# Aerodynamic constants
-
-Cmac   = 0                      # Moment coefficient about the aerodynamic centre [ ]
-#CNwa   = CLa                    # Wing normal force slope [ ]
-CNha   = 2 * pi * Ah / (Ah + 2) # Stabiliser normal force slope [ ]
-depsda = 4 / (A + 2)            # Downwash gradient [ ]
-
-# Lift and drag coefficient
-
-#CL = 2 * W / (rho * V0 ** 2 * S)              # Lift coefficient [ ]
-#CD = CD0 + (CLa * alpha0) ** 2 / (pi * A * e) # Drag coefficient [ ]
-
-# Stabiblity derivatives
-
-CX0    = W * sin(th0) / (0.5 * rho * V0 ** 2 * S)
-CXu    = -0.02792
-CXa    = +0.47966		# Positive! (has been erroneously negative since 1993) 
-CXadot = +0.08330
-CXq    = -0.28170
-CXde   = -0.03728
-
-CZ0    = -W * cos(th0) / (0.5 * rho * V0 ** 2 * S)
-CZu    = -0.37616
-CZa    = -5.74340
-CZadot = -0.00350
-CZq    = -5.66290
-CZde   = -0.69612
-
-Cmu    = +0.06990
-Cmadot = +0.17800
-Cmq    = -8.79415
-
-CYb    = -0.7500
-CYbdot =  0     
-CYp    = -0.0304
-CYr    = +0.8495
-CYda   = -0.0400
-CYdr   = +0.2300
-
-Clb    = -0.10260
-Clp    = -0.71085
-Clr    = +0.23760
-Clda   = -0.23088
-Cldr   = +0.03440
-
-Cnb    =  +0.1348
-Cnbdot =   0     
-Cnp    =  -0.0602
-Cnr    =  -0.2061
-Cnda   =  -0.0120
-Cndr   =  -0.0939
-
-A2 = np.array([[(V0/c)*CXu/(2*muc)   , (V0/c)*CXa/(2*muc) , (V0/c)*CZ0/(2*muc) , (V0/c)*CXq/(2*muc)],
-                [(V0/c)*CZu/(2*muc-CZadot)   , (V0/c)*CZa/(2*muc-CZadot)  , -(V0/c)*CX0/(2*muc-CZadot) , (V0/c)*(2*muc + CZq)/(2*muc-CZadot)],
-               [        0                  ,                0           ,           0               ,           V0/c                     ],
-               [(V0/c)*(Cmu+CZu*(Cmadot/(2*muc-CZadot)))/(2*muc*KY2), (V0/c)*(Cma + CZa*(Cmadot/(2*muc-CZadot)))/(2*muc*KY2), -(V0/c)*CX0*(Cmadot/(2*muc-CZadot))/(2*muc*KY2) , (V0/c)* (Cmq + Cmadot*((2*muc + CZq)/(2*muc - CZadot)))/(2*muc*KY2)]])
-
-A1 = np.array([[(V0/b)*(CYb/2/mub), (V0/b)*(Cl/2/mub), (V0/b)*(CYp/2/mub),(V0/b)*(CYr - 4*mub)/2/mub],
-               [   0                     ,     0           ,        2*V0/b      ,           0   ],
-               [(V0/b)*((Clb*KZ2+Cnb*KXZ)/(4*mub*(KX2*KZ2-KXZ**2))), 0 , (V0/b)*((Clp*KZ2+Cnp*KXZ)/(4*mub*(KX2*KZ2-KXZ**2))) , (V0/b)*((Clr*KZ2+Cnr*KXZ)/(4*mub*(KX2*KZ2-KXZ**2)))],
-               [(V0/b)*((Clb*KXZ+Cnb*KX2)/(4*mub*(KX2*KZ2-KXZ**2))), 0 , (V0/b)*((Clp*KXZ+Cnp*KX2)/(4*mub*(KX2*KZ2-KXZ**2))) , (V0/b)*((Clr*KXZ+Cnr*KX2)/(4*mub*(KX2*KZ2-KXZ**2)))]])
+    if Motion == 1:
+        velocity_index = np.where(parameters=='Dadc1_tas')[0].flat[0]
+        if FlightType == 1:
 
 
-# [e2, v2] = np.linalg.eig(A1)
-# print(e2)
+  #  elif Motion == 2:
+
+ #   elif Motion == 3:
+
+ #   elif Motion == 4:
+
+ #   elif Motion == 5:
+
+ #   elif Motion == 6:
+
+    else:
+        print("Not a valid input")
+        sys.exit()
+
+    hp0    =    2000   	      # pressure altitude in the stationary flight condition [m]
+    V0     = 83            # true airspeed in the stationary flight condition [m/sec]
+    #alpha0 =             # angle of attack in the stationary flight condition [rad]
+    th0    =     0        # pitch angle in the stationary flight condition [rad]
+
+    # Aircraft mass
+    #m      =             # mass [kg]
+
+    # aerodynamic properties
+    #e      =             # Oswald factor [ ]
+    #CD0    =             # Zero lift drag coefficient [ ]
+    #CLa    =             # Slope of CL-alpha curve [ ]
+
+    # Longitudinal stability
+    if FlightType == 1:
+        from StationaryData.stationary_reference_call import C_m_alpha, C_m_delta
+        Cma    = C_m_alpha           # longitudinal stabilty [ ]
+        Cmde   = C_m_delta      # elevator effectiveness [ ]
+    elif FlightType == 2:
+        from StationaryData.stationary_testflight_call import C_m_alpha, C_m_delta
+        Cma = C_m_alpha
+        Cmde = C_m_delta
+    else:
+        print("Not a valid input")
+        sys.exit()
+
+    # Aircraft geometry
+
+    S      = 30.00	          # wing area [m^2]
+    Sh     = 0.2 * S         # stabiliser area [m^2]
+    Sh_S   = Sh / S	          # [ ]
+    lh     = 0.71 * 5.968    # tail length [m]
+    c      = 2.0569	          # mean aerodynamic cord [m]
+    lh_c   = lh / c	          # [ ]
+    b      = 15.911	          # wing span [m]
+    bh     = 5.791	          # stabilser span [m]
+    A      = b ** 2 / S      # wing aspect ratio [ ]
+    Ah     = bh ** 2 / Sh    # stabilser aspect ratio [ ]
+    Vh_V   = 1	          # [ ]
+    ih     = -2 * pi / 180   # stabiliser angle of incidence [rad]
+
+    # Constant values concerning atmosphere and gravity
+
+    rho0   = 1.2250          # air density at sea level [kg/m^3]
+    lamda = -0.0065         # temperature gradient in ISA [K/m]
+    Temp0  = 288.15          # temperature at sea level in ISA [K]
+    R      = 287.05          # specific gas constant [m^2/sec^2K]
+    g      = 9.81            # [m/sec^2] (gravity constant)
+
+    # air density [kg/m^3]
+    #rho    = rho0 **( ((1+(lamda * hp0 / Temp0))), (-((g / (lamda*R)) + 1)))
+    W      = m * g            # [N]       (aircraft weight)
+
+    # Constant values concerning aircraft inertia
+
+    muc    = m / (rho * S * c)
+    mub    = m / (rho * S * b)
+    KX2    = 0.019
+    KZ2    = 0.042
+    KXZ    = 0.002
+    KY2    = 1.25 * 1.114
+
+    # Aerodynamic constants
+    Cmac   = 0                      # Moment coefficient about the aerodynamic centre [ ]
+    #CNwa   = CLa                    # Wing normal force slope [ ]
+    CNha   = 2 * pi * Ah / (Ah + 2) # Stabiliser normal force slope [ ]
+    depsda = 4 / (A + 2)            # Downwash gradient [ ]
+
+    # Lift and drag coefficient
+
+    #CL = 2 * W / (rho * V0 ** 2 * S)              # Lift coefficient [ ]
+    #CD = CD0 + (CLa * alpha0) ** 2 / (pi * A * e) # Drag coefficient [ ]
+
+    # Stabiblity derivatives
+
+    CX0    = W * sin(th0) / (0.5 * rho * V0 ** 2 * S)
+    CXu    = -0.02792
+    CXa    = +0.47966		# Positive! (has been erroneously negative since 1993)
+    CXadot = +0.08330
+    CXq    = -0.28170
+    CXde   = -0.03728
+
+    CZ0    = -W * cos(th0) / (0.5 * rho * V0 ** 2 * S)
+    CZu    = -0.37616
+    CZa    = -5.74340
+    CZadot = -0.00350
+    CZq    = -5.66290
+    CZde   = -0.69612
+
+    Cmu    = +0.06990
+    Cmadot = +0.17800
+    Cmq    = -8.79415
+
+    CYb    = -0.7500
+    CYbdot =  0
+    CYp    = -0.0304
+    CYr    = +0.8495
+    CYda   = -0.0400
+    CYdr   = +0.2300
+
+    Clb    = -0.10260
+    Clp    = -0.71085
+    Clr    = +0.23760
+    Clda   = -0.23088
+    Cldr   = +0.03440
+
+    Cnb    =  +0.1348
+    Cnbdot =   0
+    Cnp    =  -0.0602
+    Cnr    =  -0.2061
+    Cnda   =  -0.0120
+    Cndr   =  -0.0939
+
+    return rho, m, Cma, CZ0, Cl, hp0, V0, th0, Cmde, S, Sh, Sh_S, lh, c, lh_c, b, bh, A, Ah, Vh_V, ih, rho0, lamda, Temp0, R, g, W, muc, mub, KX2, KZ2, KXZ, KY2, Cmac, CNha, depsda, CX0, CXu, CXa, CXadot, CXq, CXde, CZ0, CZu, CZa, CZadot, CZq, CZde, Cmu, Cmadot, Cmq, CYb, CYbdot, CYp, CYr, CYda, CYdr, Clb, Clp, Clr, Clda, Cldr, Cnb, Cnbdot, Cnp, Cnr, Cnda, Cndr
