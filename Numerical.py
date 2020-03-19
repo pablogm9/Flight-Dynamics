@@ -42,9 +42,9 @@ reference_delta_r = np.array(reference_data[reference_headers[delta_r_index]])
 reference_delta_a = np.array(reference_data[reference_headers[delta_a_index]])
 time = np.array(reference_data[[reference_headers[time_index]]])
 
-flight_delta_e = np.array(flight_data[reference_headers[delta_e_index]])
-flight_delta_r = np.array(reference_data[reference_headers[delta_r_index]])
-flight_delta_a = np.array(reference_data[reference_headers[delta_a_index]])
+flight_delta_e = np.array(flight_data[flight_headers[delta_e_index]])
+flight_delta_r = np.array(flight_data[flight_headers[delta_r_index]])
+flight_delta_a = np.array(flight_data[flight_headers[delta_a_index]])
 time = np.array(reference_data[[reference_headers[time_index]]])
 
 #class ABCDmat():
@@ -92,32 +92,40 @@ def ABCD(flight,motion):
     #print(B2)
     #print(C2)
     #print(D2)
+    sys1 = ml.ss(A1, B1, C1, D1)
+    sys2 = ml.ss(A2,B2,C2, D2)
+
+    return sys1, sys2
 
 
-    return A1, B1, C1, D1, A2, B2, C2, D2
 
 
 
-A1, B1, C1, D1, A2, B2, C2, D2 = ABCD()
 
+########## EIGENVALUES ########## with the stationary flight conditions of short period
 
-########## EIGENVALUES ##########
-
-[e1, v1] = np.linalg.eig(A1)
-[e2, v2] = np.linalg.eig(A2)
-
-print(e1)
-print(e2)
 
 ########## STATE SPACE MODEL ##########
 
-sys1 = ml.ss(A1, B1, C1, D1)
+#short period
+sys, sys_sp_r = ABCD(1,1)
+sys, sys_sp_f = ABCD(2,1)
+ml.pzmap(sys_sp_r)
+#phugoid
+sys, sys_ph_r = ABCD(1,2)
+sys, sys_ph_f = ABCD(2,2)
+ml.pzmap(sys_ph_r)
+#dutch roll
+sys_dr_r, sys = ABCD(1,3)
+sys_dr_f, sys = ABCD(2,3)
+#aperiodic
+sys_ap_r, sys = ABCD(1,4)
+sys_ap_f, sys = ABCD(2,4)
+#spiral
+sys_spir_r,sys = ABCD(1,5)
+sys_spir_f,sys = ABCD(2,5)
 
-sys2 = ml.ss(A2, B2, C2, D2)
 
-a = [-507.87304253328404, -1.1211704696917422, -5468.616677123462, -468.2605031612816, 0.17942559940696895]
-#ml.pzmap(sys1) #eigenvalues plot
-#ml.pzmap(sys2)
 
 
 ########### SIMULATION OF EIGENMOTIONS########
@@ -131,24 +139,24 @@ t_fin = 3636
 
 u1 = inputcr(reference_delta_e, time, t1, t_ini , t_fin)
 
-y1_r , T1_r, x1_r = ml.lsim(sys2, u1, t1)
+y1_r , T1_r, x1_r = ml.lsim(sys_sp_r, u1, t1)
 
 
 u1_f = inputcr(flight_delta_e, time, t1, 3158 , 3160)
 
-y1_f , T1_f, x1_f = ml.lsim(sys2, u1_f, t1)
+y1_f , T1_f, x1_f = ml.lsim(sys_sp_f, u1_f, t1)
 
 # Phugoid
 t2 = np.arange(0 , 1000, dt)
 
 u2 = inputcr(reference_delta_e, time, t2, 3237, 3247)
 
-y2_r , T2_r, x2_r = ml.lsim(sys2, u2, t2)
+y2_r , T2_r, x2_r = ml.lsim(sys_ph_r, u2, t2)
 
 
 u2_f = inputcr(flight_delta_e, time, t2, 3230 , 3240)
 
-y2_f , T2_f, x2_f = ml.lsim(sys2, u2_f, t2)
+y2_f , T2_f, x2_f = ml.lsim(sys_ph_f, u2_f, t2)
 
 #Dutch Roll
 t3 = np.arange(0 , 100, dt)
@@ -157,14 +165,14 @@ u3_t = inputcr(reference_delta_r, time, t3, 3717, 3718.8)
 
 u3 = np.hstack((np.zeros((len(t3), 1)), u3_t))
 
-y3_r , T3_r, x3_r = ml.lsim(sys1, u3, t3)
+y3_r , T3_r, x3_r = ml.lsim(sys_dr_r, u3, t3)
 
 
 u3_t_f = inputcr(flight_delta_r, time, t3, 3479, 3480.1)
 
 u3_f = np.hstack((np.zeros((len(t3), 1)), u3_t_f))
 
-y3_f , T3_f, x3_f = ml.lsim(sys1, u3_f, t3)
+y3_f , T3_f, x3_f = ml.lsim(sys_dr_f, u3_f, t3)
 
 #Aperiodic roll
 t4 = np.arange(0 , 12, dt)
@@ -173,14 +181,14 @@ u4_t = inputcr(reference_delta_a, time, t4, 3550, 3551)
 
 u4 = np.hstack((u4_t, np.zeros((len(t4), 1))))
 
-y4_r , T4_r, x4_r = ml.lsim(sys1, u4, t4)
+y4_r , T4_r, x4_r = ml.lsim(sys_ap_r, u4, t4)
 
 
 u4_t_f = inputcr(flight_delta_a, time, t4, 3607, 3608)
 
 u4_f = np.hstack((u4_t, np.zeros((len(t4), 1))))
 
-y4_f , T4_f, x4_f = ml.lsim(sys1, u4_f, t4)
+y4_f , T4_f, x4_f = ml.lsim(sys_ap_f, u4_f, t4)
 
 
 #Spiral
@@ -190,13 +198,13 @@ u5_t = inputcr(reference_delta_a, time, t5, 3912, 3920)
 
 u5 = np.hstack((u5_t, np.zeros((len(t5), 1))))
 
-y5_r , T5_r, x5_r = ml.lsim(sys1, u5, t5)
+y5_r , T5_r, x5_r = ml.lsim(sys_spir_r, u5, t5)
 
 u5_t_f = inputcr(flight_delta_a, time, t5, 3675, 3682)
 
 u5_f = np.hstack((u5_t, np.zeros((len(t5), 1))))
 
-y5_f , T5_f, x5_f = ml.lsim(sys1, u5_f, t5)
+y5_f , T5_f, x5_f = ml.lsim(sys_spir_f, u5_f, t5)
 
 
 
