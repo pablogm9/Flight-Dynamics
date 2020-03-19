@@ -1,4 +1,4 @@
-from Resources.Cit_par import *
+from Resources.Cit_par import Cit_par_Values
 import scipy as np
 import control.matlab as ml
 import matplotlib.pyplot as plt
@@ -47,52 +47,67 @@ flight_delta_r = np.array(reference_data[reference_headers[delta_r_index]])
 flight_delta_a = np.array(reference_data[reference_headers[delta_a_index]])
 time = np.array(reference_data[[reference_headers[time_index]]])
 
+#class ABCDmat():
+    #from Resources.Cit_par import Cit_par_class
+    #def __init__(self):
+        #Cit_par_Values(self)
+
+def ABCD():
+    
+    rho, m, Cma, CZ0, Cl, hp0, V0, th0, Cmde, S, Sh, Sh_S, lh, c, lh_c, b, bh, A, Ah, Vh_V, ih, rho0, lamda, Temp0, R, g, W, muc, mub, KX2, KZ2, KXZ, KY2, Cmac, CNha, depsda, CX0, CXu, CXa, CXadot, CXq, CXde, CZ0, CZu, CZa, CZadot, CZq, CZde, Cmu, Cmadot, Cmq, CYb, CYbdot, CYp, CYr, CYda, CYdr, Clb, Clp, Clr, Clda, Cldr, Cnb, Cnbdot, Cnp, Cnr, Cnda, Cndr = Cit_par_Values()
+
+    ########## ASYMMETRIC EQUATIONS OF MOTION IN STATE-SPACE FORM ##########
+    A1 = np.array([[(V0/b)*(CYb/2/mub), (V0/b)*(Cl/2/mub), (V0/b)*(CYp/2/mub),(V0/b)*(CYr - 4*mub)/2/mub],
+                   [   0                     ,     0           ,        2*V0/b      ,           0   ],
+                   [(V0/b)*((Clb*KZ2+Cnb*KXZ)/(4*mub*(KX2*KZ2-KXZ**2))), 0 , (V0/b)*((Clp*KZ2+Cnp*KXZ)/(4*mub*(KX2*KZ2-KXZ**2))) , (V0/b)*((Clr*KZ2+Cnr*KXZ)/(4*mub*(KX2*KZ2-KXZ**2)))],
+                   [(V0/b)*((Clb*KXZ+Cnb*KX2)/(4*mub*(KX2*KZ2-KXZ**2))), 0 , (V0/b)*((Clp*KXZ+Cnp*KX2)/(4*mub*(KX2*KZ2-KXZ**2))) , (V0/b)*((Clr*KXZ+Cnr*KX2)/(4*mub*(KX2*KZ2-KXZ**2)))]])
+
+    B1 = np.array([[0          ,    (V0/b) * (CYdr/(2*mub))],
+                   [0          ,             0],
+                   [(V0/b)*((Clda*KZ2+Cnda*KXZ)/(4*mub*(KX2*KZ2-KXZ**2)))  ,  (V0/b)*((Cldr*KZ2+Cndr*KXZ)/(4*mub*(KX2*KZ2-KXZ**2)))],
+                   [(V0/b)*((Clda*KXZ+Cnda*KX2)/(4*mub*(KX2*KZ2-KXZ**2)))  ,  (V0/b)*((Cldr*KXZ+Cndr*KX2)/(4*mub*(KX2*KZ2-KXZ**2)))]])
 
 
-########## ASYMMETRIC EQUATIONS OF MOTION IN STATE-SPACE FORM ##########
-A1 = np.array([[(V0/b)*(CYb/2/mub), (V0/b)*(Cl/2/mub), (V0/b)*(CYp/2/mub),(V0/b)*(CYr - 4*mub)/2/mub],
-               [   0                     ,     0           ,        2*V0/b      ,           0   ],
-               [(V0/b)*((Clb*KZ2+Cnb*KXZ)/(4*mub*(KX2*KZ2-KXZ**2))), 0 , (V0/b)*((Clp*KZ2+Cnp*KXZ)/(4*mub*(KX2*KZ2-KXZ**2))) , (V0/b)*((Clr*KZ2+Cnr*KXZ)/(4*mub*(KX2*KZ2-KXZ**2)))],
-               [(V0/b)*((Clb*KXZ+Cnb*KX2)/(4*mub*(KX2*KZ2-KXZ**2))), 0 , (V0/b)*((Clp*KXZ+Cnp*KX2)/(4*mub*(KX2*KZ2-KXZ**2))) , (V0/b)*((Clr*KXZ+Cnr*KX2)/(4*mub*(KX2*KZ2-KXZ**2)))]])
+    C1 = np.identity(4)
 
-B1 = np.array([[0          ,    (V0/b) * (CYdr/(2*mub))],
-               [0          ,             0],
-               [(V0/b)*((Clda*KZ2+Cnda*KXZ)/(4*mub*(KX2*KZ2-KXZ**2)))  ,  (V0/b)*((Cldr*KZ2+Cndr*KXZ)/(4*mub*(KX2*KZ2-KXZ**2)))],
-               [(V0/b)*((Clda*KXZ+Cnda*KX2)/(4*mub*(KX2*KZ2-KXZ**2)))  ,  (V0/b)*((Cldr*KXZ+Cndr*KX2)/(4*mub*(KX2*KZ2-KXZ**2)))]])
+    D1 = np.array([[0, 0], [0, 0], [0, 0], [0, 0]])
 
 
-C1 = np.identity(4)
+    ########## SYMMETRIC EQUATIONS OF MOTION IN STATE-SPACE FORM ##########
+    A2 = np.array([[(V0/c)*CXu/(2*muc)   , (V0/c)*CXa/(2*muc) , (V0/c)*CZ0/(2*muc) , (V0/c)*CXq/(2*muc)],
+                    [(V0/c)*CZu/(2*muc-CZadot)   , (V0/c)*CZa/(2*muc-CZadot)  , -(V0/c)*CX0/(2*muc-CZadot) , (V0/c)*(2*muc + CZq)/(2*muc-CZadot)],
+                   [        0                  ,                0           ,           0               ,           V0/c                     ],
+                   [(V0/c)*(Cmu+CZu*(Cmadot/(2*muc-CZadot)))/(2*muc*KY2), (V0/c)*(Cma + CZa*(Cmadot/(2*muc-CZadot)))/(2*muc*KY2), -(V0/c)*CX0*(Cmadot/(2*muc-CZadot))/(2*muc*KY2) , (V0/c)* (Cmq + Cmadot*((2*muc + CZq)/(2*muc - CZadot)))/(2*muc*KY2)]])
 
-D1 = np.array([[0, 0], [0, 0], [0, 0], [0, 0]])
+    B2 = np.array([[(V0/c)*CXde/(2*muc)],
+                 [(V0/c)*CZde/(2*muc -CZadot)],
+                  [0],
+                  [(V0/c)*(Cmde + CZde*(Cmadot/(2*muc-CZadot)))/(2*muc*KY2)]])
+
+    C2 = np.identity(4)
+
+    D2 = np.array([[0], [0], [0], [0]])
+
+    #print(A2)
+    #print(B2)
+    #print(C2)
+    #print(D2)
 
 
-########## SYMMETRIC EQUATIONS OF MOTION IN STATE-SPACE FORM ##########
-A2 = np.array([[(V0/c)*CXu/(2*muc)   , (V0/c)*CXa/(2*muc) , (V0/c)*CZ0/(2*muc) , (V0/c)*CXq/(2*muc)],
-                [(V0/c)*CZu/(2*muc-CZadot)   , (V0/c)*CZa/(2*muc-CZadot)  , -(V0/c)*CX0/(2*muc-CZadot) , (V0/c)*(2*muc + CZq)/(2*muc-CZadot)],
-               [        0                  ,                0           ,           0               ,           V0/c                     ],
-               [(V0/c)*(Cmu+CZu*(Cmadot/(2*muc-CZadot)))/(2*muc*KY2), (V0/c)*(Cma + CZa*(Cmadot/(2*muc-CZadot)))/(2*muc*KY2), -(V0/c)*CX0*(Cmadot/(2*muc-CZadot))/(2*muc*KY2) , (V0/c)* (Cmq + Cmadot*((2*muc + CZq)/(2*muc - CZadot)))/(2*muc*KY2)]])
+    return A1, B1, C1, D1, A2, B2, C2, D2
 
-B2 = np.array([[(V0/c)*CXde/(2*muc)],
-             [(V0/c)*CZde/(2*muc -CZadot)],
-              [0],
-              [(V0/c)*(Cmde + CZde*(Cmadot/(2*muc-CZadot)))/(2*muc*KY2)]])
 
-C2 = np.identity(4)
 
-D2 = np.array([[0], [0], [0], [0]])
+A1, B1, C1, D1, A2, B2, C2, D2 = ABCD()
 
-#print(A2)
-#print(B2)
-#print(C2)
-#print(D2)
 
 ########## EIGENVALUES ##########
 
 [e1, v1] = np.linalg.eig(A1)
 [e2, v2] = np.linalg.eig(A2)
 
-#print(e1, v1)
-#print(e2, v2)
+print(e1)
+print(e2)
 
 ########## STATE SPACE MODEL ##########
 
@@ -100,7 +115,7 @@ sys1 = ml.ss(A1, B1, C1, D1)
 
 sys2 = ml.ss(A2, B2, C2, D2)
 
-
+a = [-507.87304253328404, -1.1211704696917422, -5468.616677123462, -468.2605031612816, 0.17942559940696895]
 #ml.pzmap(sys1) #eigenvalues plot
 #ml.pzmap(sys2)
 
@@ -397,7 +412,7 @@ plt.title('Spiral Repsonse - rb/V',pad=10)
 
 ########## Print Commands ##########
 
-
+plt.show()
 
 #print(e1, v2)
 
