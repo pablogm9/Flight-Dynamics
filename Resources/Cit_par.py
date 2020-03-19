@@ -6,8 +6,8 @@ import numpy as np
 
 #class Cit_par_class:
 
-def Cit_par_Values(FlightType,Motion):
-
+def Cit_par_Values(FlightType,Motion):              #FlightType: Reference Data = 1, Flight Test Data = 2
+                                                    #Motion: Short Period = 1, Phugoid = 2, Dutch Roll = 3, Aperiodic Roll = 4, Spiral = 5
     # self.xcg = 0.25 * c
     rho = 1.225
     m = 12000
@@ -32,6 +32,8 @@ def Cit_par_Values(FlightType,Motion):
     flight_data, flight_headers, flight_descriptions = Read.get_data('testflight')
 
     velocity_index = np.where(parameters == 'Dadc1_tas')[0].flat[0]
+    hp0_index = np.where(parameters == 'Dadc1_bcAlt')[0].flat[0]
+    th0_index = np.where(parameters == 'Ahrs1_Pitch')[0].flat[0]
     time_index = np.where(parameters=='time')[0].flat[0]
 
     time = np.array(reference_data[[reference_headers[time_index]]])
@@ -40,27 +42,126 @@ def Cit_par_Values(FlightType,Motion):
         if FlightType == 1:
             time_ini = 3695
             reference_V0 = np.array(reference_data[reference_headers[velocity_index]])
+            reference_hp0 = np.array(reference_data[reference_headers[hp0_index]])
+            reference_th0 = np.array(reference_data[reference_headers[th0_index]])
             cell_V0 = np.where(time == time_ini)[0][0]
+            cell_hp0 = np.where(time == time_ini)[0][0]
+            cell_th0 = np.where(time == time_ini)[0][0]
             V0 = reference_V0[cell_V0]
+            hp0 = reference_hp0[cell_hp0]
+            th0 = reference_th0[cell_th0]
+        elif FlightType == 2:
+            time_ini = 3695
+            flight_V0 = np.array(flight_data[flight_headers[velocity_index]])
+            flight_hp0 = np.array(flight_data[flight_headers[hp0_index]])
+            flight_th0 = np.array(flight_data[flight_headers[th0_index]])
+            cell_V0 = np.where(time == time_ini)[0][0]
+            cell_hp0 = np.where(time == time_ini)[0][0]
+            cell_th0 = np.where(time == time_ini)[0][0]
+            V0 = flight_V0[cell_V0]
+            hp0 = flight_hp0[cell_hp0]
+            th0 = flight_th0[cell_th0]
 
-  #  elif Motion == 2:
-
- #   elif Motion == 3:
-
- #   elif Motion == 4:
-
- #   elif Motion == 5:
-
- #   elif Motion == 6:
-
+    elif Motion == 2:
+        if FlightType == 1:
+            time_ini = 3695
+            reference_V0 = np.array(reference_data[reference_headers[velocity_index]])
+            reference_hp0 = np.array(reference_data[reference_headers[hp0_index]])
+            reference_th0 = np.array(reference_data[reference_headers[th0_index]])
+            cell_V0 = np.where(time == time_ini)[0][0]
+            cell_hp0 = np.where(time == time_ini)[0][0]
+            cell_th0 = np.where(time == time_ini)[0][0]
+            V0 = reference_V0[cell_V0]
+            hp0 = reference_hp0[cell_hp0]
+            th0 = reference_th0[cell_th0]
+        elif FlightType == 2:
+            time_ini = 3695
+            flight_V0 = np.array(flight_data[flight_headers[velocity_index]])
+            flight_hp0 = np.array(flight_data[flight_headers[hp0_index]])
+            flight_th0 = np.array(flight_data[flight_headers[th0_index]])
+            cell_V0 = np.where(time == time_ini)[0][0]
+            cell_hp0 = np.where(time == time_ini)[0][0]
+            cell_th0 = np.where(time == time_ini)[0][0]
+            V0 = flight_V0[cell_V0]
+            hp0 = flight_hp0[cell_hp0]
+            th0 = flight_th0[cell_th0]
+    elif Motion == 3:
+        if FlightType == 1:
+            time_ini = 3695
+            reference_V0 = np.array(reference_data[reference_headers[velocity_index]])
+            reference_hp0 = np.array(reference_data[reference_headers[hp0_index]])
+            reference_th0 = np.array(reference_data[reference_headers[th0_index]])
+            cell_V0 = np.where(time == time_ini)[0][0]
+            cell_hp0 = np.where(time == time_ini)[0][0]
+            cell_th0 = np.where(time == time_ini)[0][0]
+            V0 = reference_V0[cell_V0]
+            hp0 = reference_hp0[cell_hp0]
+            th0 = reference_th0[cell_th0]
+        elif FlightType == 2:
+            time_ini = 3695
+            flight_V0 = np.array(flight_data[flight_headers[velocity_index]])
+            flight_hp0 = np.array(flight_data[flight_headers[hp0_index]])
+            flight_th0 = np.array(flight_data[flight_headers[th0_index]])
+            cell_V0 = np.where(time == time_ini)[0][0]
+            cell_hp0 = np.where(time == time_ini)[0][0]
+            cell_th0 = np.where(time == time_ini)[0][0]
+            V0 = flight_V0[cell_V0]
+            hp0 = flight_hp0[cell_hp0]
+            th0 = flight_th0[cell_th0]
+    elif Motion == 4:
+        if FlightType == 1:
+            time_ini = 3695
+            reference_V0 = np.array(reference_data[reference_headers[velocity_index]])
+            reference_hp0 = np.array(reference_data[reference_headers[hp0_index]])
+            reference_th0 = np.array(reference_data[reference_headers[th0_index]])
+            cell_V0 = np.where(time == time_ini)[0][0]
+            cell_hp0 = np.where(time == time_ini)[0][0]
+            cell_th0 = np.where(time == time_ini)[0][0]
+            V0 = reference_V0[cell_V0]
+            hp0 = reference_hp0[cell_hp0]
+            th0 = reference_th0[cell_th0]
+        elif FlightType == 2:
+            time_ini = 3695
+            flight_V0 = np.array(flight_data[flight_headers[velocity_index]])
+            flight_hp0 = np.array(flight_data[flight_headers[hp0_index]])
+            flight_th0 = np.array(flight_data[flight_headers[th0_index]])
+            cell_V0 = np.where(time == time_ini)[0][0]
+            cell_hp0 = np.where(time == time_ini)[0][0]
+            cell_th0 = np.where(time == time_ini)[0][0]
+            V0 = flight_V0[cell_V0]
+            hp0 = flight_hp0[cell_hp0]
+            th0 = flight_th0[cell_th0]
+    elif Motion == 5:
+        if FlightType == 1:
+            time_ini = 3695
+            reference_V0 = np.array(reference_data[reference_headers[velocity_index]])
+            reference_hp0 = np.array(reference_data[reference_headers[hp0_index]])
+            reference_th0 = np.array(reference_data[reference_headers[th0_index]])
+            cell_V0 = np.where(time == time_ini)[0][0]
+            cell_hp0 = np.where(time == time_ini)[0][0]
+            cell_th0 = np.where(time == time_ini)[0][0]
+            V0 = reference_V0[cell_V0]
+            hp0 = reference_hp0[cell_hp0]
+            th0 = reference_th0[cell_th0]
+        elif FlightType == 2:
+            time_ini = 3695
+            flight_V0 = np.array(flight_data[flight_headers[velocity_index]])
+            flight_hp0 = np.array(flight_data[flight_headers[hp0_index]])
+            flight_th0 = np.array(flight_data[flight_headers[th0_index]])
+            cell_V0 = np.where(time == time_ini)[0][0]
+            cell_hp0 = np.where(time == time_ini)[0][0]
+            cell_th0 = np.where(time == time_ini)[0][0]
+            V0 = flight_V0[cell_V0]
+            hp0 = flight_hp0[cell_hp0]
+            th0 = flight_th0[cell_th0]
     else:
         print("Not a valid input")
         sys.exit()
 
-    hp0    =    2000   	      # pressure altitude in the stationary flight condition [m]
-    V0     = 83            # true airspeed in the stationary flight condition [m/sec]
+    #hp0    =    2000   	      # pressure altitude in the stationary flight condition [m]
+    #V0     = 83            # true airspeed in the stationary flight condition [m/sec]
     #alpha0 =             # angle of attack in the stationary flight condition [rad]
-    th0    =     0        # pitch angle in the stationary flight condition [rad]
+    #th0    =     0        # pitch angle in the stationary flight condition [rad]
 
     # Aircraft mass
     #m      =             # mass [kg]
