@@ -1,10 +1,12 @@
 # Citation 550 - Linear simulation
 from math import *
+import sys
+import Read
 import numpy as np
 
 #class Cit_par_class:
 
-def Cit_par_Values():
+def Cit_par_Values(FlightType,Motion):
 
     # self.xcg = 0.25 * c
     rho = 1.225
@@ -14,6 +16,40 @@ def Cit_par_Values():
     Cl = 1.2
 
     # Stationary flight condition
+    parameters = np.array(
+        ['vane_AOA', 'elevator_dte', 'column_fe', 'lh_engine_FMF', 'rh_engine_FMF', 'lh_engine_itt', 'rh_engine_itt',
+         'lh_engine_OP', 'rh_engine_OP', 'lh_engine_fan_N1', 'lh_engine_turbine_N2', 'rh_engine_fan_N1',
+         'rh_engine_turbine_N2',
+         'lh_engine_FU', 'rh_engine_FU', 'delta_a', 'delta_e', 'delta_r', 'Gps_date', 'Gps_utcSec', 'Ahrs1_Roll',
+         'Ahrs1_Pitch', 'Fms1_trueHeading', 'Gps_lat', 'Gps_long', 'Ahrs1_bRollRate', 'Ahrs1_bPitchRate',
+         'Ahrs1_bYawRate',
+         'Ahrs1_bLongAcc', 'Ahrs1_bLatAcc', 'Ahrs1_bNormAcc', 'Ahrs1_aHdgAcc', 'Ahrs1_xHdgAcc', 'Ahrs1_VertAcc',
+         'Dadc1_sat', 'Dadc1_tat', 'Dadc1_alt', 'Dadc1_bcAlt', 'Dadc1_bcAltMb', 'Dadc1_mach', 'Dadc1_cas', 'Dadc1_tas',
+         'Dadc1_altRate', 'measurement_running', 'measurement_n_rdy', 'display_graph_state', 'display_active_screen',
+         'time'])
+
+    reference_data, reference_headers, reference_descriptions = Read.get_data('ref_data')
+    flight_data, flight_headers, flight_descriptions = Read.get_data('testflight')
+
+    if Motion == 1:
+        velocity_index = np.where(parameters=='Dadc1_tas')[0].flat[0]
+        if FlightType == 1:
+
+
+  #  elif Motion == 2:
+
+ #   elif Motion == 3:
+
+ #   elif Motion == 4:
+
+ #   elif Motion == 5:
+
+ #   elif Motion == 6:
+
+    else:
+        print("Not a valid input")
+        sys.exit()
+
     hp0    =    2000   	      # pressure altitude in the stationary flight condition [m]
     V0     = 83            # true airspeed in the stationary flight condition [m/sec]
     #alpha0 =             # angle of attack in the stationary flight condition [rad]
@@ -28,8 +64,17 @@ def Cit_par_Values():
     #CLa    =             # Slope of CL-alpha curve [ ]
 
     # Longitudinal stability
-    Cma    = -1.2           # longitudinal stabilty [ ]
-    Cmde   =   -0.02          # elevator effectiveness [ ]
+    if FlightType == 1:
+        from StationaryData.stationary_reference_call import C_m_alpha, C_m_delta
+        Cma    = C_m_alpha           # longitudinal stabilty [ ]
+        Cmde   = C_m_delta      # elevator effectiveness [ ]
+    elif FlightType == 2:
+        from StationaryData.stationary_testflight_call import C_m_alpha, C_m_delta
+        Cma = C_m_alpha
+        Cmde = C_m_delta
+    else:
+        print("Not a valid input")
+        sys.exit()
 
     # Aircraft geometry
 
@@ -119,97 +164,3 @@ def Cit_par_Values():
     Cndr   =  -0.0939
 
     return rho, m, Cma, CZ0, Cl, hp0, V0, th0, Cmde, S, Sh, Sh_S, lh, c, lh_c, b, bh, A, Ah, Vh_V, ih, rho0, lamda, Temp0, R, g, W, muc, mub, KX2, KZ2, KXZ, KY2, Cmac, CNha, depsda, CX0, CXu, CXa, CXadot, CXq, CXde, CZ0, CZu, CZa, CZadot, CZq, CZde, Cmu, Cmadot, Cmq, CYb, CYbdot, CYp, CYr, CYda, CYdr, Clb, Clp, Clr, Clda, Cldr, Cnb, Cnbdot, Cnp, Cnr, Cnda, Cndr
-'''
-    def returnCit_par(self):
-
-        rho = self.rho
-        m = self.m
-
-        CZ0 = self.CZ0
-        Cl = self.Cl
-
-        hp0 = self.hp0
-        V0 = self.V0
-
-        th0 = self.th0
-
-
-        Cma = self.Cma
-        Cmde = self.Cmde
-
-
-
-        S = self.S
-        Sh = self.Sh
-        Sh_S = self.Sh_S
-        lh = self.lh
-        c = self.c
-        lh_c = self.lh_c
-        b = self.b
-        bh = self.bh
-        A = self.A
-        Ah = self.Ah
-        Vh_V = self.Vh_V
-        ih = self.ih
-
-
-        rho0 = self.rho0
-        lamda = self.lamda
-        Temp0 = self.Temp0
-        R = self.R
-        g = self.g
-
-        W = self.W
-
-        muc = self.muc
-        mub = self.mub
-        KX2 = self.KX2
-        KZ2 = self.KZ2
-        KXZ = self.KXZ
-        KY2 = self.KY2
-
-        Cmac = self.Cmac
-
-        CNha = self.CNha
-        depsda = self.depsda
-
-        CX0 = self.CX0
-        CXu = self.CXu
-        CXa = self.CXa
-        CXadot = self.CXadot
-        CXq = self.CXq
-        CXde = self.CXde
-
-        CZ0 = self.CZ0
-        CZu = self.CZu
-        CZa = self.CZa
-        CZadot = self.CZadot
-        CZq = self.CZq
-        CZde = self.CZde
-
-        Cmu = self.Cmu
-        Cmadot = self.Cmadot
-        Cmq = self.Cmq
-
-        CYb = self.CYb
-        CYbdot = self.CYbdot
-        CYp = self.CYp
-        CYr = self.CYr
-        CYda = self.CYda
-        CYdr = self.CYdr
-
-        Clb = self.Clb
-        Clp = self.Clp
-        Clr = self.Clr
-        Clda = self.Clda
-        Cldr = self.Cldr
-
-        Cnb = self.Cnb
-        Cnbdot = self.Cnbdot
-        Cnp = self.Cnp
-        Cnr = self.Cnr
-        Cnda = self.Cnda
-        Cndr = self.Cndr
-
-        return rho, m, Cma, CZ0, Cl, hp0, V0, th0, Cmde, S, Sh, Sh_S, lh, c, lh_c, b, bh, A, Ah, Vh_V, ih, rho0, lamda, Temp0, R, g, W, muc, mub, KX2, KZ2, KXZ, KY2, Cmac, CNha, depsda, CX0, CXu, CXa, CXadot, CXq, CXde, CZ0, CZu, CZa, CZadot, CZq, CZde, Cmu, Cmadot, Cmq, CYb, CYbdot, CYp, CYr, CYda, CYdr, Clb, Clp, Clr, Clda, Cldr, Cnb, Cnbdot, Cnp, Cnr, Cnda, Cndr
-'''
