@@ -254,7 +254,7 @@ C_L_range = C_L_alpha_polynomial(alpha_range)
 C_L_alpha = C_L_alpha_coefficients[0]
 
 # Alpha_0 
-idx = np.where(C_L_range==np.abs(C_L_range).min())
+idx = np.where(np.abs(C_L_range)==np.abs(C_L_range).min())
 alpha_0 = alpha_range[idx][0]
 
 
@@ -412,7 +412,7 @@ moment_BEM = 2672972.25
 x_cg_payload = np.array([131,131,170,214,214,251,251,288,288])
 
 #Array of moment of each passenger in [lbs*inch]
-moment_payload = x_cg_payload*np.array(passenger_masses)*2.20462
+moment_payload = x_cg_payload*np.array(passenger_masses)*2.20462*386.09
 
 #Value of total moment of all passengers in [lbs*inch]
 moment_total_payload = np.sum(moment_payload)
@@ -428,7 +428,7 @@ moment_total_aircraft = np.array([moment_BEM,moment_BEM])+moment_fuel_load+np.ar
 
 #Array of 2 cg locations [inches] from the datum line
 x_cg_max = (moment_BEM+moment_total_payload+11451.85)/(rampmass*2.20462) #Once again choose the last value according to your Fuel Load
-x_cg = moment_total_aircraft/(W_cg*2.20462)
+x_cg = moment_total_aircraft/(W_cg*2.20462*386.09)
 
 
 # --- Calculating C_m_delta ---
