@@ -28,16 +28,11 @@ flight_data,flight_headers,flight_descriptions = Read.get_data('testflight')
 
 
 
-# ---------------- ANALYSIS OF STATIONARY MEASUREMENT DATA ----------------
- 
-
-
-
-
 
 
 
 # ---------------- SAMPLE PLOTS ----------------
+
 
 # Sample plot, AOA vs t
 alpha_index = np.where(parameters=='vane_AOA')[0].flat[0]
@@ -75,9 +70,31 @@ plt.grid()
 plt.xlabel('Time [sec]')
 plt.ylabel('Delta_e [deg]')
 plt.title('Elevator deflection over time',pad=10)
-
 plt.show()
 
+
+'''
+# Sample plot, elevator_dte vs t
+time_index = np.where(parameters=='time')[0].flat[0]
+time = np.array(reference_data[[reference_headers[time_index]]])
+
+trim_index = np.where(parameters=='elevator_dte')[0].flat[0]
+
+reference_trim = np.array(reference_data[flight_headers[trim_index]])
+flight_trim = np.array(flight_data[flight_headers[trim_index]])
+
+f2 = plt.figure(2)
+plt.plot(time,reference_trim,'r',label='Arbitrary data (sine function)')
+plt.plot(time,flight_trim,'b',label='Flight data')
+
+plt.legend()
+plt.grid()
+plt.xlabel('Time [sec]')
+plt.ylabel('Elevator trim tab deflection [deg]')
+plt.title('Trim tab deflection over time',pad=10)
+
+plt.show()
+'''
 
 
 
