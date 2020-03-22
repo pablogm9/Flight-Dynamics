@@ -7,11 +7,6 @@ rho, m, Cma, CZ0, Cl, hp0, V0, th0, Cmde, S, Sh, Sh_S, lh, c, lh_c, b, bh, A, Ah
 
 
 
-
-print(th0)
-
-
-
 #empty lists to fill with values
 lambdas     = []
 lambdas_real = []
@@ -177,3 +172,35 @@ damp_droll = -1*lambda_droll_real/abs(lambda_droll_real+lambda_droll_imag)
 damp_ratio.append(damp_shawty)
 damp_ratio.append(damp_phugoid)
 damp_ratio.append(damp_droll)
+
+
+
+#============================COMPLETE SOLUTION SYMMETRICAL======================
+A_s = 4 * muc**2 * KY2 * (CZadot - 2*muc)
+B_s = Cmadot * 2 * muc * (CZq + 2 * muc) - Cmq * 2 * muc * (CZadot - 2 * muc) - 2*muc * KY2 * (CXu * (CZadot - 2*muc) - 2*muc*CZa)
+C_s = Cma * 2*muc * (CZq + 2*muc) - Cmadot * (2*muc * CX0 + CXu * (CZq + 2*muc)) + Cmq * (CXu * (CZadot - 2*muc) - 2*muc * CZa) + 2*muc * KY2 * (CXa * CZu - CZa * CXu)
+D_s = Cmu * ( CXa * ( CZq + 2*muc) - CZ0 * (CZadot - 2*muc)) - Cma * (2*muc * CX0 + CXu * (CZq + 2*muc)) + Cmadot * (CX0 * CXu - CZ0 * CZu) + Cmq *  (CXu * CZa - CZu * CXa)
+E_s = -Cmu * (CX0 * CXa + CZ0 * CZa) + Cma * (CX0 * CXu + CZ0 * CZu)
+p_s = np.array([A_s, B_s, C_s, D_s, E_s])
+
+roots_s = np.roots(p_s)
+root1_s = roots_s[0]*V0/c
+root2_s = roots_s[1]*V0/c
+root3_s = roots_s[2]*V0/c
+root4_s = roots_s[3]*V0/c
+
+
+#===========================COMPLETE SOLUTION ASYMMETRICAL==========================
+A_a = 16 * mub**3 * (KX2*KZ2 - KXZ**2)
+B_a = -4*mub**2 * ( 2*CYb * (KX2*KZ2 - KXZ**2) + Cnr * KX2 + Clp * KZ2 + (Clr + Cnp) * KXZ)
+C_a = 2*mub * ((CYb * Cnr - CYr * Cnb) * KX2 + (CYb * Clp - Clb * CYp) * KZ2 + ((CYb * Cnp - Cnb * CYp) + (CYb * Clr - Clb * CYr)) * KXZ + 4*mub * Cnb * KX2 + 4*mub * Clb * KXZ + 0.5 * (Clp * Cnr - Cnp * Clr))
+D_a = -4*mub * Cl * (Clb * KZ2 + Cnb * KXZ) + 2*mub * (Clb * Cnp - Cnb * Clp) + 0.5 * CYb * (Clr * Cnp - Cnr * Clp) + 0.5 * CYp * (Clb * Cnr - Cnb * Clr) + 0.5 * CYr * (Clp * Cnb - Cnp * Clb)
+E_a = Cl * (Clb * Cnr - Cnb * Clr)
+p_a = np.array([A_a, B_a, C_a, D_a, E_a])
+
+roots_a = np.roots(p_a)
+root1_a = roots_a[0]*V0/b
+root2_a = roots_a[1]*V0/b
+root3_a = roots_a[2]*V0/b
+root4_a = roots_a[3]*V0/b
+print(root1_a, root2_a, root3_a, root4_a)
