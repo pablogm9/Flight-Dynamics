@@ -9,7 +9,7 @@ import numpy as np
 def Cit_par_Values(FlightType,Motion):              #FlightType: Reference Data = 1, Flight Test Data = 2
                                                     #Motion: Short Period = 1, Phugoid = 2, Dutch Roll = 3, Aperiodic Roll = 4, Spiral = 5
     # self.xcg = 0.25 * c
-    rho = 1.225
+
     m = 4000
 
 
@@ -46,7 +46,7 @@ def Cit_par_Values(FlightType,Motion):              #FlightType: Reference Data 
             cell_hp0 = np.where(time == time_ini)[0][0]
             cell_th0 = np.where(time == time_ini)[0][0]
             V0 = reference_V0[cell_V0]*0.51444
-            hp0 = reference_hp0[cell_hp0]
+            hp0 = reference_hp0[cell_hp0]*0.3048
             th0 = reference_th0[cell_th0]*pi/180
         elif FlightType == 2:
             time_ini = 3157
@@ -57,7 +57,7 @@ def Cit_par_Values(FlightType,Motion):              #FlightType: Reference Data 
             cell_hp0 = np.where(time == time_ini)[0][0]
             cell_th0 = np.where(time == time_ini)[0][0]
             V0 = flight_V0[cell_V0]*0.51444
-            hp0 = flight_hp0[cell_hp0]
+            hp0 = flight_hp0[cell_hp0]*0.3048
             th0 = flight_th0[cell_th0]*pi/180
 
     elif Motion == 2:
@@ -70,7 +70,7 @@ def Cit_par_Values(FlightType,Motion):              #FlightType: Reference Data 
             cell_hp0 = np.where(time == time_ini)[0][0]
             cell_th0 = np.where(time == time_ini)[0][0]
             V0 = reference_V0[cell_V0]*0.51444
-            hp0 = reference_hp0[cell_hp0]
+            hp0 = reference_hp0[cell_hp0]*0.3048
             th0 = reference_th0[cell_th0]*pi/180
         elif FlightType == 2:
             time_ini = 3228
@@ -81,7 +81,7 @@ def Cit_par_Values(FlightType,Motion):              #FlightType: Reference Data 
             cell_hp0 = np.where(time == time_ini)[0][0]
             cell_th0 = np.where(time == time_ini)[0][0]
             V0 = flight_V0[cell_V0]*0.51444
-            hp0 = flight_hp0[cell_hp0]
+            hp0 = flight_hp0[cell_hp0]*0.3048
             th0 = flight_th0[cell_th0]*pi/180
     elif Motion == 3:
         if FlightType == 1:
@@ -93,7 +93,7 @@ def Cit_par_Values(FlightType,Motion):              #FlightType: Reference Data 
             cell_hp0 = np.where(time == time_ini)[0][0]
             cell_th0 = np.where(time == time_ini)[0][0]
             V0 = reference_V0[cell_V0]*0.51444
-            hp0 = reference_hp0[cell_hp0]
+            hp0 = reference_hp0[cell_hp0]*0.3048
             th0 = reference_th0[cell_th0]*pi/180
         elif FlightType == 2:
             time_ini = 3479
@@ -104,7 +104,7 @@ def Cit_par_Values(FlightType,Motion):              #FlightType: Reference Data 
             cell_hp0 = np.where(time == time_ini)[0][0]
             cell_th0 = np.where(time == time_ini)[0][0]
             V0 = flight_V0[cell_V0]*0.51444
-            hp0 = flight_hp0[cell_hp0]
+            hp0 = flight_hp0[cell_hp0]*0.3048
             th0 = flight_th0[cell_th0]*pi/180
     elif Motion == 4:
         if FlightType == 1:
@@ -116,7 +116,7 @@ def Cit_par_Values(FlightType,Motion):              #FlightType: Reference Data 
             cell_hp0 = np.where(time == time_ini)[0][0]
             cell_th0 = np.where(time == time_ini)[0][0]
             V0 = reference_V0[cell_V0]*0.51444
-            hp0 = reference_hp0[cell_hp0]
+            hp0 = reference_hp0[cell_hp0]*0.3048
             th0 = reference_th0[cell_th0]*pi/180
         elif FlightType == 2:
             time_ini = 3607
@@ -127,7 +127,7 @@ def Cit_par_Values(FlightType,Motion):              #FlightType: Reference Data 
             cell_hp0 = np.where(time == time_ini)[0][0]
             cell_th0 = np.where(time == time_ini)[0][0]
             V0 = flight_V0[cell_V0]*0.51444
-            hp0 = flight_hp0[cell_hp0]
+            hp0 = flight_hp0[cell_hp0]*0.3048
             th0 = (flight_th0[cell_th0])*pi/180
     elif Motion == 5:
         if FlightType == 1:
@@ -139,7 +139,7 @@ def Cit_par_Values(FlightType,Motion):              #FlightType: Reference Data 
             cell_hp0 = np.where(time == time_ini)[0][0]
             cell_th0 = np.where(time == time_ini)[0][0]
             V0 = reference_V0[cell_V0]*0.51444
-            hp0 = reference_hp0[cell_hp0]
+            hp0 = reference_hp0[cell_hp0]*0.3048
             th0 = reference_th0[cell_th0]*pi/180
         elif FlightType == 2:
             time_ini = 3675
@@ -150,7 +150,7 @@ def Cit_par_Values(FlightType,Motion):              #FlightType: Reference Data 
             cell_hp0 = np.where(time == time_ini)[0][0]
             cell_th0 = np.where(time == time_ini)[0][0]
             V0 = flight_V0[cell_V0]*0.51444
-            hp0 = flight_hp0[cell_hp0]
+            hp0 = flight_hp0[cell_hp0]*0.3048
             th0 = flight_th0[cell_th0]*pi/180
     else:
         print("Not a valid input")

@@ -4,7 +4,7 @@ import control.matlab as ml
 import matplotlib.pyplot as plt
 import control as ctr
 import Read
-Cl = 1.3
+
 
 #####DEFINITIONS######
 
@@ -19,9 +19,9 @@ def inputcr(delta_values, time_value, t_array, time_ini, time_fin): #(deflection
      missing = len(t_array) - len(values)
      zeros = np.zeros((1, missing))
      delta_values_aaa = np.hstack((delta_values_aa, zeros))
-     delta_values_aaaa = np.transpose(delta_values_aaa)
+     delta_values_array = np.transpose(delta_values_aaa)
 
-     return delta_values_aaaa
+     return delta_values_array
 
 
 ####GETTING DATA FOR INPUTS###########
@@ -96,8 +96,10 @@ def ABCD(flight,motion):
     #print(D2)
     sys1 = ml.ss(A1, B1, C1, D1)
     sys2 = ml.ss(A2,B2,C2, D2)
+    e1 = np.linalg.eig(A1)
+    e2 = np.linalg.eig(A2)
 
-    return sys1, sys2
+    return sys1, sys2, e1, e2
 
 
 
@@ -110,22 +112,25 @@ def ABCD(flight,motion):
 ########## STATE SPACE MODEL ##########
 
 #short period
-sys, sys_sp_r = ABCD(1,1)
-sys, sys_sp_f = ABCD(2,1)
+sys, sys_sp_r, e1_sp_r, e2_sp_r = ABCD(1,1)
+sys, sys_sp_f, e1_sp_f, e2_sp_f = ABCD(2,1)
 ml.pzmap(sys_sp_r)
 #phugoid
-sys, sys_ph_r = ABCD(1,2)
-sys, sys_ph_f = ABCD(2,2)
+sys, sys_ph_r, e1_ph_r, e2_ph_r = ABCD(1,2)
+sys, sys_ph_f, e1_ph_f, e2_ph_f = ABCD(2,2)
 ml.pzmap(sys_ph_r)
 #dutch roll
-sys_dr_r, sys = ABCD(1,3)
-sys_dr_f, sys = ABCD(2,3)
+sys_dr_r, sys, e1_dr_r, e2_dr_r = ABCD(1,3)
+sys_dr_f, sys, e1_dr_f, e2_dr_f = ABCD(2,3)
+ml.pzmap(sys_dr_r)
 #aperiodic
-sys_ap_r, sys = ABCD(1,4)
-sys_ap_f, sys = ABCD(2,4)
+sys_ap_r, sys, e1_ap_r, e2_ap_r = ABCD(1,4)
+sys_ap_f, sys, e1_ap_f, e2_ap_f = ABCD(2,4)
+ml.pzmap(sys_ap_r)
 #spiral
-sys_spir_r,sys = ABCD(1,5)
-sys_spir_f,sys = ABCD(2,5)
+sys_spir_r,sys, e1_spir_r, e2_spir_r = ABCD(1,5)
+sys_spir_f,sys, e1_spir_f, e2_spir_f = ABCD(2,5)
+ml.pzmap(sys_spir_r)
 
 
 
