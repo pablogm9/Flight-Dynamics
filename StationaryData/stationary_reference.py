@@ -429,16 +429,34 @@ moment_BEM = 2672972.25
 x_cg_payload_0 = np.array([131,131,170,214,214,251,251,288,288])
 x_cg_payload_1 = np.array([131,131,170,214,214,251,251,288,134])
 
+x_cg_payload_veri_1 = np.array([131,131,170,214,214,251,251,288,251])
+x_cg_payload_veri_2 = np.array([131,131,170,214,214,251,251,288,214])
+x_cg_payload_veri_3 = np.array([131,131,170,214,214,251,251,288,170])
+
+
 
 #Array of moment of each passenger in [lbs*inch]
 moment_payload_0 = x_cg_payload_0*np.array(passenger_masses)*2.20462
 moment_payload_1 = x_cg_payload_1*np.array(passenger_masses)*2.20462
 
+moment_payload_veri_1 = x_cg_payload_veri_1*np.array(passenger_masses)*2.20462
+moment_payload_veri_2 = x_cg_payload_veri_2*np.array(passenger_masses)*2.20462
+moment_payload_veri_3 = x_cg_payload_veri_3*np.array(passenger_masses)*2.20462
+
 
 #Value of total moment of all passengers in [lbs*inch]
 moment_total_payload = np.array([np.sum(moment_payload_0),np.sum(moment_payload_1)])
+moment_total_payload_veri_0 = np.array([np.sum(moment_payload_0),np.sum(moment_payload_0)])
+moment_total_payload_veri_1 = np.array([np.sum(moment_payload_0),np.sum(moment_payload_veri_1)])
+moment_total_payload_veri_2 = np.array([np.sum(moment_payload_0),np.sum(moment_payload_veri_2)])
+moment_total_payload_veri_3 = np.array([np.sum(moment_payload_0),np.sum(moment_payload_veri_3)])
+
+
+
 
 #Array of 2 fuel loads in [lbs]
+fuel_load= np.array([block_fuel,block_fuel,block_fuel,block_fuel,block_fuel,block_fuel])*2.20462 -F_used*2.20462
+fuel_load_elev=np.array([block_fuel,block_fuel,block_fuel,block_fuel,block_fuel,block_fuel,block_fuel])*2.20462 - F_used_elevator*2.20462
 fuel_load_cg = np.array([block_fuel,block_fuel])*2.20462-F_used_cg
 
 #Array of 2 moment of fuel loads [lbs*inch]
@@ -446,10 +464,35 @@ moment_fuel_load = np.array([9036.2144*100,8953.344*100]) # Choose this Value ac
 moment_fuel_load_mean=np.mean(moment_fuel_load)
 #Total moment of aircraft [lbs*inch]
 moment_total_aircraft = np.array([moment_BEM,moment_BEM])+moment_fuel_load+moment_total_payload
+moment_total_aircraft_veri_0 = np.array([moment_BEM,moment_BEM])+moment_fuel_load+moment_total_payload_veri_0
+moment_total_aircraft_veri_1 = np.array([moment_BEM,moment_BEM])+moment_fuel_load+moment_total_payload_veri_1
+moment_total_aircraft_veri_2 = np.array([moment_BEM,moment_BEM])+moment_fuel_load+moment_total_payload_veri_2
+moment_total_aircraft_veri_3 = np.array([moment_BEM,moment_BEM])+moment_fuel_load+moment_total_payload_veri_3
+
+
 
 #Array of 2 cg locations [inches] from the datum line
 x_cg_max = (moment_BEM+moment_total_payload+11451.85)/(rampmass*2.20462) #Once again choose the last value according to your Fuel Load
 x_cg = moment_total_aircraft/(W_cg*2.20462)
+x_cg_veri_0 = (moment_total_aircraft_veri_0/(W_cg*2.20462))
+x_cg_veri_1 = (moment_total_aircraft_veri_1/(W_cg*2.20462))
+x_cg_veri_2 = (moment_total_aircraft_veri_2/(W_cg*2.20462))
+x_cg_veri_3 = (moment_total_aircraft_veri_3/(W_cg*2.20462))
+seat_locations = np.array([288,251,214,170,134])
+x_cg_veri = np.array([x_cg_veri_0[1]-x_cg_veri_0[0],x_cg_veri_1[1]-x_cg_veri_1[0],x_cg_veri_2[1]-x_cg_veri_2[0],x_cg_veri_3[1]-x_cg_veri_3[0],x_cg[1]-x_cg[0]])
+
+'''
+plt.scatter(seat_locations,x_cg_veri)
+plt.xlabel('Aircraft Seat Location relative to Datum [m]')
+plt.ylabel('Change in Center of Gravity [m]')
+plt.ylim((0,np.min(x_cg_veri)*1.1))
+plt.title(r'$\Delta x_{cg}$ VS Passenger Location')
+plt.legend()
+plt.grid()
+plt.show()
+'''
+
+
 
 
 # --- Calculating C_m_delta ---
