@@ -49,10 +49,6 @@ flight_delta_r = np.array(flight_data[flight_headers[delta_r_index]])
 flight_delta_a = np.array(flight_data[flight_headers[delta_a_index]])
 time = np.array(reference_data[[reference_headers[time_index]]])
 
-#class ABCDmat():
-    #from Resources.Cit_par import Cit_par_class
-    #def __init__(self):
-        #Cit_par_Values(self)
 
 def ABCD(flight,motion):
     
@@ -90,10 +86,7 @@ def ABCD(flight,motion):
 
     D2 = np.array([[0], [0], [0], [0]])
 
-    #print(A2)
-    #print(B2)
-    #print(C2)
-    #print(D2)
+
     sys1 = ml.ss(A1, B1, C1, D1)
     sys2 = ml.ss(A2,B2,C2, D2)
     e1,v = np.linalg.eig(A1)
@@ -137,33 +130,34 @@ sys_spir_f,sys, e1_spir_f, e2_spir_f = ABCD(2,5)
 ########### SIMULATION OF EIGENMOTIONS########
 dt= 0.1
 
-'''
+
 #Short Period
-t1 = np.arange(0 , 10, dt)
-t_ini = 3634
-t_fin = 3636
+t1 = np.arange(0 , 5, dt)
+# t_ini = 3634
+# t_fin = 3636
+#
+# u1, cell = inputcr(reference_delta_e, time, t1, t_ini , t_fin)
+#
+# y1_r , T1_r, x1_r = ml.lsim(sys_sp_r, u1, t1)
 
-u1, cell = inputcr(reference_delta_e, time, t1, t_ini , t_fin)
 
-y1_r , T1_r, x1_r = ml.lsim(sys_sp_r, u1, t1)
-
-
-u1_f, celli_1 = inputcr(flight_delta_e, time, t1, 3158 , 3168)
+u1_f, celli_1 = inputcr(flight_delta_e, time, t1, 3156 , 3161)
 
 y1_f , T1_f, x1_f = ml.lsim(sys_sp_f, u1_f, t1)
+
 
 # Phugoid
 t2 = np.arange(0 , 150, dt)
 
-u2, cell = inputcr(reference_delta_e, time, t2, 3237, 3247)
+# u2, cell = inputcr(reference_delta_e, time, t2, 3237, 3247)
+#
+# y2_r , T2_r, x2_r = ml.lsim(sys_ph_r, u2, t2)
 
-y2_r , T2_r, x2_r = ml.lsim(sys_ph_r, u2, t2)
 
-
-u2_f, celli_2 = inputcr(flight_delta_e, time, t2, 3230 , 3240)
+u2_f, celli_2 = inputcr(flight_delta_e, time, t2, 3230 , 3251)
 
 y2_f , T2_f, x2_f = ml.lsim(sys_ph_f, u2_f, t2)
-'''
+
 #Dutch Roll
 t3 = np.arange(0 , 30, dt)
 
@@ -179,20 +173,20 @@ u3_t_f, celli_3 = inputcr(flight_delta_r, time, t3, 3527, 3537)
 u3_f = np.hstack((np.zeros((len(t3), 1)), u3_t_f))
 
 y3_f , T3_f, x3_f = ml.lsim(sys_dr_f, u3_f, t3)
-'''
+
 #Aperiodic roll
 t4 = np.arange(0 , 30, dt)
 
-u4_t, cell = inputcr(reference_delta_a, time, t4, 3550, 3580)
+# u4_t, cell = inputcr(reference_delta_a, time, t4, 3550, 3580)
+#
+# u4 = np.hstack((u4_t, np.zeros((len(t4), 1))))
+#
+# y4_r , T4_r, x4_r = ml.lsim(sys_ap_r, u4, t4)
 
-u4 = np.hstack((u4_t, np.zeros((len(t4), 1))))
 
-y4_r , T4_r, x4_r = ml.lsim(sys_ap_r, u4, t4)
+u4_t1_f, celli_4 = inputcr(flight_delta_a, time, t4, 3607, 3627)
 
-
-u4_t1_f, celli_4 = inputcr(flight_delta_a, time, t4, 3607, 3637)
-
-u4_t2_f, celli_4 = inputcr(flight_delta_r, time, t4, 3607, 3637)
+u4_t2_f, celli_4 = inputcr(flight_delta_r, time, t4, 3607, 3627)
 
 u4_f = np.hstack((u4_t1_f,u4_t2_f))
 
@@ -200,24 +194,24 @@ y4_f , T4_f, x4_f = ml.lsim(sys_ap_f, u4_f, t4)
 
 
 #Spiral
-t5 = np.arange(0, 100,dt)
+t5 = np.arange(0, 140,dt)
 
-u5_t, cell= inputcr(reference_delta_a, time, t5, 3912, 4012)
+# u5_t, cell= inputcr(reference_delta_a, time, t5, 3912, 4012)
+#
+# u5 = np.hstack((u5_t, np.zeros((len(t5), 1))))
+#
+# y5_r , T5_r, x5_r = ml.lsim(sys_spir_r, u5, t5)
 
-u5 = np.hstack((u5_t, np.zeros((len(t5), 1))))
+u5_t1_f, celli_5 = inputcr(flight_delta_a, time, t5, 3667, 3687)
 
-y5_r , T5_r, x5_r = ml.lsim(sys_spir_r, u5, t5)
-
-u5_t1_f, celli_5 = inputcr(flight_delta_a, time, t5, 3675, 3775)
-
-u5_t2_f, celli_5 = inputcr(flight_delta_r, time, t5, 3675, 3775)
+u5_t2_f, celli_5 = inputcr(flight_delta_r, time, t5, 3667, 3607)
 
 u5_f = np.hstack((u5_t1_f, u5_t2_f))
 
 y5_f , T5_f, x5_f = ml.lsim(sys_spir_f, u5_f, t5)
-'''
 
-'''
+
+
 ##########PLOTS OF RESPONSES###########
 #Short Period
 f1 = plt.figure(1)
@@ -310,7 +304,7 @@ plt.grid()
 plt.xlabel('Time [sec]')
 plt.ylabel('qc/V[-]')
 plt.title('Phugoid Response - qc/V',pad=10)
-'''
+
 
 #Dutch Roll
 f9 = plt.figure(9)
@@ -358,7 +352,7 @@ plt.grid()
 plt.xlabel('Time [sec]')
 plt.ylabel('rb/V [-]')
 plt.title('Dutch Roll Repsonse - rb/V',pad=10)
-'''
+
 #Aperiodic Roll
 f13 = plt.figure(13)
 #plt.plot(T4_r,y4_r[:,0],'r',label='Reference Data')
@@ -449,7 +443,7 @@ plt.xlabel('Time [sec]')
 plt.ylabel('rb/V [-]')
 plt.title('Spiral Repsonse - rb/V',pad=10)
 
- '''
+
 
 ########## Print Commands ##########
 

@@ -51,21 +51,17 @@ def statvalues(FlightType, Motion):
         if FlightType == 1:
             time_ini = 3634
             cell_V0 = np.where(time == time_ini)[0][0]
-            cell_hp0 = np.where(time == time_ini)[0][0]
             cell_th0 = np.where(time == time_ini)[0][0]
             V0 = reference_V0[cell_V0] * 0.51444
-            hp0 = reference_hp0[cell_hp0] * 0.3048
             th0 = reference_th0[cell_th0] * pi / 180
             a01 = flight_a[cell_th0] * pi / 180
 
         elif FlightType == 2:
             time_ini = 3157
             cell_V0 = np.where(time == time_ini)[0][0]
-            cell_hp0 = np.where(time == time_ini)[0][0]
             cell_th0 = np.where(time == time_ini)[0][0]
             cell_a0 = np.where(time == time_ini)[0][0]
             V0 = flight_V0[cell_V0] * 0.51444
-            hp0 = flight_hp0[cell_hp0] * 0.3048
             th0 = flight_th0[cell_th0] * pi / 180
             a01 = flight_a[cell_a0] * pi / 180
 
@@ -76,16 +72,14 @@ def statvalues(FlightType, Motion):
             cell_hp0 = np.where(time == time_ini)[0][0]
             cell_th0 = np.where(time == time_ini)[0][0]
             V0 = reference_V0[cell_V0] * 0.51444
-            hp0 = reference_hp0[cell_hp0] * 0.3048
             th0 = reference_th0[cell_th0] * pi / 180
         elif FlightType == 2:
-            time_ini = 3228
+            time_ini = 3230
             cell_V0 = np.where(time == time_ini)[0][0]
             cell_hp0 = np.where(time == time_ini)[0][0]
             cell_th0 = np.where(time == time_ini)[0][0]
             cell_a0 = np.where(time == time_ini)[0][0]
             V0 = flight_V0[cell_V0] * 0.51444
-            hp0 = flight_hp0[cell_hp0] * 0.3048
             th0 = flight_th0[cell_th0] * pi / 180
             a01 = flight_a[cell_a0] * pi / 180
 
@@ -97,7 +91,6 @@ def statvalues(FlightType, Motion):
             cell_th0 = np.where(time == time_ini)[0][0]
             cell_a0 = np.where(time == time_ini)[0][0]
             V0 = reference_V0[cell_V0] * 0.51444
-            hp0 = reference_hp0[cell_hp0] * 0.3048
             th0 = reference_th0[cell_th0] * pi / 180
         elif FlightType == 2:
             time_ini = 3479
@@ -106,7 +99,6 @@ def statvalues(FlightType, Motion):
             cell_th0 = np.where(time == time_ini)[0][0]
             cell_a0 = np.where(time == time_ini)[0][0]
             V0 = flight_V0[cell_V0] * 0.51444
-            hp0 = flight_hp0[cell_hp0] * 0.3048
             th0 = flight_th0[cell_th0] * pi / 180
             a01 = flight_a[cell_a0] * pi / 180
     elif Motion == 4:
@@ -116,7 +108,6 @@ def statvalues(FlightType, Motion):
             cell_hp0 = np.where(time == time_ini)[0][0]
             cell_th0 = np.where(time == time_ini)[0][0]
             V0 = reference_V0[cell_V0] * 0.51444
-            hp0 = reference_hp0[cell_hp0] * 0.3048
             th0 = reference_th0[cell_th0] * pi / 180
         elif FlightType == 2:
             time_ini = 3607
@@ -125,7 +116,6 @@ def statvalues(FlightType, Motion):
             cell_th0 = np.where(time == time_ini)[0][0]
             cell_a0 = np.where(time == time_ini)[0][0]
             V0 = flight_V0[cell_V0] * 0.51444
-            hp0 = flight_hp0[cell_hp0] * 0.3048
             th0 = (flight_th0[cell_th0]) * pi / 180
             a01 = flight_a[cell_a0] * pi / 180
     elif Motion == 5:
@@ -135,7 +125,6 @@ def statvalues(FlightType, Motion):
             cell_hp0 = np.where(time == time_ini)[0][0]
             cell_th0 = np.where(time == time_ini)[0][0]
             V0 = reference_V0[cell_V0] * 0.51444
-            hp0 = reference_hp0[cell_hp0] * 0.3048
             th0 = reference_th0[cell_th0] * pi / 180
         elif FlightType == 2:
             time_ini = 3675
@@ -144,7 +133,6 @@ def statvalues(FlightType, Motion):
             cell_th0 = np.where(time == time_ini)[0][0]
             cell_a0 = np.where(time == time_ini)[0][0]
             V0 = flight_V0[cell_V0] * 0.51444
-            hp0 = flight_hp0[cell_hp0] * 0.3048
             th0 = flight_th0[cell_th0] * pi / 180
             a01 = flight_a[cell_a0] * pi / 180
 
@@ -173,6 +161,34 @@ parameters =  np.array(['vane_AOA', 'elevator_dte', 'column_fe', 'lh_engine_FMF'
 
 reference_data,reference_headers,reference_descriptions = Read.get_data('ref_data')
 flight_data,flight_headers,flight_descriptions = Read.get_data('testflight')
+
+
+
+
+
+#=====================TO PLOT THE INPUT CONTROL====================================
+delta_e_index = np.where(parameters=='delta_e')[0].flat[0]
+delta_r_index = np.where(parameters=='delta_r')[0].flat[0]
+delta_a_index = np.where(parameters=='delta_a')[0].flat[0]
+time_index = np.where(parameters=='time')[0].flat[0]
+
+reference_delta_e = np.array(reference_data[reference_headers[delta_e_index]])
+reference_delta_r = np.array(reference_data[reference_headers[delta_r_index]])
+reference_delta_a = np.array(reference_data[reference_headers[delta_a_index]])
+time = np.array(reference_data[[reference_headers[time_index]]])
+
+flight_delta_e = np.array(flight_data[flight_headers[delta_e_index]])
+flight_delta_r = np.array(flight_data[flight_headers[delta_r_index]])
+flight_delta_a = np.array(flight_data[flight_headers[delta_a_index]])
+time = np.array(reference_data[[reference_headers[time_index]]])
+# fig1 = plt.figure(1)
+# plt.plot(time, flight_delta_a, 'r', label='aileron')
+# plt.plot(time, flight_delta_e, 'b', label='elevator')
+# plt.plot(time, flight_delta_r, 'g', label='rudder')
+#
+# plt.show()
+#==============================================================================
+
 
 
 
