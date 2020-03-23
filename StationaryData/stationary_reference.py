@@ -211,6 +211,16 @@ V_TAS = M*np.sqrt(np.array((gamma*R*T),dtype=np.float))
 # Density [kg/m^3]
 rho = p/(R*T)
 
+b_mu = 1.458*(10**(-6))
+S_mu = 110.4 #[K]
+mac = 2.0569 #[m]
+mu = b_mu*(T**(3/2))/(T+S_mu)
+
+Rey = np.array(rho*V_TAS*mac/(mu),dtype=np.float)
+
+R_range = np.max(Rey)-np.min(Rey)
+
+
 C_L = np.array(W/(0.5*rho*(V_TAS**2)*S),dtype=np.float)
 
 
@@ -365,6 +375,13 @@ V_TAS_elevator = M_elevator * np.sqrt(np.array((gamma * R * T_elevator), dtype=n
 
 # ------------- Density [kg/m^3] -------------
 rho_elevator = p_elevator / (R * T_elevator)
+
+
+mu_elevator = b_mu*(T_elevator**(3/2))/(T_elevator+S_mu)
+
+Rey_elevator = np.array(rho_elevator*V_TAS_elevator*mac/(mu_elevator),dtype=np.float)
+
+R_range_elevator = np.max(Rey_elevator)-np.min(Rey_elevator)
 
 # ------------- Shift in c.g. -------------
 
