@@ -211,7 +211,18 @@ V_TAS = M*np.sqrt(np.array((gamma*R*T),dtype=np.float))
 # Density [kg/m^3]
 rho = p/(R*T)
 
+b_mu = 1.458*(10**(-6))
+S_mu = 110.4 #[K]
+mac = 2.0569 #[m]
+mu = b_mu*(T**(3/2))/(T+S_mu)
+
+Rey = np.array(rho*V_TAS*mac/(mu),dtype=np.float)
+
+R_range = np.max(Rey)-np.min(Rey)
+
+
 C_L = np.array(W/(0.5*rho*(V_TAS**2)*S),dtype=np.float)
+
 
 
 # ------------- Compute C_D -------------
@@ -365,6 +376,10 @@ V_TAS_elevator = M_elevator * np.sqrt(np.array((gamma * R * T_elevator), dtype=n
 
 # ------------- Density [kg/m^3] -------------
 rho_elevator = p_elevator / (R * T_elevator)
+
+mu_elevator = b_mu*(T_elevator**(3/2))/(T_elevator+S_mu)
+
+Rey_elevator = np.array(rho_elevator*V_TAS_elevator*mac/(mu_elevator),dtype=np.float)
 
 # ------------- Shift in c.g. -------------
 
@@ -583,9 +598,10 @@ for i in range(len(standard_thrust)):
 # -----------------------------------------------
 
 # ------------- C_L vs Alpha -------------
-'''
+
 angle_of_attack=np.array(a,dtype = np.float)
 
+'''
 plt.plot(alpha_range,C_L_range,'r--',label=r'Constructed C$_L$ vs. $\alpha$ curve',zorder=1)
 plt.scatter(angle_of_attack,C_L,label='Measurement points',marker='D',color='g',zorder=2,s=75,facecolors='None')
 plt.scatter(alpha_0,C_L_range[idx],marker='o',label=r'Zero-lift angle of attack, $\alpha_0$',zorder=3,s=75,color='b')
@@ -594,8 +610,20 @@ plt.axhline(0,color='k')
 plt.xlabel(r'Angle of Attack, $\alpha$ [deg]',fontsize=13)
 plt.ylabel(r'Coefficient of Lift, C$_L$ [-]',fontsize=13)
 plt.xlim((-3,12))
-plt.title(r'C$_L$ vs. $\alpha$ (linear part)',fontsize=17,pad=25)
-plt.legend()
+plt.title(r'C$_L$ vs. $\alpha$ (linear part)',fontsize=17,pad=15)
+
+props = dict(boxstyle='round', facecolor='wheat', alpha=1)
+
+textstr = '\n'.join((
+    r'$M \,\in\, \left[0.209,\,0.434\right]$',
+    r'$Re \,\in\, \left[8.339\cdot 10^{6},\,1.740\cdot 10^{7}\right]$',
+    'A/C Configuration: Clean'))
+
+#plt.subplots_adjust(right=0.8)
+plt.text(0.15, 0.55, textstr, fontsize=11, transform=plt.gcf().transFigure,bbox=props)
+
+
+plt.legend(loc='upper left',prop={'size':11},framealpha=1)
 plt.grid()
 plt.show()
 '''
@@ -611,15 +639,28 @@ plt.axhline(0,color='k')
 plt.xlabel(r'Angle of Attack, $\alpha$ [deg]',fontsize=13)
 plt.ylabel(r'Coefficient of Drag, C$_D$ [-]',fontsize=13)
 plt.xlim((-3,12))
-plt.title(r'C$_D$ vs. $\alpha$',fontsize=17,pad=25)
-plt.legend()
+plt.title(r'C$_D$ vs. $\alpha$',fontsize=17,pad=15)
+
+props = dict(boxstyle='round', facecolor='wheat', alpha=1)
+
+textstr = '\n'.join((
+    r'$M \,\in\, \left[0.209,\,0.434\right]$',
+    r'$Re \,\in\, \left[8.339\cdot 10^{6},\,1.740\cdot 10^{7}\right]$',
+    'A/C Configuration: Clean'))
+
+#plt.subplots_adjust(right=0.8)
+plt.text(0.15, 0.55, textstr, fontsize=11, transform=plt.gcf().transFigure,bbox=props)
+
+
+
+plt.legend(loc='upper left',prop={'size':11},framealpha=1)
 plt.grid()
 plt.show()
 '''
 
-
-# ------------- Drag polar, C_L vs C_D -------------
 '''
+# ------------- Drag polar, C_L vs C_D -------------
+
 plt.plot(C_D_range,C_L_range,'r--',label=r'Constructed C$_L$ vs. C$_D$ curve',zorder=1)
 plt.scatter(C_D,C_L,label='Measurement points',marker='D',color='g',zorder=2,s=75,facecolors='None')
 plt.scatter(C_D_range[idx],C_L_range[idx],marker='o',label=r'Zero-lift drag coefficient, $C_{D_0}$',zorder=3,s=75,color='b')
@@ -628,11 +669,24 @@ plt.axhline(0,color='k')
 plt.xlabel(r'Coefficient of Drag, C$_D$ [-]',fontsize=13)
 plt.ylabel(r'Coefficient of Lift, C$_L$ [-]',fontsize=13)
 #plt.xlim((-3,12))
-plt.title(r'Drag polar (C$_L$ vs. C$_D$)',fontsize=17,pad=25)
-plt.legend(loc='upper left')
+plt.title(r'Drag polar (C$_L$ vs. C$_D$)',fontsize=17,pad=15)
+
+props = dict(boxstyle='round', facecolor='wheat', alpha=1)
+
+textstr = '\n'.join((
+    r'$M \,\in\, \left[0.209,\,0.434\right]$',
+    r'$Re \,\in\, \left[8.339\cdot 10^{6},\,1.740\cdot 10^{7}\right]$',
+    'A/C Configuration: Clean'))
+
+#plt.subplots_adjust(right=0.8)
+plt.text(0.50, 0.2, textstr, fontsize=11, transform=plt.gcf().transFigure,bbox=props)
+
+
+plt.legend(loc='upper left',prop={'size':11},framealpha=1)
 plt.grid()
 plt.show()
 '''
+
 
 # --- Plot elevator trim curve (AOA) ---
 
@@ -650,16 +704,27 @@ plt.gca().invert_yaxis()
 
 plt.axvline(0,color='k')
 plt.axhline(0,color='k')
-plt.axhline(-C_m_0/C_m_delta,color='k',linestyle='--')
+#plt.axhline(-C_m_0/C_m_delta,color='k',linestyle='--')
 
 plt.xlim((0,10))
 
 plt.xlabel(r'Angle of Attack, $\alpha$ [deg]',fontsize=13)
 plt.ylabel(r'Reduced elevator deflection, $\delta^*_{e_{eq}}$ [deg]',fontsize=13)
-plt.title(r'Elevator trim curve (vs. $\alpha$)',fontsize=17,pad=25)
+plt.title(r'Elevator trim curve (vs. $\alpha$)',fontsize=17,pad=15)
+
+props = dict(boxstyle='round', facecolor='wheat', alpha=1)
+
+textstr = '\n'.join((
+    r'$M \,\in\, \left[0.247,\,0.348\right]$',
+    r'$Re \,\in\, \left[9.661\cdot 10^{6},\,1.460\cdot 10^{7}\right]$',
+    'A/C Configuration: Clean'))
+
+#plt.subplots_adjust(right=0.8)
+plt.text(0.15, 0.6, textstr, fontsize=11, transform=plt.gcf().transFigure,bbox=props)
+
 
 plt.grid()
-plt.legend()
+plt.legend(loc='upper left',prop={'size':11},framealpha=1)
 plt.show()
 '''
 
@@ -691,20 +756,33 @@ plt.axvline(V_stall,color='b',linestyle='--',label='Stall speed (clean configura
 
 plt.xlabel(r'Reduced equivalent airspeed, $\tilde{V}_{EAS}$ [m/s]',fontsize=13)
 plt.ylabel(r'Reduced elevator deflection, $\delta^*_{e_{eq}}$ [deg]',fontsize=13)
-plt.title(r'Elevator trim curve (vs. $\tilde{V}_{EAS}$)',fontsize=17,pad=25)
+plt.title(r'Elevator trim curve (vs. $\tilde{V}_{EAS}$)',fontsize=17,pad=15)
+
+props = dict(boxstyle='round', facecolor='wheat', alpha=1)
+
+textstr = '\n'.join((
+    r'$M \,\in\, \left[0.247,\,0.348\right]$',
+    r'$Re \,\in\, \left[9.661\cdot 10^{6},\,1.460\cdot 10^{7}\right]$',
+    'A/C Configuration: Clean'))
+
+#plt.subplots_adjust(right=0.8)
+plt.text(0.2, 0.2, textstr, fontsize=11, transform=plt.gcf().transFigure,bbox=props)
+
 
 plt.grid()
-plt.legend(loc='lower center')
+plt.legend(loc='upper right',prop={'size':11},framealpha=1)
 plt.show()
-
 '''
+
+
+
 
 
 # --- Plot elevator force curve (V_EAS_reduced) ---
 
 '''
 t = np.polyfit(V_EAS_reduced**2,F_e_reduced,1)
-V_range = np.linspace(V_stall,100,10000)
+V_range = np.linspace(V_stall,110,10000)
 F_range = (V_range**2)*t[0] + t[1]
 
 
@@ -721,12 +799,22 @@ plt.gca().invert_yaxis()
 
 plt.xlabel(r'Reduced equivalent airspeed, $\tilde{V}_{EAS}$ [m/s]',fontsize=13)
 plt.ylabel(r'Reduced stick force, $F^*_e$ [N]',fontsize=13)
-plt.title(r'Elevator control force curve (vs. $\tilde{V}_{EAS}$)',fontsize=17,pad=25)
+plt.title(r'Elevator control force curve (vs. $\tilde{V}_{EAS}$)',fontsize=17,pad=15)
+
+props = dict(boxstyle='round', facecolor='wheat', alpha=1)
+
+textstr = '\n'.join((
+    r'$M \,\in\, \left[0.247,\,0.348\right]$',
+    r'$Re \,\in\, \left[9.661\cdot 10^{6},\,1.460\cdot 10^{7}\right]$',
+    'A/C Configuration: Clean'))
+
+#plt.subplots_adjust(right=0.8)
+plt.text(0.15, 0.15, textstr, fontsize=11, transform=plt.gcf().transFigure,bbox=props)
+
 
 plt.grid()
-plt.legend(loc='lower center')
+plt.legend(loc='lower left', prop={'size':11}, framealpha=1,bbox_to_anchor=(0.01,0.23))
 plt.show()
-
 '''
 
 
