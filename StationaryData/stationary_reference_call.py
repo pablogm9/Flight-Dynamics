@@ -394,7 +394,7 @@ T_cg = TAT_cg/(1+((gamma-1)/2)*(M_cg**2))
 # True airspeed [m/s]
 V_TAS_cg = M_cg*np.sqrt(np.array((gamma*R*T_cg),dtype=np.float))
 
-# Density [kg/m^3]
+# Density [kg/m^3]C:\Users\Pattis\AppData\Local\Programs\Python
 rho_cg = p_cg/(R*T_cg)
 
 # Coefficient of normal Force:C N
@@ -409,26 +409,30 @@ C_N_cg_av=np.mean(C_N_cg)
 moment_BEM = 2672972.25
 
 #Array of x_cg of each passenger in [inches]
-x_cg_payload = np.array([131,131,170,214,214,251,251,288,288])
+x_cg_payload_0 = np.array([131,131,170,214,214,251,251,288,288])
+x_cg_payload_1 = np.array([131,131,170,214,214,251,251,288,134])
+
 
 #Array of moment of each passenger in [lbs*inch]
-moment_payload = x_cg_payload*np.array(passenger_masses)*2.20462*386.09
+moment_payload_0 = x_cg_payload_0*np.array(passenger_masses)*2.20462
+moment_payload_1 = x_cg_payload_1*np.array(passenger_masses)*2.20462
+
 
 #Value of total moment of all passengers in [lbs*inch]
-moment_total_payload = np.sum(moment_payload)
+moment_total_payload = np.array([np.sum(moment_payload_0),np.sum(moment_payload_1)])
 
 #Array of 2 fuel loads in [lbs]
 fuel_load_cg = np.array([block_fuel,block_fuel])*2.20462-F_used_cg
 
 #Array of 2 moment of fuel loads [lbs*inch]
-moment_fuel_load = np.array([9036.2144,8953.344]) # Choose this Value according to the value of fuel_load_cg from E.2 [Inch*pounds]
-
+moment_fuel_load = np.array([9036.2144*100,8953.344*100]) # Choose this Value according to the value of fuel_load_cg from E.2 [Inch*pounds]
+moment_fuel_load_mean=np.mean(moment_fuel_load)
 #Total moment of aircraft [lbs*inch]
-moment_total_aircraft = np.array([moment_BEM,moment_BEM])+moment_fuel_load+np.array([moment_total_payload,moment_total_payload])
+moment_total_aircraft = np.array([moment_BEM,moment_BEM])+moment_fuel_load+moment_total_payload
 
 #Array of 2 cg locations [inches] from the datum line
 x_cg_max = (moment_BEM+moment_total_payload+11451.85)/(rampmass*2.20462) #Once again choose the last value according to your Fuel Load
-x_cg = moment_total_aircraft/(W_cg*2.20462*386.09)
+x_cg = moment_total_aircraft/(W_cg*2.20462)
 
 
 # --- Calculating C_m_delta ---
@@ -437,7 +441,7 @@ x_cg = moment_total_aircraft/(W_cg*2.20462*386.09)
 Delta_e_cg = np.array(delta_e_cg)[1]-np.array(delta_e_cg)[0]
 
 # C_m_delta
-C_m_delta = (1/Delta_e_cg)*C_N_cg_av*((x_cg[1]-x_cg[0])/c)
+C_m_delta = -(1/Delta_e_cg)*C_N_cg_av*((x_cg[1]-x_cg[0])/(c*39.3701))
 
 
 # ------------- Elevator trim curve -------------
