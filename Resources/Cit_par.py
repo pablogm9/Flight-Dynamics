@@ -10,7 +10,7 @@ def Cit_par_Values(FlightType,Motion):              #FlightType: Reference Data 
                                                     #Motion: Short Period = 1, Phugoid = 2, Dutch Roll = 3, Aperiodic Roll = 4, Spiral = 5
     # self.xcg = 0.25 * c
 
-    m = 4000
+    m = 6000
 
 
     # Stationary flight condition
