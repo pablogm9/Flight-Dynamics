@@ -36,7 +36,9 @@ g_0 = 9.80665 #[m/s^2]
 
 # ------------- Read EXCEL file -------------
 
-datasheet = pd.read_excel('../Data/REFERENCE_Post_Flight_Datasheet.xlsx')
+#datasheet = pd.read_excel('../Data/REFERENCE_Post_Flight_Datasheet.xlsx')
+datasheet = pd.read_excel('../Data/TESTFLIGHT_Post_Flight_Datasheet.xlsx')
+
 datasheet.columns = ['A','B','C','D','E','F','G','H','I','J','K','L','M']
 datasheet.index = range(2,85)
 
@@ -455,13 +457,14 @@ moment_total_payload_veri_3 = np.array([np.sum(moment_payload_0),np.sum(moment_p
 
 
 #Array of 2 fuel loads in [lbs]
-fuel_load= np.array([block_fuel,block_fuel,block_fuel,block_fuel,block_fuel,block_fuel])*2.20462 -F_used*2.20462
+fuel_load_stat= np.array([block_fuel,block_fuel,block_fuel,block_fuel,block_fuel,block_fuel])*2.20462 -F_used*2.20462
 fuel_load_elev=np.array([block_fuel,block_fuel,block_fuel,block_fuel,block_fuel,block_fuel,block_fuel])*2.20462 - F_used_elevator*2.20462
 fuel_load_cg = np.array([block_fuel,block_fuel])*2.20462-F_used_cg
+fuel_load = np.concatenate((fuel_load_stat,fuel_load_elev,fuel_load_cg), axis=None )
 
 #Array of 2 moment of fuel loads [lbs*inch]
 moment_fuel_load = np.array([9036.2144*100,8953.344*100]) # Choose this Value according to the value of fuel_load_cg from E.2 [Inch*pounds]
-moment_fuel_load_mean=np.mean(moment_fuel_load)
+moment_fuel_load_total=np.array([10528.164,10379.0488,10278.6828,10189.8096,10035.0024,9926.114,9656.881,9570.976,9467.89,9396.329,9273.4264,9196.255,9136.2328,9036.2144,8953.344])*100
 #Total moment of aircraft [lbs*inch]
 moment_total_aircraft = np.array([moment_BEM,moment_BEM])+moment_fuel_load+moment_total_payload
 moment_total_aircraft_veri_0 = np.array([moment_BEM,moment_BEM])+moment_fuel_load+moment_total_payload_veri_0
@@ -469,7 +472,8 @@ moment_total_aircraft_veri_1 = np.array([moment_BEM,moment_BEM])+moment_fuel_loa
 moment_total_aircraft_veri_2 = np.array([moment_BEM,moment_BEM])+moment_fuel_load+moment_total_payload_veri_2
 moment_total_aircraft_veri_3 = np.array([moment_BEM,moment_BEM])+moment_fuel_load+moment_total_payload_veri_3
 
-
+moment_total_aircraft_total = np.ones(15)*moment_BEM+moment_fuel_load_total+np.ones(15)*moment_total_payload[0]
+W_total=np.concatenate(((W/g_0),(W_elevator/g_0),W_cg), axis = None)
 
 #Array of 2 cg locations [inches] from the datum line
 x_cg_max = (moment_BEM+moment_total_payload+11451.85)/(rampmass*2.20462) #Once again choose the last value according to your Fuel Load
@@ -481,6 +485,9 @@ x_cg_veri_3 = (moment_total_aircraft_veri_3/(W_cg*2.20462))
 seat_locations = np.array([288,251,214,170,134])
 x_cg_veri = np.array([x_cg_veri_0[1]-x_cg_veri_0[0],x_cg_veri_1[1]-x_cg_veri_1[0],x_cg_veri_2[1]-x_cg_veri_2[0],x_cg_veri_3[1]-x_cg_veri_3[0],x_cg[1]-x_cg[0]])
 
+
+x_cg_total = moment_total_aircraft_total/(W_total*2.20462)
+x_cg_total_MAC = (x_cg_total - 261.45)/(c*39.3701)
 '''
 plt.scatter(seat_locations,x_cg_veri)
 plt.xlabel('Aircraft Seat Location relative to Datum [m]')

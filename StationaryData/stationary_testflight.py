@@ -437,17 +437,28 @@ moment_payload_1 = x_cg_payload_1*np.array(passenger_masses)*2.20462
 moment_total_payload = np.array([np.sum(moment_payload_0),np.sum(moment_payload_1)])
 
 #Array of 2 fuel loads in [lbs]
+fuel_load_stat = np.array([block_fuel,block_fuel,block_fuel,block_fuel,block_fuel,block_fuel])*2.20462 -F_used*2.20462
+fuel_load_elev = np.array([block_fuel,block_fuel,block_fuel,block_fuel,block_fuel,block_fuel,block_fuel])*2.20462 - F_used_elevator*2.20462
 fuel_load_cg = np.array([block_fuel,block_fuel])*2.20462-F_used_cg
+fuel_load = np.concatenate((fuel_load_stat,fuel_load_elev,fuel_load_cg), axis=None )
+
 
 #Array of 2 moment of fuel loads [lbs*inch]
-moment_fuel_load = np.array([9036.2144*100,8953.344*100]) # Choose this Value according to the value of fuel_load_cg from E.2 [Inch*pounds]
-
+moment_fuel_load = np.array([9353.456*100,9261.9936*100]) # Choose this Value according to the value of fuel_load_cg from E.2 [Inch*pounds]
+moment_fuel_load_total= np.array([10668.7817,10533.8992,10442.136,10324.5644,10198.41,10112.406,9906.0639,9840.185,9780.0347,9731.3416,9648.2905,9487.9345,9436.3915,9353.456,9261.9936])
 #Total moment of aircraft [lbs*inch]
 moment_total_aircraft = np.array([moment_BEM,moment_BEM])+moment_fuel_load+moment_total_payload
+
+moment_total_aircraft_total = np.ones(15)*moment_BEM+moment_fuel_load_total+np.ones(15)*moment_total_payload[0]
+W_total=np.concatenate(((W/g_0),(W_elevator/g_0),W_cg), axis = None)
 
 #Array of 2 cg locations [inches] from the datum line
 x_cg_max = (moment_BEM+moment_total_payload+11451.85)/(rampmass*2.20462) #Once again choose the last value according to your Fuel Load
 x_cg = moment_total_aircraft/(W_cg*2.20462)
+
+x_cg_total = moment_total_aircraft_total/(W_total*2.20462)
+x_cg_total_MAC = (x_cg_total - 261.45)/(c*39.3701)
+
 
 
 # --- Calculating C_m_delta ---
