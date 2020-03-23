@@ -176,8 +176,8 @@
       <item itemvalue="Python.Numerical" />
       <item itemvalue="Python.dynamic" />
       <item itemvalue="Python.stationary_reference - Copy" />
-      <item itemvalue="Python.stationary_reference" />
       <item itemvalue="Python.stationary_testflight" />
+      <item itemvalue="Python.stationary_reference" />
     </list>
     <recent_temporary>
       <list>
@@ -375,11 +375,11 @@
       <screen x="0" y="23" width="1440" height="823" />
     </state>
     <state x="0" y="176" key="#xdebugger.XInspectDialog/0.23.1440.823@0.23.1440.823" timestamp="1584796359372" />
-    <state x="389" y="7" key="CommitChangelistDialog2" timestamp="1584968570372">
+    <state x="389" y="7" key="CommitChangelistDialog2" timestamp="1584978296667">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="346" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1583420948259" />
-    <state x="389" y="7" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1584968570372" />
+    <state x="389" y="7" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1584978296667" />
     <state x="389" y="0" key="CommitChangelistDialog2/0.0.1536.834@0.0.1536.834" timestamp="1584537052815" />
     <state x="365" y="23" key="CommitChangelistDialog2/0.23.1440.821@0.23.1440.821" timestamp="1584652334912" />
     <state x="365" y="23" key="CommitChangelistDialog2/0.23.1440.823@0.23.1440.823" timestamp="1584877834197" />
@@ -457,16 +457,20 @@
     </state>
     <state x="424" y="139" key="MultipleFileMergeDialog/0.23.1440.825@0.23.1440.825" timestamp="1584362367461" />
     <state x="424" y="139" key="MultipleFileMergeDialog/0.23.1440.827@0.23.1440.827" timestamp="1584958480650" />
+    <state x="526" y="123" key="RollbackChangesDialog" timestamp="1584978290854">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="526" y="123" key="RollbackChangesDialog/0.0.1536.824@0.0.1536.824" timestamp="1584978290854" />
     <state x="207" y="8" key="SettingsEditor" timestamp="1584973488800">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="184" y="7" key="SettingsEditor/0.0.1366.728@0.0.1366.728" timestamp="1583420900781" />
     <state x="207" y="8" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1584973488800" />
     <state x="207" y="8" key="SettingsEditor/0.0.1536.834@0.0.1536.834" timestamp="1583863707363" />
-    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1584968578416">
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1584978268479">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1584968578416" />
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1584978268479" />
     <state x="361" y="147" key="Vcs.Push.Dialog.v2/0.0.1536.834@0.0.1536.834" timestamp="1584537061529" />
     <state x="338" y="167" key="Vcs.Push.Dialog.v2/0.23.1440.821@0.23.1440.821" timestamp="1584652340286" />
     <state x="338" y="167" key="Vcs.Push.Dialog.v2/0.23.1440.823@0.23.1440.823" timestamp="1584877844788" />
