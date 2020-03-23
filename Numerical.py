@@ -3,7 +3,7 @@ import scipy as np
 import control.matlab as ml
 import matplotlib.pyplot as plt
 import Read
-from dynamic import alpha_1, theta_1, u_1, q_1,alpha_2, theta_2, u_2, q_2, r_3
+from dynamic import alpha_1, theta_1, u_1, q_1,alpha_2, theta_2, u_2, q_2, phi, r_3, p_3, r_4, p_4, r_5, p_5
 
 
 #####DEFINITIONS######
@@ -19,7 +19,7 @@ def inputcr(delta_values, time_value, t_array, time_ini, time_fin): #(deflection
      missing = len(t_array) - len(values)
      zeros = np.zeros((1, missing))
      delta_values_aaa = np.hstack((delta_values_aa, zeros))
-     delta_values_array = np.transpose(delta_values_aaa)
+     delta_values_array = np.transpose(delta_values_aaa)*-1
 
      return delta_values_array, cell_ini
 
@@ -153,7 +153,7 @@ u1_f, celli_1 = inputcr(flight_delta_e, time, t1, 3158 , 3160)
 y1_f , T1_f, x1_f = ml.lsim(sys_sp_f, u1_f, t1)
 
 # Phugoid
-t2 = np.arange(0 , 1000, dt)
+t2 = np.arange(0 , 150, dt)
 
 u2, cell = inputcr(reference_delta_e, time, t2, 3237, 3247)
 
@@ -165,16 +165,16 @@ u2_f, celli_2 = inputcr(flight_delta_e, time, t2, 3230 , 3240)
 y2_f , T2_f, x2_f = ml.lsim(sys_ph_f, u2_f, t2)
 
 #Dutch Roll
-t3 = np.arange(0 , 100, dt)
+t3 = np.arange(0 , 15, dt)
 
-u3_t, cell = inputcr(reference_delta_r, time, t3, 3717, 3718.8)
+u3_t, cell = inputcr(reference_delta_r, time, t3, 3717, 3719)
 
 u3 = np.hstack((np.zeros((len(t3), 1)), u3_t))
 
 y3_r , T3_r, x3_r = ml.lsim(sys_dr_r, u3, t3)
 
 
-u3_t_f, celli_3 = inputcr(flight_delta_r, time, t3, 3479, 3480.1)
+u3_t_f, celli_3 = inputcr(flight_delta_r, time, t3, 3479, 3481)
 
 u3_f = np.hstack((np.zeros((len(t3), 1)), u3_t_f))
 
@@ -312,6 +312,7 @@ f9 = plt.figure(9)
 plt.plot(T3_r,y3_r[:,0],'r',label='Reference Data')
 plt.plot(T3_f,y3_f[:,0],'b',label='Flight Data')
 
+
 plt.legend()
 plt.grid()
 plt.xlabel('Time [sec]')
@@ -321,6 +322,7 @@ plt.title('Dutch Roll Repsonse - Sideslip',pad=10)
 f10 = plt.figure(10)
 plt.plot(T3_r,y3_r[:,1],'r',label='Reference Data')
 plt.plot(T3_f,y3_f[:,1],'b',label='Flight Data')
+plt.plot(T3_f, phi[celli_3:(celli_3+len(t3))], 'g', label = 'Actual Response')
 
 plt.legend()
 plt.grid()
@@ -331,6 +333,7 @@ plt.title('Dutch Roll Repsonse - Roll Angle',pad=10)
 f11 = plt.figure(11)
 plt.plot(T3_r,y3_r[:,2],'r',label='Reference Data')
 plt.plot(T3_f,y3_f[:,2],'b',label='Flight Data')
+plt.plot(T3_f, p_3[celli_3:(celli_3+len(t3))], 'g', label = 'Actual Response')
 
 plt.legend()
 plt.grid()
@@ -342,6 +345,7 @@ f12 = plt.figure(12)
 plt.plot(T3_r,y3_r[:,3],'r',label='Reference Data')
 plt.plot(T3_f,y3_f[:,3],'b',label='Flight Data')
 plt.plot(T3_f, r_3[celli_3:(celli_3+len(t3))], 'g', label = 'Actual Response')
+
 
 
 plt.legend()
@@ -364,6 +368,7 @@ plt.title('Aperiodic Roll Repsonse - Sideslip',pad=10)
 f14 = plt.figure(14)
 plt.plot(T4_r,y4_r[:,1],'r',label='Reference Data')
 plt.plot(T4_f,y4_f[:,1],'b',label='Flight Data')
+plt.plot(T4_f, phi[celli_4:(celli_4+len(t4))], 'g', label = 'Actual Response')
 
 plt.legend()
 plt.grid()
@@ -374,6 +379,7 @@ plt.title('Aperiodic Roll Repsonse - Roll Angle',pad=10)
 f15 = plt.figure(15)
 plt.plot(T4_r,y4_r[:,2],'r',label='Reference Data')
 plt.plot(T4_f,y4_f[:,2],'b',label='Flight Data')
+plt.plot(T4_f, p_4[celli_4:(celli_4+len(t4))], 'g', label = 'Actual Response')
 
 plt.legend()
 plt.grid()
@@ -384,6 +390,7 @@ plt.title('Aperiodic Roll Repsonse - pb/V',pad=10)
 f16 = plt.figure(16)
 plt.plot(T4_r,y4_r[:,3],'r',label='Reference Data')
 plt.plot(T4_f,y4_f[:,3],'b',label='Flight Data')
+plt.plot(T4_f, r_4[celli_4:(celli_4+len(t4))], 'g', label = 'Actual Response')
 
 plt.legend()
 plt.grid()
@@ -397,6 +404,7 @@ f17 = plt.figure(17)
 plt.plot(T5_r,y5_r[:,0],'r',label='Reference Data')
 plt.plot(T5_f,y5_f[:,0],'b',label='Flight Data')
 
+
 plt.legend()
 plt.grid()
 plt.xlabel('Time [sec]')
@@ -406,6 +414,7 @@ plt.title('Spiral Repsonse - Sideslip',pad=10)
 f18 = plt.figure(18)
 plt.plot(T5_r,y5_r[:,1],'r',label='Reference Data')
 plt.plot(T5_f,y5_f[:,1],'b',label='Flight Data')
+plt.plot(T5_f, phi[celli_5:(celli_5+len(t5))], 'g', label = 'Actual Response')
 
 plt.legend()
 plt.grid()
@@ -416,6 +425,7 @@ plt.title('Spiral Repsonse - Roll Angle',pad=10)
 f19 = plt.figure(19)
 plt.plot(T5_r,y5_r[:,2],'r',label='Reference Data')
 plt.plot(T5_f,y5_f[:,2],'b',label='Flight Data')
+plt.plot(T5_f, p_5[celli_5:(celli_5+len(t5))], 'g', label = 'Actual Response')
 
 plt.legend()
 plt.grid()
@@ -426,6 +436,7 @@ plt.title('Spiral Repsonse - pb/V',pad=10)
 f20 = plt.figure(20)
 plt.plot(T5_r,y5_r[:,3],'r',label='Reference Data')
 plt.plot(T5_f,y5_f[:,3],'b',label='Flight Data')
+plt.plot(T5_f, r_5[celli_5:(celli_5+len(t5))], 'g', label = 'Actual Response')
 
 plt.legend()
 plt.grid()
