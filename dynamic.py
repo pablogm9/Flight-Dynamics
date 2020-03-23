@@ -183,7 +183,10 @@ alpha_a_index = np.where(parameters == 'vane_AOA')[0].flat[0]
 theta_index =np.where(parameters == 'Ahrs1_Pitch')[0].flat[0]
 q_index = np.where(parameters == 'Ahrs1_bPitchRate')[0].flat[0]
 V_index = np.where(parameters == 'Dadc1_tas')[0].flat[0]
-r_index = np.where(parameters == 'Dadc1_tas')[0].flat[0]
+phi_index = np.where(parameters == 'Ahrs1_Roll')[0].flat[0]
+p_index = np.where(parameters == 'Ahrs1_bRollRate')[0].flat[0]
+r_index = np.where(parameters == 'Ahrs1_bYawRate')[0].flat[0]
+
 
 
 
@@ -194,7 +197,10 @@ theta =  np.array(flight_data[[flight_headers[theta_index]]])*pi/180
 Pitch_rate_q =  np.array(flight_data[[flight_headers[q_index]]])*pi/180
 V_tas = np.array(flight_data[[flight_headers[V_index]]])*0.51444
 
-roll_rate_r = np.array(flight_data[[flight_headers[r_index]]])*pi/180
+phi = np.array(flight_data[[flight_headers[phi_index]]])*pi/180
+roll_rate_p = np.array(flight_data[[flight_headers[p_index]]])*pi/180
+yaw_rate_r = np.array(flight_data[[flight_headers[r_index]]])*pi/180
+
 
 alpha_1 = np.array([i- a0_1 for i in alpha])
 theta_1 = np.array([i-th0_1 for i in theta])
@@ -206,7 +212,16 @@ theta_2 = np.array([i-th0_2 for i in theta])
 u_2 = np.array([(i-V0_2)/V0_2 for i in V_tas])
 q_2 = np.array([i*c/V0_2 for i in Pitch_rate_q])
 
-r_3 = np.array([i*b/(2*V0_3) for i in roll_rate_r])
+
+p_3 = np.array([i*b/(2*V0_3) for i in roll_rate_p])
+r_3 = np.array([i*b/(2*V0_3) for i in yaw_rate_r])
+
+p_4 = np.array([i*b/(2*V0_4) for i in roll_rate_p])
+r_4 = np.array([i*b/(2*V0_4) for i in yaw_rate_r])
+
+p_5 = np.array([i*b/(2*V0_5) for i in roll_rate_p])
+r_5 = np.array([i*b/(2*V0_5) for i in yaw_rate_r])
+
 
 
 # ---------------- SAMPLE PLOTS ----------------
