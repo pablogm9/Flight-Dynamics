@@ -137,7 +137,7 @@ sys_spir_f,sys, e1_spir_f, e2_spir_f = ABCD(2,5)
 ########### SIMULATION OF EIGENMOTIONS########
 dt= 0.1
 
-
+'''
 #Short Period
 t1 = np.arange(0 , 10, dt)
 t_ini = 3634
@@ -163,7 +163,7 @@ y2_r , T2_r, x2_r = ml.lsim(sys_ph_r, u2, t2)
 u2_f, celli_2 = inputcr(flight_delta_e, time, t2, 3230 , 3240)
 
 y2_f , T2_f, x2_f = ml.lsim(sys_ph_f, u2_f, t2)
-
+'''
 #Dutch Roll
 t3 = np.arange(0 , 30, dt)
 
@@ -179,7 +179,7 @@ u3_t_f, celli_3 = inputcr(flight_delta_r, time, t3, 3527, 3537)
 u3_f = np.hstack((np.zeros((len(t3), 1)), u3_t_f))
 
 y3_f , T3_f, x3_f = ml.lsim(sys_dr_f, u3_f, t3)
-
+'''
 #Aperiodic roll
 t4 = np.arange(0 , 30, dt)
 
@@ -215,9 +215,9 @@ u5_t2_f, celli_5 = inputcr(flight_delta_r, time, t5, 3675, 3775)
 u5_f = np.hstack((u5_t1_f, u5_t2_f))
 
 y5_f , T5_f, x5_f = ml.lsim(sys_spir_f, u5_f, t5)
+'''
 
-
-
+'''
 ##########PLOTS OF RESPONSES###########
 #Short Period
 f1 = plt.figure(1)
@@ -310,6 +310,7 @@ plt.grid()
 plt.xlabel('Time [sec]')
 plt.ylabel('qc/V[-]')
 plt.title('Phugoid Response - qc/V',pad=10)
+'''
 
 #Dutch Roll
 f9 = plt.figure(9)
@@ -357,7 +358,7 @@ plt.grid()
 plt.xlabel('Time [sec]')
 plt.ylabel('rb/V [-]')
 plt.title('Dutch Roll Repsonse - rb/V',pad=10)
-
+'''
 #Aperiodic Roll
 f13 = plt.figure(13)
 #plt.plot(T4_r,y4_r[:,0],'r',label='Reference Data')
@@ -448,7 +449,7 @@ plt.xlabel('Time [sec]')
 plt.ylabel('rb/V [-]')
 plt.title('Spiral Repsonse - rb/V',pad=10)
 
-
+ '''
 
 ########## Print Commands ##########
 
