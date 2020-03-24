@@ -49,6 +49,10 @@ flight_delta_r = np.array(flight_data[flight_headers[delta_r_index]])
 flight_delta_a = np.array(flight_data[flight_headers[delta_a_index]])
 time = np.array(reference_data[[reference_headers[time_index]]])
 
+#class ABCDmat():
+    #from Resources.Cit_par import Cit_par_class
+    #def __init__(self):
+        #Cit_par_Values(self)
 
 def ABCD(flight,motion):
     
@@ -86,7 +90,10 @@ def ABCD(flight,motion):
 
     D2 = np.array([[0], [0], [0], [0]])
 
-
+    #print(A2)
+    #print(B2)
+    #print(C2)
+    #print(D2)
     sys1 = ml.ss(A1, B1, C1, D1)
     sys2 = ml.ss(A2,B2,C2, D2)
     e1,v = np.linalg.eig(A1)
@@ -132,31 +139,31 @@ dt= 0.1
 
 
 #Short Period
-t1 = np.arange(0 , 5, dt)
-# t_ini = 3634
-# t_fin = 3636
-#
-# u1, cell = inputcr(reference_delta_e, time, t1, t_ini , t_fin)
-#
-# y1_r , T1_r, x1_r = ml.lsim(sys_sp_r, u1, t1)
+t1 = np.arange(0 , 15, dt)
+t_ini = 3634
+t_fin = 3636
+
+u1, cell = inputcr(reference_delta_e, time, t1, 3633 , 3648)
+
+y1_r , T1_r, x1_r = ml.lsim(sys_sp_r, u1, t1)
 
 
-u1_f, celli_1 = inputcr(flight_delta_e, time, t1, 3156 , 3161)
+u1_f, celli_1 = inputcr(flight_delta_e, time, t1, 3156 , 3171)
 
 y1_f , T1_f, x1_f = ml.lsim(sys_sp_f, u1_f, t1)
-
 
 # Phugoid
 t2 = np.arange(0 , 150, dt)
 
-# u2, cell = inputcr(reference_delta_e, time, t2, 3237, 3247)
-#
-# y2_r , T2_r, x2_r = ml.lsim(sys_ph_r, u2, t2)
+u2, cell = inputcr(reference_delta_e, time, t2, 3237, 3247)
+
+y2_r , T2_r, x2_r = ml.lsim(sys_ph_r, u2, t2)
 
 
-u2_f, celli_2 = inputcr(flight_delta_e, time, t2, 3230 , 3251)
+u2_f, celli_2 = inputcr(flight_delta_e, time, t2, 3230 , 3240)
 
 y2_f , T2_f, x2_f = ml.lsim(sys_ph_f, u2_f, t2)
+
 
 #Dutch Roll
 t3 = np.arange(0 , 30, dt)
@@ -177,11 +184,11 @@ y3_f , T3_f, x3_f = ml.lsim(sys_dr_f, u3_f, t3)
 #Aperiodic roll
 t4 = np.arange(0 , 30, dt)
 
-# u4_t, cell = inputcr(reference_delta_a, time, t4, 3550, 3580)
-#
-# u4 = np.hstack((u4_t, np.zeros((len(t4), 1))))
-#
-# y4_r , T4_r, x4_r = ml.lsim(sys_ap_r, u4, t4)
+u4_t, cell = inputcr(reference_delta_a, time, t4, 3550, 3570)
+
+u4 = np.hstack((u4_t, np.zeros((len(t4), 1))))
+
+y4_r , T4_r, x4_r = ml.lsim(sys_ap_r, u4, t4)
 
 
 u4_t1_f, celli_4 = inputcr(flight_delta_a, time, t4, 3607, 3627)
@@ -196,15 +203,15 @@ y4_f , T4_f, x4_f = ml.lsim(sys_ap_f, u4_f, t4)
 #Spiral
 t5 = np.arange(0, 140,dt)
 
-# u5_t, cell= inputcr(reference_delta_a, time, t5, 3912, 4012)
-#
-# u5 = np.hstack((u5_t, np.zeros((len(t5), 1))))
-#
-# y5_r , T5_r, x5_r = ml.lsim(sys_spir_r, u5, t5)
+u5_t, cell= inputcr(reference_delta_a, time, t5, 3912, 3932)
+
+u5 = np.hstack((u5_t, np.zeros((len(t5), 1))))
+
+y5_r , T5_r, x5_r = ml.lsim(sys_spir_r, u5, t5)
 
 u5_t1_f, celli_5 = inputcr(flight_delta_a, time, t5, 3667, 3687)
 
-u5_t2_f, celli_5 = inputcr(flight_delta_r, time, t5, 3667, 3607)
+u5_t2_f, celli_5 = inputcr(flight_delta_r, time, t5, 3667, 3687)
 
 u5_f = np.hstack((u5_t1_f, u5_t2_f))
 
@@ -214,17 +221,46 @@ y5_f , T5_f, x5_f = ml.lsim(sys_spir_f, u5_f, t5)
 
 ##########PLOTS OF RESPONSES###########
 #Short Period
+plt.style.use('seaborn-darkgrid')
+
+fig1, (axs1,axs2,axs3,axs4,axs5) = plt.subplots(5, sharex=True)
+fig1.suptitle('Short Period Response')
+l1, = axs1.plot(T1_f, u1, '--', label = 'Reference Input')
+l2, = axs1.plot(T1_f, u1_f,'r', label = 'Flight Input')
+axs2.plot(T1_f,y1_r[:,0], '--', label = 'Reference data')
+axs2.plot(T1_f,y1_f[:,0],'r',  label = 'Flight data')
+axs3.plot(T1_f, y1_r[:,1], '--' , label = 'Reference data')
+axs3.plot(T1_f,y1_f[:,1], 'r', label = 'Flight data')
+axs4.plot(T1_f, y1_r[:,2],'--', label = 'Reference data')
+axs4.plot(T1_f,y1_f[:,2], 'r', label = 'Flight data')
+axs5.plot(T1_f, y1_r[:,3],'--', label = 'Reference data')
+axs5.plot(T1_f,y1_f[:,3], 'r', label = 'Flight data')
+
+axs1.set_title('Inputs')
+axs1.set_ylabel('Def [rad]')
+
+axs2.set_title('Velocity along x-axis')
+axs2.set_ylabel('u [-]')
+
+axs3.set_title('Angle of Attack')
+axs3.set_ylabel(r'alpha $ [-]')
+
+axs4.set_title('Pitch Angle')
+axs4.set_ylabel('theta [-]')
+
+axs5.set_title('Pitch Rate')
+axs5.set_ylabel('cV/q[-]')
+
+fig1.legend([l1, l2],['Reference Data', 'Flight Data'] )
+plt.xlabel('Time [s]')
+
+#Short Period
+'''
 f1 = plt.figure(1)
-#plt.plot(T1_r,y1_r[:,0],'r',label='Reference Data')
+plt.plot(T1_r,y1_r[:,0],'r',label='Reference Data')
 plt.plot(T1_f,y1_f[:,0],'b',label='Flight Data')
 plt.plot(T1_f, u_1[celli_1:(celli_1+len(t1))], 'g', label = 'Actual Response')
 
-
-plt.legend()
-plt.grid()
-plt.xlabel('Time [sec]')
-plt.ylabel('Absoulte Velocity')
-plt.title('Short Period Response - velocity',pad=10)
 
 f2 = plt.figure(2)
 #plt.plot(T1_r,y1_r[:,1],'r',label='Reference Data')
@@ -355,7 +391,7 @@ plt.title('Dutch Roll Repsonse - rb/V',pad=10)
 
 #Aperiodic Roll
 f13 = plt.figure(13)
-#plt.plot(T4_r,y4_r[:,0],'r',label='Reference Data')
+plt.plot(T4_r,y4_r[:,0],'r',label='Reference Data')
 plt.plot(T4_f,y4_f[:,0],'b',label='Flight Data')
 
 plt.legend()
@@ -365,7 +401,7 @@ plt.ylabel('Side Slip [-]')
 plt.title('Aperiodic Roll Repsonse - Sideslip',pad=10)
 
 f14 = plt.figure(14)
-#plt.plot(T4_r,y4_r[:,1],'r',label='Reference Data')
+plt.plot(T4_r,y4_r[:,1],'r',label='Reference Data')
 plt.plot(T4_f,y4_f[:,1],'b',label='Flight Data')
 plt.plot(T4_f, phi[celli_4:(celli_4+len(t4))], 'g', label = 'Actual Response')
 
@@ -376,7 +412,7 @@ plt.ylabel('Roll Angle [-]')
 plt.title('Aperiodic Roll Repsonse - Roll Angle',pad=10)
 
 f15 = plt.figure(15)
-#plt.plot(T4_r,y4_r[:,2],'r',label='Reference Data')
+plt.plot(T4_r,y4_r[:,2],'r',label='Reference Data')
 plt.plot(T4_f,y4_f[:,2],'b',label='Flight Data')
 plt.plot(T4_f, p_4[celli_4:(celli_4+len(t4))], 'g', label = 'Actual Response')
 
@@ -443,9 +479,8 @@ plt.xlabel('Time [sec]')
 plt.ylabel('rb/V [-]')
 plt.title('Spiral Repsonse - rb/V',pad=10)
 
-
-
-########## Print Commands ##########
+'''
+###### Print Commands ##########
 
 plt.show()
 
