@@ -442,6 +442,7 @@ Delta_e_cg = np.array(delta_e_cg)[1]-np.array(delta_e_cg)[0]
 
 # C_m_delta
 C_m_delta = -(1/Delta_e_cg)*C_N_cg_av*((x_cg[1]-x_cg[0])/(c*39.3701))
+C_m_delta = C_m_delta * 180/np.pi
 
 
 # ------------- Elevator trim curve -------------
