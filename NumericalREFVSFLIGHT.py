@@ -156,7 +156,7 @@ y1_f , T1_f, x1_f = ml.lsim(sys_sp_f, u1_f, t1)
 # Phugoid
 t2 = np.arange(0 , 150, dt)
 
-u2, cell = inputcr(reference_delta_e, time, t2, 3237, 3247)
+u2, cell = inputcr(reference_delta_e, time, t2, 3227, 3247)
 
 y2_r , T2_r, x2_r = ml.lsim(sys_ph_r, u2, t2)
 

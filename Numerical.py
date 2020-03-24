@@ -9,36 +9,41 @@ from dynamic import alpha_1, theta_1, u_1, q_1,alpha_2, theta_2, u_2, q_2, phi, 
 #####DEFINITIONS######
 
 
+def inputcr(delta_values, time_value, t_array, time_ini,
+            time_fin):  # (deflections values, time of flight, time of simulation, start time of input, end time of input)
+    cell_ini = np.where(time_value == time_ini)[0][0]
+    cell_fin = np.where(time_value == time_fin)[0][0]
+    values = delta_values[cell_ini:cell_fin]
+    delta_values_a = np.array([values])
+    delta_values_aa = np.array([i * 0.017455 for i in delta_values_a])
+    missing = len(t_array) - len(values)
+    zeros = np.zeros((1, missing))
+    delta_values_aaa = np.hstack((delta_values_aa, zeros))
+    delta_values_array = np.transpose(delta_values_aaa)
 
-def inputcr(delta_values, time_value, t_array, time_ini, time_fin): #(deflections values, time of flight, time of simulation, start time of input, end time of input)
-     cell_ini = np.where(time_value == time_ini)[0][0]
-     cell_fin = np.where(time_value == time_fin)[0][0]
-     values = delta_values[cell_ini:cell_fin]
-     delta_values_a = np.array([values])
-     delta_values_aa = np.array([i * 0.017455 for i in delta_values_a])
-     missing = len(t_array) - len(values)
-     zeros = np.zeros((1, missing))
-     delta_values_aaa = np.hstack((delta_values_aa, zeros))
-     delta_values_array = np.transpose(delta_values_aaa)*-1
-
-
-     return delta_values_array, cell_ini
+    return delta_values_array, cell_ini
 
 
 ####GETTING DATA FOR INPUTS###########
 
-parameters =  np.array(['vane_AOA', 'elevator_dte', 'column_fe', 'lh_engine_FMF', 'rh_engine_FMF', 'lh_engine_itt', 'rh_engine_itt', 'lh_engine_OP', 'rh_engine_OP', 'lh_engine_fan_N1', 'lh_engine_turbine_N2', 'rh_engine_fan_N1', 'rh_engine_turbine_N2',
-                'lh_engine_FU', 'rh_engine_FU', 'delta_a', 'delta_e', 'delta_r', 'Gps_date', 'Gps_utcSec', 'Ahrs1_Roll', 'Ahrs1_Pitch', 'Fms1_trueHeading', 'Gps_lat', 'Gps_long', 'Ahrs1_bRollRate', 'Ahrs1_bPitchRate', 'Ahrs1_bYawRate',
-                'Ahrs1_bLongAcc', 'Ahrs1_bLatAcc', 'Ahrs1_bNormAcc', 'Ahrs1_aHdgAcc', 'Ahrs1_xHdgAcc', 'Ahrs1_VertAcc', 'Dadc1_sat', 'Dadc1_tat', 'Dadc1_alt', 'Dadc1_bcAlt', 'Dadc1_bcAltMb', 'Dadc1_mach', 'Dadc1_cas', 'Dadc1_tas',
-                'Dadc1_altRate', 'measurement_running', 'measurement_n_rdy', 'display_graph_state', 'display_active_screen', 'time'])
+parameters = np.array(
+    ['vane_AOA', 'elevator_dte', 'column_fe', 'lh_engine_FMF', 'rh_engine_FMF', 'lh_engine_itt', 'rh_engine_itt',
+     'lh_engine_OP', 'rh_engine_OP', 'lh_engine_fan_N1', 'lh_engine_turbine_N2', 'rh_engine_fan_N1',
+     'rh_engine_turbine_N2',
+     'lh_engine_FU', 'rh_engine_FU', 'delta_a', 'delta_e', 'delta_r', 'Gps_date', 'Gps_utcSec', 'Ahrs1_Roll',
+     'Ahrs1_Pitch', 'Fms1_trueHeading', 'Gps_lat', 'Gps_long', 'Ahrs1_bRollRate', 'Ahrs1_bPitchRate', 'Ahrs1_bYawRate',
+     'Ahrs1_bLongAcc', 'Ahrs1_bLatAcc', 'Ahrs1_bNormAcc', 'Ahrs1_aHdgAcc', 'Ahrs1_xHdgAcc', 'Ahrs1_VertAcc',
+     'Dadc1_sat', 'Dadc1_tat', 'Dadc1_alt', 'Dadc1_bcAlt', 'Dadc1_bcAltMb', 'Dadc1_mach', 'Dadc1_cas', 'Dadc1_tas',
+     'Dadc1_altRate', 'measurement_running', 'measurement_n_rdy', 'display_graph_state', 'display_active_screen',
+     'time'])
 
-reference_data,reference_headers,reference_descriptions = Read.get_data('ref_data')
-flight_data,flight_headers,flight_descriptions = Read.get_data('testflight')
+reference_data, reference_headers, reference_descriptions = Read.get_data('ref_data')
+flight_data, flight_headers, flight_descriptions = Read.get_data('testflight')
 
-delta_e_index = np.where(parameters=='delta_e')[0].flat[0]
-delta_r_index = np.where(parameters=='delta_r')[0].flat[0]
-delta_a_index = np.where(parameters=='delta_a')[0].flat[0]
-time_index = np.where(parameters=='time')[0].flat[0]
+delta_e_index = np.where(parameters == 'delta_e')[0].flat[0]
+delta_r_index = np.where(parameters == 'delta_r')[0].flat[0]
+delta_a_index = np.where(parameters == 'delta_a')[0].flat[0]
+time_index = np.where(parameters == 'time')[0].flat[0]
 
 reference_delta_e = np.array(reference_data[reference_headers[delta_e_index]])
 reference_delta_r = np.array(reference_data[reference_headers[delta_r_index]])
@@ -50,59 +55,68 @@ flight_delta_r = np.array(flight_data[flight_headers[delta_r_index]])
 flight_delta_a = np.array(flight_data[flight_headers[delta_a_index]])
 time = np.array(reference_data[[reference_headers[time_index]]])
 
-#class ABCDmat():
-    #from Resources.Cit_par import Cit_par_class
-    #def __init__(self):
-        #Cit_par_Values(self)
 
-def ABCD(flight,motion):
-    
-    rho, m, Cma, CZ0, Cl, hp0, V0, th0, Cmde, S, Sh, Sh_S, lh, c, lh_c, b, bh, A, Ah, Vh_V, ih, rho0, lamda, Temp0, R, g, W, muc, mub, KX2, KZ2, KXZ, KY2, Cmac, CNha, depsda, CX0, CXu, CXa, CXadot, CXq, CXde, CZ0, CZu, CZa, CZadot, CZq, CZde, Cmu, Cmadot, Cmq, CYb, CYbdot, CYp, CYr, CYda, CYdr, Clb, Clp, Clr, Clda, Cldr, Cnb, Cnbdot, Cnp, Cnr, Cnda, Cndr = Cit_par_Values(flight,motion)
+# class ABCDmat():
+# from Resources.Cit_par import Cit_par_class
+# def __init__(self):
+# Cit_par_Values(self)
+
+def ABCD(flight, motion):
+    rho, m, Cma, CZ0, Cl, hp0, V0, th0, Cmde, S, Sh, Sh_S, lh, c, lh_c, b, bh, A, Ah, Vh_V, ih, rho0, lamda, Temp0, R, g, W, muc, mub, KX2, KZ2, KXZ, KY2, Cmac, CNha, depsda, CX0, CXu, CXa, CXadot, CXq, CXde, CZ0, CZu, CZa, CZadot, CZq, CZde, Cmu, Cmadot, Cmq, CYb, CYbdot, CYp, CYr, CYda, CYdr, Clb, Clp, Clr, Clda, Cldr, Cnb, Cnbdot, Cnp, Cnr, Cnda, Cndr = Cit_par_Values(
+        flight, motion)
 
     ########## ASYMMETRIC EQUATIONS OF MOTION IN STATE-SPACE FORM ##########
-    A1 = np.array([[(V0/b)*(CYb/2/mub), (V0/b)*(Cl/2/mub), (V0/b)*(CYp/2/mub),(V0/b)*(CYr - 4*mub)/2/mub],
-                   [   0                     ,     0           ,        2*V0/b      ,           0   ],
-                   [(V0/b)*((Clb*KZ2+Cnb*KXZ)/(4*mub*(KX2*KZ2-KXZ**2))), 0 , (V0/b)*((Clp*KZ2+Cnp*KXZ)/(4*mub*(KX2*KZ2-KXZ**2))) , (V0/b)*((Clr*KZ2+Cnr*KXZ)/(4*mub*(KX2*KZ2-KXZ**2)))],
-                   [(V0/b)*((Clb*KXZ+Cnb*KX2)/(4*mub*(KX2*KZ2-KXZ**2))), 0 , (V0/b)*((Clp*KXZ+Cnp*KX2)/(4*mub*(KX2*KZ2-KXZ**2))) , (V0/b)*((Clr*KXZ+Cnr*KX2)/(4*mub*(KX2*KZ2-KXZ**2)))]])
+    A1 = np.array([[(V0 / b) * (CYb / 2 / mub), (V0 / b) * (Cl / 2 / mub), (V0 / b) * (CYp / 2 / mub),
+                    (V0 / b) * (CYr - 4 * mub) / 2 / mub],
+                   [0, 0, 2 * V0 / b, 0],
+                   [(V0 / b) * ((Clb * KZ2 + Cnb * KXZ) / (4 * mub * (KX2 * KZ2 - KXZ ** 2))), 0,
+                    (V0 / b) * ((Clp * KZ2 + Cnp * KXZ) / (4 * mub * (KX2 * KZ2 - KXZ ** 2))),
+                    (V0 / b) * ((Clr * KZ2 + Cnr * KXZ) / (4 * mub * (KX2 * KZ2 - KXZ ** 2)))],
+                   [(V0 / b) * ((Clb * KXZ + Cnb * KX2) / (4 * mub * (KX2 * KZ2 - KXZ ** 2))), 0,
+                    (V0 / b) * ((Clp * KXZ + Cnp * KX2) / (4 * mub * (KX2 * KZ2 - KXZ ** 2))),
+                    (V0 / b) * ((Clr * KXZ + Cnr * KX2) / (4 * mub * (KX2 * KZ2 - KXZ ** 2)))]])
 
-    B1 = np.array([[0          ,    (V0/b) * (CYdr/(2*mub))],
-                   [0          ,             0],
-                   [(V0/b)*((Clda*KZ2+Cnda*KXZ)/(4*mub*(KX2*KZ2-KXZ**2)))  ,  (V0/b)*((Cldr*KZ2+Cndr*KXZ)/(4*mub*(KX2*KZ2-KXZ**2)))],
-                   [(V0/b)*((Clda*KXZ+Cnda*KX2)/(4*mub*(KX2*KZ2-KXZ**2)))  ,  (V0/b)*((Cldr*KXZ+Cndr*KX2)/(4*mub*(KX2*KZ2-KXZ**2)))]])
-
+    B1 = np.array([[0, (V0 / b) * (CYdr / (2 * mub))],
+                   [0, 0],
+                   [(V0 / b) * ((Clda * KZ2 + Cnda * KXZ) / (4 * mub * (KX2 * KZ2 - KXZ ** 2))),
+                    (V0 / b) * ((Cldr * KZ2 + Cndr * KXZ) / (4 * mub * (KX2 * KZ2 - KXZ ** 2)))],
+                   [(V0 / b) * ((Clda * KXZ + Cnda * KX2) / (4 * mub * (KX2 * KZ2 - KXZ ** 2))),
+                    (V0 / b) * ((Cldr * KXZ + Cndr * KX2) / (4 * mub * (KX2 * KZ2 - KXZ ** 2)))]])
 
     C1 = np.identity(4)
 
     D1 = np.array([[0, 0], [0, 0], [0, 0], [0, 0]])
 
-
     ########## SYMMETRIC EQUATIONS OF MOTION IN STATE-SPACE FORM ##########
-    A2 = np.array([[(V0/c)*CXu/(2*muc)   , (V0/c)*CXa/(2*muc) , (V0/c)*CZ0/(2*muc) , (V0/c)*CXq/(2*muc)],
-                    [(V0/c)*CZu/(2*muc-CZadot)   , (V0/c)*CZa/(2*muc-CZadot)  , -(V0/c)*CX0/(2*muc-CZadot) , (V0/c)*(2*muc + CZq)/(2*muc-CZadot)],
-                   [        0                  ,                0           ,           0               ,           V0/c                     ],
-                   [(V0/c)*(Cmu+CZu*(Cmadot/(2*muc-CZadot)))/(2*muc*KY2), (V0/c)*(Cma + CZa*(Cmadot/(2*muc-CZadot)))/(2*muc*KY2), -(V0/c)*CX0*(Cmadot/(2*muc-CZadot))/(2*muc*KY2) , (V0/c)* (Cmq + Cmadot*((2*muc + CZq)/(2*muc - CZadot)))/(2*muc*KY2)]])
+    A2 = np.array([[(V0 / c) * CXu / (2 * muc), (V0 / c) * CXa / (2 * muc), (V0 / c) * CZ0 / (2 * muc),
+                    (V0 / c) * CXq / (2 * muc)],
+                   [(V0 / c) * CZu / (2 * muc - CZadot), (V0 / c) * CZa / (2 * muc - CZadot),
+                    -(V0 / c) * CX0 / (2 * muc - CZadot), (V0 / c) * (2 * muc + CZq) / (2 * muc - CZadot)],
+                   [0, 0, 0, V0 / c],
+                   [(V0 / c) * (Cmu + CZu * (Cmadot / (2 * muc - CZadot))) / (2 * muc * KY2),
+                    (V0 / c) * (Cma + CZa * (Cmadot / (2 * muc - CZadot))) / (2 * muc * KY2),
+                    -(V0 / c) * CX0 * (Cmadot / (2 * muc - CZadot)) / (2 * muc * KY2),
+                    (V0 / c) * (Cmq + Cmadot * ((2 * muc + CZq) / (2 * muc - CZadot))) / (2 * muc * KY2)]])
 
-    B2 = np.array([[(V0/c)*CXde/(2*muc)],
-                 [(V0/c)*CZde/(2*muc -CZadot)],
-                  [0],
-                  [(V0/c)*(Cmde + CZde*(Cmadot/(2*muc-CZadot)))/(2*muc*KY2)]])
+    B2 = np.array([[(V0 / c) * CXde / (2 * muc)],
+                   [(V0 / c) * CZde / (2 * muc - CZadot)],
+                   [0],
+                   [(V0 / c) * (Cmde + CZde * (Cmadot / (2 * muc - CZadot))) / (2 * muc * KY2)]])
 
     C2 = np.identity(4)
 
     D2 = np.array([[0], [0], [0], [0]])
 
-    #print(A2)
-    #print(B2)
-    #print(C2)
-    #print(D2)
+    # print(A2)
+    # print(B2)
+    # print(C2)
+    # print(D2)
     sys1 = ml.ss(A1, B1, C1, D1)
-    sys2 = ml.ss(A2,B2,C2, D2)
-    e1,v = np.linalg.eig(A1)
-    e2 , v= np.linalg.eig(A2)
+    sys2 = ml.ss(A2, B2, C2, D2)
+    e1, v = np.linalg.eig(A1)
+    e2, v = np.linalg.eig(A2)
 
     return sys1, sys2, e1, e2
-
-
 
 
 ########## EIGENVALUES ########## with the stationary flight conditions of short period
@@ -110,107 +124,97 @@ def ABCD(flight,motion):
 
 ########## STATE SPACE MODEL ##########
 
-#short period
-sys, sys_sp_r, e1_sp_r, e2_sp_r = ABCD(1,1)
-sys, sys_sp_f, e1_sp_f, e2_sp_f = ABCD(2,1)
+# short period
+sys, sys_sp_r, e1_sp_r, e2_sp_r = ABCD(1, 1)
+sys, sys_sp_f, e1_sp_f, e2_sp_f = ABCD(2, 1)
 
-#phugoid
-sys, sys_ph_r, e1_ph_r, e2_ph_r = ABCD(1,2)
-sys, sys_ph_f, e1_ph_f, e2_ph_f = ABCD(2,2)
+# phugoid
+sys, sys_ph_r, e1_ph_r, e2_ph_r = ABCD(1, 2)
+sys, sys_ph_f, e1_ph_f, e2_ph_f = ABCD(2, 2)
 
-#dutch roll
-sys_dr_r, sys, e1_dr_r, e2_dr_r = ABCD(1,3)
-sys_dr_f, sys, e1_dr_f, e2_dr_f = ABCD(2,3)
+# dutch roll
+sys_dr_r, sys, e1_dr_r, e2_dr_r = ABCD(1, 3)
+sys_dr_f, sys, e1_dr_f, e2_dr_f = ABCD(2, 3)
 
-#aperiodic
-sys_ap_r, sys, e1_ap_r, e2_ap_r = ABCD(1,4)
-sys_ap_f, sys, e1_ap_f, e2_ap_f = ABCD(2,4)
+# aperiodic
+sys_ap_r, sys, e1_ap_r, e2_ap_r = ABCD(1, 4)
+sys_ap_f, sys, e1_ap_f, e2_ap_f = ABCD(2, 4)
 
-#spiral
-sys_spir_r,sys, e1_spir_r, e2_spir_r = ABCD(1,5)
-sys_spir_f,sys, e1_spir_f, e2_spir_f = ABCD(2,5)
-
-
-
+# spiral
+sys_spir_r, sys, e1_spir_r, e2_spir_r = ABCD(1, 5)
+sys_spir_f, sys, e1_spir_f, e2_spir_f = ABCD(2, 5)
 
 ########### SIMULATION OF EIGENMOTIONS########
-dt= 0.1
+dt = 0.1
 
-
-#Short Period
-t1 = np.arange(0 , 15, dt)
+# Short Period
+t1 = np.arange(0, 15, dt)
 t_ini = 3634
 t_fin = 3636
 
-u1, cell = inputcr(reference_delta_e, time, t1, 3633 , 3648)
+u1, cell = inputcr(reference_delta_e, time, t1, 3633, 3648)
 
-y1_r , T1_r, x1_r = ml.lsim(sys_sp_r, u1, t1)
+y1_r, T1_r, x1_r = ml.lsim(sys_sp_r, u1, t1)
 
+u1_f, celli_1 = inputcr(flight_delta_e, time, t1, 3156, 3171)
 
-u1_f, celli_1 = inputcr(flight_delta_e, time, t1, 3156 , 3171)
-
-y1_f , T1_f, x1_f = ml.lsim(sys_sp_f, u1_f, t1)
+y1_f, T1_f, x1_f = ml.lsim(sys_sp_f, u1_f, t1)
 
 # Phugoid
-t2 = np.arange(0 , 150, dt)
+t2 = np.arange(0, 150, dt)
 
 u2, cell = inputcr(reference_delta_e, time, t2, 3237, 3247)
 
-y2_r , T2_r, x2_r = ml.lsim(sys_ph_r, u2, t2)
+y2_r, T2_r, x2_r = ml.lsim(sys_ph_r, u2, t2)
 
+u2_f, celli_2 = inputcr(flight_delta_e, time, t2, 3230, 3250)
 
-u2_f, celli_2 = inputcr(flight_delta_e, time, t2, 3230 , 3240)
+y2_f, T2_f, x2_f = ml.lsim(sys_ph_f, u2_f, t2)
 
-y2_f , T2_f, x2_f = ml.lsim(sys_ph_f, u2_f, t2)
-
-
-#Dutch Roll
-t3 = np.arange(0 , 30, dt)
+# Dutch Roll
+t3 = np.arange(0, 30, dt)
 
 u3_t, cell = inputcr(reference_delta_r, time, t3, 3717, 3727)
 
 u3 = np.hstack((np.zeros((len(t3), 1)), u3_t))
 
-y3_r , T3_r, x3_r = ml.lsim(sys_dr_r, u3, t3)
-
+y3_r, T3_r, x3_r = ml.lsim(sys_dr_r, u3, t3)
 
 u3_t_f, celli_3 = inputcr(flight_delta_r, time, t3, 3527, 3537)
 
 u3_f = np.hstack((np.zeros((len(t3), 1)), u3_t_f))
 
-y3_f , T3_f, x3_f = ml.lsim(sys_dr_f, u3_f, t3)
+y3_f, T3_f, x3_f = ml.lsim(sys_dr_f, u3_f, t3)
 
-#Aperiodic roll
-t4 = np.arange(0 , 30, dt)
+# Aperiodic roll
+t4 = np.arange(0, 30, dt)
 
 u4_t1_r, cell = inputcr(reference_delta_a, time, t4, 3550, 3570)
 
 u4_t2_r, cell = inputcr(flight_delta_r, time, t4, 3550, 3570)
 
-u4 = np.hstack((u4_t1_r,u4_t2_r))
+u4 = np.hstack((u4_t1_r, u4_t2_r))
 
-y4_r , T4_r, x4_r = ml.lsim(sys_ap_r, u4, t4)
-
+y4_r, T4_r, x4_r = ml.lsim(sys_ap_r, u4, t4)
 
 u4_t1_f, celli_4 = inputcr(flight_delta_a, time, t4, 3607, 3627)
 
 u4_t2_f, celli_4 = inputcr(flight_delta_r, time, t4, 3607, 3627)
 
-u4_f = np.hstack((u4_t1_f,u4_t2_f))
+u4_f = np.hstack((u4_t1_f, u4_t2_f))
 
-y4_f , T4_f, x4_f = ml.lsim(sys_ap_f, u4_f, t4)
+y4_f, T4_f, x4_f = ml.lsim(sys_ap_f, u4_f, t4)
 
+# Spiral
+t5 = np.arange(0, 140, dt)
 
-#Spiral
-t5 = np.arange(0, 140,dt)
+u5_t1_r, cell = inputcr(reference_delta_a, time, t5, 3912, 3932)
 
-u5_t1_r, cell= inputcr(reference_delta_a, time, t5, 3912, 3932)
-
-u5_t2_r, cell= inputcr(reference_delta_r, time, t5, 3912, 3932)
+u5_t2_r, cell = inputcr(reference_delta_r, time, t5, 3912, 3932)
 
 u5 = np.hstack((u5_t1_r, u5_t2_r))
 
-y5_r , T5_r, x5_r = ml.lsim(sys_spir_r, u5, t5)
+y5_r, T5_r, x5_r = ml.lsim(sys_spir_r, u5, t5)
 
 u5_t1_f, celli_5 = inputcr(flight_delta_a, time, t5, 3667, 3687)
 
@@ -218,9 +222,7 @@ u5_t2_f, celli_5 = inputcr(flight_delta_r, time, t5, 3667, 3687)
 
 u5_f = np.hstack((u5_t1_f, u5_t2_f))
 
-y5_f , T5_f, x5_f = ml.lsim(sys_spir_f, u5_f, t5)
-
-
+y5_f, T5_f, x5_f = ml.lsim(sys_spir_f, u5_f, t5)
 
 ##########PLOTS OF RESPONSES###########
 #Short Period
@@ -233,7 +235,7 @@ fig1, (axs2,axs3,axs4,axs5) = plt.subplots(4, sharex=True)
 fig1.suptitle('Short Period Response', fontsize=16, fontweight='bold')
 
 axs2.plot(T1_f, u_1[celli_1:(celli_1+len(t1))],'--', label = 'Actual Response')
-axs2.plot(T1_f,y1_f[:,2], 'r', label = 'Flight data')
+axs2.plot(T1_f,y1_f[:,0], 'r', label = 'Flight data')
 l1, = axs3.plot(T1_f,alpha_1[celli_1:(celli_1+len(t1))], '--' , label = 'Actual Response')
 l2, = axs3.plot(T1_f,y1_f[:,1], 'r', label = 'Flight data')
 axs4.plot(T1_f, theta_1[celli_1:(celli_1+len(t1))],'--', label = 'Actual Response')
