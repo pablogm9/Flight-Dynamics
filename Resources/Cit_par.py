@@ -156,18 +156,6 @@ def Cit_par_Values(FlightType,Motion):              #FlightType: Reference Data 
         print("Not a valid input")
         sys.exit()
 
-    #hp0 = pressure altitude in the stationary flight condition [m]
-    #V0 = true airspeed in the stationary flight condition [m/sec]
-    #alpha0 = angle of attack in the stationary flight condition [rad]
-    #th0    =  pitch angle in the stationary flight condition [rad]
-
-    # Aircraft mass
-    #m      =             # mass [kg]
-
-    # aerodynamic properties
-    #e      =             # Oswald factor [ ]
-    #CD0    =             # Zero lift drag coefficient [ ]
-    #CLa    =             # Slope of CL-alpha curve [ ]
 
     # Longitudinal stability
     if FlightType == 1:
