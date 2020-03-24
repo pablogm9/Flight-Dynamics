@@ -36,8 +36,8 @@ g_0 = 9.80665 #[m/s^2]
 
 # ------------- Read EXCEL file -------------
 
-#datasheet = pd.read_excel('../Data/REFERENCE_Post_Flight_Datasheet.xlsx')
-datasheet = pd.read_excel('../Data/TESTFLIGHT_Post_Flight_Datasheet.xlsx')
+datasheet = pd.read_excel('../Data/REFERENCE_Post_Flight_Datasheet.xlsx')
+#datasheet = pd.read_excel('../Data/TESTFLIGHT_Post_Flight_Datasheet.xlsx')
 
 datasheet.columns = ['A','B','C','D','E','F','G','H','I','J','K','L','M']
 datasheet.index = range(2,85)
