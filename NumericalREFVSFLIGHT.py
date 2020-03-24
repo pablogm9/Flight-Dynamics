@@ -344,7 +344,7 @@ axs3.set_ylabel('\u03C6 [-]',fontsize=12)
 
 
 axs4.set_title('Roll Rate',fontsize=12)
-axs4.set_ylabel(' qb/V[-]',fontsize=12)
+axs4.set_ylabel(' pb/V[-]',fontsize=12)
 
 
 
@@ -390,7 +390,7 @@ axs3.set_title('Roll Angle',fontsize=12)
 axs3.set_ylabel('\u03C6 [-]',fontsize=14)
 
 axs4.set_title('Roll Rate',fontsize=12)
-axs4.set_ylabel('qb/V[-]',fontsize=14)
+axs4.set_ylabel('pb/V[-]',fontsize=14)
 
 axs5.set_title('Yaw Rate',fontsize=12)
 axs5.set_ylabel('rb/V[-]',fontsize=14)
@@ -433,7 +433,7 @@ axs3.set_title('Roll Angle',fontsize=12)
 axs3.set_ylabel('\u03C6 [-]',fontsize=14)
 
 axs4.set_title('Roll Rate',fontsize=12)
-axs4.set_ylabel('qb/V[-]',fontsize=14)
+axs4.set_ylabel('pb/V[-]',fontsize=14)
 
 axs5.set_title('Yaw Rate',fontsize=12)
 axs5.set_ylabel('rb/V[-]',fontsize=14)
