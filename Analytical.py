@@ -3,8 +3,33 @@ from math import *
 import cmath
 #import matplotlib.pyplot as plt
 
-rho, m, Cma, CZ0, Cl, hp0, V0, th0, Cmde, S, Sh, Sh_S, lh, c, lh_c, b, bh, A, Ah, Vh_V, ih, rho0, lamda, Temp0, R, g, W, muc, mub, KX2, KZ2, KXZ, KY2, Cmac, CNha, depsda, CX0, CXu, CXa, CXadot, CXq, CXde, CZ0, CZu, CZa, CZadot, CZq, CZde, Cmu, Cmadot, Cmq, CYb, CYbdot, CYp, CYr, CYda, CYdr, Clb, Clp, Clr, Clda, Cldr, Cnb, Cnbdot, Cnp, Cnr, Cnda, Cndr= Cit_par_Values(1,1)
+rho, m, Cma, CZ0, Cl, hp0, V0, th0, Cmde, S, Sh, Sh_S, lh, c, lh_c, b, bh, A, Ah, Vh_V, ih, rho0, lamda, Temp0, R, g, W, muc, mub, KX2, KZ2, KXZ, KY2, Cmac, CNha, depsda, CX0, CXu, CXa, CXadot, CXq, CXde, CZ0, CZu, CZa, CZadot, CZq, CZde, Cmu, Cmadot, Cmq, CYb, CYbdot, CYp, CYr, CYda, CYdr, Clb, Clp, Clr, Clda, Cldr, Cnb, Cnbdot, Cnp, Cnr, Cnda, Cndr= Cit_par_Values(2,5)
 
+# muc = 102.7
+# KY2 = 0.98
+# V0 = 59.9
+# S = 24.2
+# m = 4547.8
+# c = 2.022
+#
+# CXu = -0.2199    #PH
+# CXa = +0.4653    #PH
+# CX0 = 0
+# CXadot = 0
+# CXq = 0
+# CXde = 0
+# CZ0 = -1.136   #Important PH
+# CZu = -2.272    #PH
+# CZa = -5.1600    #PH + SP
+# CZadot = -1.4300 #SP
+# CZq = -3.8600    #SP
+# CZde = -0.6238
+#
+# Cmu = +0.0    #PH
+# Cmadot = -3.700 #SP
+# Cmq = -7.0400    #PH + SP
+# Cma = -0.4300    #PH + SP
+# Cmde = -1.553
 
 
 #empty lists to fill with values
@@ -174,7 +199,6 @@ damp_ratio.append(damp_phugoid)
 damp_ratio.append(damp_droll)
 
 
-
 #============================COMPLETE SOLUTION SYMMETRICAL======================
 A_s = 4 * muc**2 * KY2 * (CZadot - 2*muc)
 B_s = Cmadot * 2 * muc * (CZq + 2 * muc) - Cmq * 2 * muc * (CZadot - 2 * muc) - 2*muc * KY2 * (CXu * (CZadot - 2*muc) - 2*muc*CZa)
@@ -188,6 +212,7 @@ root1_s = roots_s[0]*V0/c
 root2_s = roots_s[1]*V0/c
 root3_s = roots_s[2]*V0/c
 root4_s = roots_s[3]*V0/c
+print(root1_s, root2_s, root3_s, root4_s)
 
 
 #===========================COMPLETE SOLUTION ASYMMETRICAL==========================
