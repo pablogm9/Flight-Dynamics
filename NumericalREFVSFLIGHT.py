@@ -19,7 +19,7 @@ def inputcr(delta_values, time_value, t_array, time_ini, time_fin): #(deflection
      missing = len(t_array) - len(values)
      zeros = np.zeros((1, missing))
      delta_values_aaa = np.hstack((delta_values_aa, zeros))
-     delta_values_array = np.transpose(delta_values_aaa)*-1
+     delta_values_array = np.transpose(delta_values_aaa)
 
 
      return delta_values_array, cell_ini
@@ -101,6 +101,8 @@ def ABCD(flight,motion):
     e2 , v= np.linalg.eig(A2)
 
     return sys1, sys2, e1, e2
+
+
 
 
 
@@ -229,18 +231,21 @@ plt.style.use('seaborn-darkgrid')
 
 
 
-fig1, (axs2,axs3,axs4,axs5) = plt.subplots(4, sharex=True)
+fig1, (axs1,axs2,axs3,axs4,axs5) = plt.subplots(5, sharex=True)
 fig1.suptitle('Short Period Response', fontsize=16, fontweight='bold')
-
-axs2.plot(T1_f, u_1[celli_1:(celli_1+len(t1))],'--', label = 'Actual Response')
-axs2.plot(T1_f,y1_f[:,2], 'r', label = 'Flight data')
-l1, = axs3.plot(T1_f,alpha_1[celli_1:(celli_1+len(t1))], '--' , label = 'Actual Response')
-l2, = axs3.plot(T1_f,y1_f[:,1], 'r', label = 'Flight data')
-axs4.plot(T1_f, theta_1[celli_1:(celli_1+len(t1))],'--', label = 'Actual Response')
+l1, = axs1.plot(T1_f, u1, '--', label = 'Reference Input')
+l2, = axs1.plot(T1_f, u1_f,'r', label = 'Flight Input')
+axs2.plot(T1_f,y1_r[:,0], '--', label = 'Reference data')
+axs2.plot(T1_f,y1_f[:,0],'r',  label = 'Flight data')
+axs3.plot(T1_f, y1_r[:,1], '--' , label = 'Reference data')
+axs3.plot(T1_f,y1_f[:,1], 'r', label = 'Flight data')
+axs4.plot(T1_f, y1_r[:,2],'--', label = 'Reference data')
 axs4.plot(T1_f,y1_f[:,2], 'r', label = 'Flight data')
-axs5.plot(T1_f, q_1[celli_1:(celli_1+len(t1))],'--', label = 'Actual Response')
+axs5.plot(T1_f, y1_r[:,3],'--', label = 'Reference data')
 axs5.plot(T1_f,y1_f[:,3], 'r', label = 'Flight data')
 
+axs1.set_title('Inputs',fontsize=12)
+axs1.set_ylabel('Def_e [rad]',fontsize=12)
 
 axs2.set_title('Velocity along x-axis',fontsize=12)
 axs2.set_ylabel('u [-]',fontsize=12)
@@ -256,7 +261,7 @@ axs5.set_ylabel('qc/V[-]',fontsize=12)
 
 plt.xlabel('Time [s]')
 
-legend1 = fig1.legend([l1, l2],['Actual Response', 'Numerical Response'], loc='center right',framealpha=1,frameon=True )
+legend1 = fig1.legend([l1, l2],['Reference Data', 'Flight Data'], loc='center right',framealpha=1,frameon=True )
 plt.subplots_adjust(right=0.75)
 fig1.align_labels()
 
@@ -268,17 +273,21 @@ frame1.set_edgecolor('black')
 
 #Phugoid
 
-fig2, (axs2,axs3,axs4,axs5) = plt.subplots(4, sharex=True)
+fig2, (axs1,axs2,axs3,axs4,axs5) = plt.subplots(5, sharex=True)
 fig2.suptitle('Phugoid Response', fontsize=16, fontweight='bold')
-axs2.plot(T2_f, u_2[celli_2:(celli_2+len(t2))],'--', label = 'Actual Response')
-axs2.plot(T2_f,y2_f[:,2], 'r', label = 'Flight data')
-l1, = axs3.plot(T2_f,alpha_2[celli_2:(celli_2+len(t2))], '--' , label = 'Actual Response')
-l2, = axs3.plot(T2_f,y2_f[:,1], 'r', label = 'Flight data')
-axs4.plot(T2_f, theta_2[celli_2:(celli_2+len(t2))],'--', label = 'Actual Response')
+l1, = axs1.plot(T2_f, u2, '--', label = 'Reference Input')
+l2, = axs1.plot(T2_f, u2_f,'r', label = 'Flight Input')
+axs2.plot(T2_f,y2_r[:,0], '--', label = 'Reference data')
+axs2.plot(T2_f,y2_f[:,0],'r',  label = 'Flight data')
+axs3.plot(T2_f, y2_r[:,1], '--' , label = 'Reference data')
+axs3.plot(T2_f,y2_f[:,1], 'r', label = 'Flight data')
+axs4.plot(T2_f, y2_r[:,2],'--', label = 'Reference data')
 axs4.plot(T2_f,y2_f[:,2], 'r', label = 'Flight data')
-axs5.plot(T2_f, q_2[celli_2:(celli_2+len(t2))],'--', label = 'Actual Response')
+axs5.plot(T2_f, y2_r[:,3],'--', label = 'Reference data')
 axs5.plot(T2_f,y2_f[:,3], 'r', label = 'Flight data')
 
+axs1.set_title('Inputs',fontsize=12)
+axs1.set_ylabel('Def_e [rad]',fontsize=12)
 
 axs2.set_title('Velocity along x-axis',fontsize=12)
 axs2.set_ylabel('u [-]',fontsize=12)
@@ -294,7 +303,7 @@ axs5.set_ylabel('qc/V[-]',fontsize=12)
 
 plt.xlabel('Time [s]')
 
-legend2 = fig2.legend([l1, l2],['Actual Response', 'Numerical Response'], loc='center right',framealpha=1,frameon=True )
+legend2 = fig2.legend([l1, l2],['Reference Data', 'Flight Data'], loc='center right',framealpha=1,frameon=True )
 plt.subplots_adjust(right=0.75)
 fig2.align_labels()
 
@@ -307,14 +316,26 @@ frame2.set_edgecolor('black')
 #Dutch Roll
 
 
-fig3, (axs3,axs4,axs5) = plt.subplots(3, sharex=True)
+fig3, (axs1,axs2,axs3,axs4,axs5) = plt.subplots(5, sharex=True)
 fig3.suptitle('Dutch Roll Response',fontsize=16, fontweight='bold')
-l1, = axs3.plot(T3_f, phi[celli_3:(celli_3+len(t3))], '--' , label = 'Actual Response')
-l2, = axs3.plot(T3_f,y3_f[:,1], 'r', label = 'Flight data')
-axs4.plot(T3_f, p_3[celli_3:(celli_3+len(t3))],'--', label = 'Reference data')
+l1, = axs1.plot(T3_f, u3_t, '--', label = 'Reference Input')
+l2, = axs1.plot(T3_f, u3_t_f,'r', label = 'Flight Input')
+axs2.plot(T3_f,y3_r[:,0], '--', label = 'Reference data')
+axs2.plot(T3_f,y3_f[:,0],'r',  label = 'Flight data')
+axs3.plot(T3_f, y3_r[:,1], '--' , label = 'Reference data')
+axs3.plot(T3_f,y3_f[:,1], 'r', label = 'Flight data')
+axs4.plot(T3_f, y3_r[:,2],'--', label = 'Reference data')
 axs4.plot(T3_f,y3_f[:,2], 'r', label = 'Flight data')
-axs5.plot(T3_f, r_3[celli_3:(celli_3+len(t3))],'--', label = 'Reference data')
+axs5.plot(T3_f, y3_r[:,3],'--', label = 'Reference data')
 axs5.plot(T3_f,y3_f[:,3], 'r', label = 'Flight data')
+
+axs1.set_title('Inputs',fontsize=12)
+axs1.set_ylabel('Def_r [rad]',fontsize=12)
+
+
+axs2.set_title('Yaw Angle',fontsize=12)
+axs2.set_ylabel('\u03B2 [-]',fontsize=12)
+
 
 
 axs3.set_title('Roll Angle',fontsize=12)
@@ -331,7 +352,8 @@ axs5.set_title('Yaw Rate',fontsize=12)
 axs5.set_ylabel('rb/V[-]',fontsize=12)
 
 
-legend3 = fig3.legend([l1, l2],['Actual Response', 'Numerical Response'], loc='center right',framealpha=1,frameon=True )
+
+legend3 = fig3.legend([l1, l2],['Reference Data', 'Flight Data'], loc='center right',framealpha=1,frameon=True )
 plt.subplots_adjust(right=0.75)
 fig3.align_labels()
 
@@ -343,36 +365,42 @@ frame3.set_edgecolor('black')
 
 #Aperiodic Roll
 
-
-fig4, (axs3,axs4,axs5) = plt.subplots(3, sharex=True)
+fig4, (axs1,axs2,axs3,axs4,axs5) = plt.subplots(5, sharex=True)
 fig4.suptitle('Aperiodic Roll Response',fontsize=16, fontweight='bold')
-l1, = axs3.plot(T4_f, phi[celli_4:(celli_4+len(t4))], '--' , label = 'Actual Response')
-l2, = axs3.plot(T4_f,y4_f[:,1], 'r', label = 'Flight data')
-axs4.plot(T4_f, p_4[celli_4:(celli_4+len(t4))],'--', label = 'Reference data')
+l3, = axs1.plot(T4_f, u4_t1_f, 'g', label = 'Flight data aileron deflection')
+l4, = axs1.plot(T4_f, u4_t2_f,'b', label = 'Flight data rudder deflection')
+l5, = axs1.plot(T4_f, u4_t1_r, 'g--', label = 'Reference data aileron deflection')
+l6, = axs1.plot(T4_f, u4_t2_r,'b--', label = 'Reference data rudder deflection')
+l1, = axs2.plot(T4_f,y4_r[:,0], '--', label = 'Reference data response')
+l2, = axs2.plot(T4_f,y4_f[:,0],'r',  label = 'Flight data response')
+axs3.plot(T4_f, y4_r[:,1], '--' , label = 'Reference data')
+axs3.plot(T4_f,y4_f[:,1], 'r', label = 'Flight data')
+axs4.plot(T4_f, y4_r[:,2],'--', label = 'Reference data')
 axs4.plot(T4_f,y4_f[:,2], 'r', label = 'Flight data')
-axs5.plot(T4_f, r_4[celli_4:(celli_4+len(t4))],'--', label = 'Reference data')
+axs5.plot(T4_f, y4_r[:,3],'--', label = 'Reference data')
 axs5.plot(T4_f,y4_f[:,3], 'r', label = 'Flight data')
 
+axs1.set_title('Inputs',fontsize=12)
+axs1.set_ylabel('Def [rad]',fontsize=14)
+
+axs2.set_title('Yaw Angle',fontsize=12)
+axs2.set_ylabel('\u03B2 [-]',fontsize=14)
 
 axs3.set_title('Roll Angle',fontsize=12)
-axs3.set_ylabel('\u03C6 [-]',fontsize=12)
-
-
+axs3.set_ylabel('\u03C6 [-]',fontsize=14)
 
 axs4.set_title('Roll Rate',fontsize=12)
-axs4.set_ylabel(' qb/V[-]',fontsize=12)
-
-
+axs4.set_ylabel('qb/V[-]',fontsize=14)
 
 axs5.set_title('Yaw Rate',fontsize=12)
-axs5.set_ylabel('rb/V[-]',fontsize=12)
+axs5.set_ylabel('rb/V[-]',fontsize=14)
 
-
-legend4 = fig4.legend([l1, l2], ['Actual Response', 'Numerical Response'],loc='center right',framealpha=1,frameon=True )
 plt.subplots_adjust(right=0.75)
 fig4.align_labels()
 
+legend4 = fig4.legend([l2, l3, l4,l1, l5, l6],['Flight data response','Flight data aileron deflection','Flight data rudder deflection', 'Reference data response','Reference data aileron deflection', 'Reference data rudder deflection'], loc='center right',framealpha=1,frameon=True)
 plt.xlabel('Time [s]',fontsize=14)
+
 frame4 = legend4.get_frame()
 
 frame4.set_facecolor('0.90')
@@ -380,35 +408,42 @@ frame4.set_edgecolor('black')
 
 #spiral
 
-fig5, (axs3,axs4,axs5) = plt.subplots(3, sharex=True)
+fig5, (axs1,axs2,axs3,axs4,axs5) = plt.subplots(5, sharex=True)
 fig5.suptitle('Spiral Dive Response',fontsize=16, fontweight='bold')
-l1, = axs3.plot(T5_f, phi[celli_5:(celli_5+len(t5))], '--' , label = 'Actual Response')
-l2, = axs3.plot(T5_f,y5_f[:,1], 'r', label = 'Flight data')
-axs4.plot(T5_f, p_5[celli_5:(celli_5+len(t5))],'--', label = 'Reference data')
+l3, = axs1.plot(T5_f, u5_t1_f, 'g', label = 'Flight data aileron deflection')
+l4, = axs1.plot(T5_f, u5_t2_f,'b', label = 'Flight data rudder deflection')
+l5, = axs1.plot(T5_f, u5_t1_r, 'g--', label = 'Reference data aileron deflection')
+l6, = axs1.plot(T5_f, u5_t2_r,'b--', label = 'Reference data rudder deflection')
+l1, = axs2.plot(T5_f,y5_r[:,0], '--', label = 'Reference data response')
+l2, = axs2.plot(T5_f,y5_f[:,0],'r',  label = 'Flight data response')
+axs3.plot(T5_f, y5_r[:,1], '--' , label = 'Reference data')
+axs3.plot(T5_f,y5_f[:,1], 'r', label = 'Flight data')
+axs4.plot(T5_f, y5_r[:,2],'--', label = 'Reference data')
 axs4.plot(T5_f,y5_f[:,2], 'r', label = 'Flight data')
-axs5.plot(T5_f, r_5[celli_5:(celli_5+len(t5))],'--', label = 'Reference data')
+axs5.plot(T5_f, y5_r[:,3],'--', label = 'Reference data')
 axs5.plot(T5_f,y5_f[:,3], 'r', label = 'Flight data')
 
+axs1.set_title('Inputs',fontsize=12)
+axs1.set_ylabel('Def [rad]',fontsize=14)
+
+axs2.set_title('Yaw Angle',fontsize=12)
+axs2.set_ylabel('\u03B2 [-]',fontsize=14)
 
 axs3.set_title('Roll Angle',fontsize=12)
-axs3.set_ylabel('\u03C6 [-]',fontsize=12)
-
-
+axs3.set_ylabel('\u03C6 [-]',fontsize=14)
 
 axs4.set_title('Roll Rate',fontsize=12)
-axs4.set_ylabel(' qb/V[-]',fontsize=12)
-
-
+axs4.set_ylabel('qb/V[-]',fontsize=14)
 
 axs5.set_title('Yaw Rate',fontsize=12)
-axs5.set_ylabel('rb/V[-]',fontsize=12)
+axs5.set_ylabel('rb/V[-]',fontsize=14)
 
-
-legend5 = fig5.legend([l1, l2],['Actual Response', 'Numerical Response'], loc='center right',framealpha=1,frameon=True )
 plt.subplots_adjust(right=0.75)
 fig5.align_labels()
 
+legend5 = fig5.legend([l2, l3, l4,l1, l5, l6],['Flight data response','Flight data aileron deflection','Flight data rudder deflection', 'Reference data response','Reference data aileron deflection', 'Reference data rudder deflection'], loc='center right',framealpha=1,frameon=True)
 plt.xlabel('Time [s]',fontsize=14)
+
 frame5 = legend5.get_frame()
 
 frame5.set_facecolor('0.90')
