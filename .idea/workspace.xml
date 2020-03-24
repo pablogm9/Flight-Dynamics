@@ -2,7 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5377f238-fd03-4bd2-9ddb-43d6a7551285" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/other.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/other.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Numerical.py" beforeDir="false" afterPath="$PROJECT_DIR$/Numerical.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StationaryData/stationary_reference.py" beforeDir="false" afterPath="$PROJECT_DIR$/StationaryData/stationary_reference.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,7 +35,7 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-    <option name="UPDATE_TYPE" value="MERGE" />
+    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="ProjectId" id="1Yhr0GNFFyj20ec7mN8qk7JkQBi" />
   <component name="ProjectLevelVcsManager">
@@ -48,16 +51,13 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$USER_HOME$/AppData/Local/Programs/Python/Python38-32/python.exe" />
-    <property name="settings.editor.selected.configurable" value="configurable.group.tools" />
+    <property name="settings.editor.selected.configurable" value="PyScientificConfigurable" />
   </component>
-  <component name="RunManager" selected="Python.stationary_reference">
+  <component name="RunManager" selected="Python.Numerical">
     <configuration name="Numerical" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="FlightDynamicsAssignment" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="true" />
@@ -189,10 +189,10 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.Numerical" />
         <item itemvalue="Python.stationary_reference" />
         <item itemvalue="Python.stationary_testflight" />
         <item itemvalue="Python.stationary_reference - Copy" />
-        <item itemvalue="Python.Numerical" />
         <item itemvalue="Python.dynamic" />
       </list>
     </recent_temporary>
@@ -215,7 +215,8 @@
       <workItem from="1584966107602" duration="6046000" />
       <workItem from="1584972729007" duration="3450000" />
       <workItem from="1584978583253" duration="7576000" />
-      <workItem from="1585051305241" duration="2997000" />
+      <workItem from="1585051305241" duration="9875000" />
+      <workItem from="1585078762532" duration="2990000" />
     </task>
     <task id="LOCAL-00001" summary="Readme Updated">
       <created>1583409266618</created>
@@ -364,7 +365,14 @@
       <option name="project" value="LOCAL" />
       <updated>1584989457740</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="Readme Updated">
+      <created>1585054648032</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1585054648032</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -392,11 +400,11 @@
       <screen x="0" y="23" width="1440" height="823" />
     </state>
     <state x="0" y="176" key="#xdebugger.XInspectDialog/0.23.1440.823@0.23.1440.823" timestamp="1584796359372" />
-    <state x="389" y="7" key="CommitChangelistDialog2" timestamp="1584989457131">
+    <state x="389" y="7" key="CommitChangelistDialog2" timestamp="1585054647314">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="346" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1583420948259" />
-    <state x="389" y="7" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1584989457131" />
+    <state x="389" y="7" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1585054647314" />
     <state x="389" y="0" key="CommitChangelistDialog2/0.0.1536.834@0.0.1536.834" timestamp="1584537052815" />
     <state x="365" y="23" key="CommitChangelistDialog2/0.23.1440.821@0.23.1440.821" timestamp="1584652334912" />
     <state x="365" y="23" key="CommitChangelistDialog2/0.23.1440.823@0.23.1440.823" timestamp="1584877834197" />
@@ -478,33 +486,33 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="526" y="123" key="RollbackChangesDialog/0.0.1536.824@0.0.1536.824" timestamp="1584978290854" />
-    <state x="207" y="8" key="SettingsEditor" timestamp="1584973488800">
+    <state x="207" y="8" key="SettingsEditor" timestamp="1585080035127">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="184" y="7" key="SettingsEditor/0.0.1366.728@0.0.1366.728" timestamp="1583420900781" />
-    <state x="207" y="8" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1584973488800" />
+    <state x="207" y="8" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1585080035127" />
     <state x="207" y="8" key="SettingsEditor/0.0.1536.834@0.0.1536.834" timestamp="1583863707363" />
-    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1584989464399">
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1585054656462">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1584989464399" />
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1585054656462" />
     <state x="361" y="147" key="Vcs.Push.Dialog.v2/0.0.1536.834@0.0.1536.834" timestamp="1584537061529" />
     <state x="338" y="167" key="Vcs.Push.Dialog.v2/0.23.1440.821@0.23.1440.821" timestamp="1584652340286" />
     <state x="338" y="167" key="Vcs.Push.Dialog.v2/0.23.1440.823@0.23.1440.823" timestamp="1584877844788" />
     <state x="338" y="168" key="Vcs.Push.Dialog.v2/0.23.1440.825@0.23.1440.825" timestamp="1584632458258" />
     <state x="338" y="169" key="Vcs.Push.Dialog.v2/0.23.1440.826@0.23.1440.826" timestamp="1584912653152" />
     <state x="338" y="169" key="Vcs.Push.Dialog.v2/0.23.1440.828@0.23.1440.828" timestamp="1584209219604" />
-    <state x="426" y="212" key="com.intellij.ide.util.TipDialog" timestamp="1585051305415">
+    <state x="426" y="212" key="com.intellij.ide.util.TipDialog" timestamp="1585078764636">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="379" y="188" key="com.intellij.ide.util.TipDialog/0.0.1366.728@0.0.1366.728" timestamp="1583420330863" />
-    <state x="426" y="212" key="com.intellij.ide.util.TipDialog/0.0.1536.824@0.0.1536.824" timestamp="1585051305415" />
+    <state x="426" y="212" key="com.intellij.ide.util.TipDialog/0.0.1536.824@0.0.1536.824" timestamp="1585078764636" />
     <state x="426" y="215" key="com.intellij.ide.util.TipDialog/0.0.1536.834@0.0.1536.834" timestamp="1584184192147" />
-    <state x="578" y="329" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1584989442193">
+    <state x="578" y="329" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1585079282640">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="514" y="291" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1366.728@0.0.1366.728" timestamp="1583421841314" />
-    <state x="578" y="329" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1536.824@0.0.1536.824" timestamp="1584989442193" />
+    <state x="578" y="329" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1536.824@0.0.1536.824" timestamp="1585079282640" />
     <state x="578" y="333" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1536.834@0.0.1536.834" timestamp="1584184199024" />
     <state x="542" y="350" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.23.1440.821@0.23.1440.821" timestamp="1584652319332" />
     <state x="542" y="352" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.23.1440.822@0.23.1440.822" timestamp="1584283421263" />
