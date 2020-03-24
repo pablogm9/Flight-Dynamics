@@ -3,7 +3,7 @@ import scipy as np
 import control.matlab as ml
 import matplotlib.pyplot as plt
 import Read
-from dynamic import alpha_1, theta_1, u_1, q_1,alpha_2, theta_2, u_2, q_2, phi, r_3, p_3, r_4, p_4, r_5, p_5
+from dynamic import alpha_1, theta_1, u_1, q_1, alpha_2, theta_2, u_2, q_2, phi, r_3, p_3, r_4, p_4, r_5, p_5
 
 
 #####DEFINITIONS######
@@ -19,7 +19,7 @@ def inputcr(delta_values, time_value, t_array, time_ini,
     missing = len(t_array) - len(values)
     zeros = np.zeros((1, missing))
     delta_values_aaa = np.hstack((delta_values_aa, zeros))
-    delta_values_array = np.transpose(delta_values_aaa)
+    delta_values_array = np.transpose(delta_values_aaa)*-1
 
     return delta_values_array, cell_ini
 
@@ -119,7 +119,7 @@ def ABCD(flight, motion):
     return sys1, sys2, e1, e2
 
 
-########## EIGENVALUES ########## with the stationary flight conditions of short period
+# EIGENVALUES ########## with the stationary flight conditions of short period
 
 
 ########## STATE SPACE MODEL ##########
@@ -225,294 +225,314 @@ u5_f = np.hstack((u5_t1_f, u5_t2_f))
 y5_f, T5_f, x5_f = ml.lsim(sys_spir_f, u5_f, t5)
 
 ##########PLOTS OF RESPONSES###########
-#Short Period
+# Short Period
 plt.style.use('seaborn-darkgrid')
 
 
+fig1, (axs2, axs3, axs4, axs5) = plt.subplots(4, sharex=True)
+fig1.suptitle('Short Period Response', fontsize=20, fontweight='bold')
+
+axs2.plot(T1_f, u_1[celli_1:(celli_1+len(t1))], '--', label='Actual Response')
+axs2.plot(T1_f, y1_f[:, 0], 'r', label='Flight data')
 
 
-fig1, (axs2,axs3,axs4,axs5) = plt.subplots(4, sharex=True)
-fig1.suptitle('Short Period Response', fontsize=16, fontweight='bold')
-
-axs2.plot(T1_f, u_1[celli_1:(celli_1+len(t1))],'--', label = 'Actual Response')
-axs2.plot(T1_f,y1_f[:,0], 'r', label = 'Flight data')
+l1, = axs3.plot(T1_f, alpha_1[celli_1:(celli_1+len(t1))], '--', label='Actual Response')
+l2, = axs3.plot(T1_f, y1_f[:, 1], 'r', label='Flight data')
 
 
-l1, = axs3.plot(T1_f,alpha_1[celli_1:(celli_1+len(t1))], '--' , label = 'Actual Response')
-l2, = axs3.plot(T1_f,y1_f[:,1], 'r', label = 'Flight data')
+axs4.plot(T1_f, theta_1[celli_1:(celli_1+len(t1))], '--', label='Actual Response')
+axs4.plot(T1_f, y1_f[:, 2], 'r', label='Flight data')
 
 
-axs4.plot(T1_f, theta_1[celli_1:(celli_1+len(t1))],'--', label = 'Actual Response')
-axs4.plot(T1_f,y1_f[:,2], 'r', label = 'Flight data')
+axs5.plot(T1_f, q_1[celli_1:(celli_1+len(t1))], '--', label='Actual Response')
+axs5.plot(T1_f, y1_f[:, 3], 'r', label='Flight data')
 
 
-axs5.plot(T1_f, q_1[celli_1:(celli_1+len(t1))],'--', label = 'Actual Response')
-axs5.plot(T1_f,y1_f[:,3], 'r', label = 'Flight data')
+axs2.set_title('Velocity along x-axis', fontsize=16)
+axs2.set_ylabel('u [-]', fontsize=16)
+axs2.tick_params(axis='both', which='major', labelsize=12)
 
 
-axs2.set_title('Velocity along x-axis',fontsize=12)
-axs2.set_ylabel('u [-]',fontsize=12)
+axs3.set_title('Angle of Attack', fontsize=16)
+axs3.set_ylabel(' \u03B1 [-]', fontsize=16)
+axs3.tick_params(axis='both', which='major', labelsize=12)
 
-axs3.set_title('Angle of Attack',fontsize=12)
-axs3.set_ylabel(' \u03B1 [-]',fontsize=12)
 
-axs4.set_title('Pitch Angle',fontsize=12)
-axs4.set_ylabel('\u03B8 [-]',fontsize=12)
+axs4.set_title('Pitch Angle', fontsize=16)
+axs4.set_ylabel('\u03B8 [-]', fontsize=16)
+axs4.tick_params(axis='both', which='major', labelsize=12)
 
-axs5.set_title('Pitch Rate',fontsize=12)
-axs5.set_ylabel('qc/V[-]',fontsize=12)
+
+axs5.set_title('Pitch Rate', fontsize=16)
+axs5.set_ylabel('qc/V[-]', fontsize=16)
+axs5.tick_params(axis='both', which='major', labelsize=12)
+
 
 plt.xlabel('Time [s]')
 
-legend1 = fig1.legend([l1, l2],['Actual Response', 'Numerical Response'], loc='center right',framealpha=1,frameon=True )
+legend1 = fig1.legend([l1, l2], ['Actual Response', 'Numerical Response'],
+                      loc='center right', framealpha=1, frameon=True, fontsize=16)
 plt.subplots_adjust(right=0.75)
 fig1.align_labels()
 
-plt.xlabel('Time [s]',fontsize=14)
+plt.xlabel('Time [s]', fontsize=16)
 frame1 = legend1.get_frame()
 
 frame1.set_facecolor('0.90')
 frame1.set_edgecolor('black')
 
 # Errors
-sp_e1 = np.transpose(u_1[celli_1:(celli_1+len(t1))]) - np.transpose(y1_f[:,0])
+sp_e1 = np.transpose(u_1[celli_1:(celli_1+len(t1))]) - np.transpose(y1_f[:, 0])
 sp_mean1 = np.mean(sp_e1)
 sp_std1 = np.std(sp_e1)
 
-sp_e2 = np.transpose(alpha_1[celli_1:(celli_1+len(t1))]) - np.transpose(y1_f[:,1])
+sp_e2 = np.transpose(alpha_1[celli_1:(celli_1+len(t1))]) - np.transpose(y1_f[:, 1])
 sp_mean2 = np.mean(sp_e2)
 sp_std2 = np.std(sp_e2)
 
-sp_e3 = np.transpose(theta_1[celli_1:(celli_1+len(t1))]) - np.transpose(y1_f[:,2])
+sp_e3 = np.transpose(theta_1[celli_1:(celli_1+len(t1))]) - np.transpose(y1_f[:, 2])
 sp_mean3 = np.mean(sp_e3)
 sp_std3 = np.std(sp_e3)
 
-sp_e4 = np.transpose(q_1[celli_1:(celli_1+len(t1))]) - np.transpose(y1_f[:,3])
+sp_e4 = np.transpose(q_1[celli_1:(celli_1+len(t1))]) - np.transpose(y1_f[:, 3])
 sp_mean4 = np.mean(sp_e4)
 sp_std4 = np.std(sp_e4)
 
 sp_std_tot = np.sqrt(sp_std1**2 + sp_std2**2 + sp_std3**2 + sp_std4**2)
 
 
-#Phugoid
+# Phugoid
 
-fig2, (axs2,axs3,axs4,axs5) = plt.subplots(4, sharex=True)
-fig2.suptitle('Phugoid Response', fontsize=16, fontweight='bold')
+fig2, (axs2, axs3, axs4, axs5) = plt.subplots(4, sharex=True)
+fig2.suptitle('Phugoid Response', fontsize=20, fontweight='bold')
+axs2.plot(T2_f, u_2[celli_2:(celli_2+len(t2))], '--', label='Actual Response')
+axs2.plot(T2_f, y2_f[:, 0], 'r', label='Flight data')
 
-axs2.plot(T2_f, u_2[celli_2:(celli_2+len(t2))],'--', label = 'Actual Response')
-axs2.plot(T2_f,y2_f[:,0], 'r', label = 'Flight data')
+l1, = axs3.plot(T2_f, alpha_2[celli_2:(celli_2+len(t2))], '--', label='Actual Response')
+l2, = axs3.plot(T2_f, y2_f[:, 1], 'r', label='Flight data')
 
-l1, = axs3.plot(T2_f,alpha_2[celli_2:(celli_2+len(t2))], '--' , label = 'Actual Response')
-l2, = axs3.plot(T2_f,y2_f[:,1], 'r', label = 'Flight data')
+axs4.plot(T2_f, theta_2[celli_2:(celli_2+len(t2))], '--', label='Actual Response')
+axs4.plot(T2_f, y2_f[:, 2], 'r', label='Flight data')
 
-axs4.plot(T2_f, theta_2[celli_2:(celli_2+len(t2))],'--', label = 'Actual Response')
-axs4.plot(T2_f,y2_f[:,2], 'r', label = 'Flight data')
-
-axs5.plot(T2_f, q_2[celli_2:(celli_2+len(t2))],'--', label = 'Actual Response')
-axs5.plot(T2_f,y2_f[:,3], 'r', label = 'Flight data')
+axs5.plot(T2_f, q_2[celli_2:(celli_2+len(t2))], '--', label='Actual Response')
+axs5.plot(T2_f, y2_f[:, 3], 'r', label='Flight data')
 
 
-axs2.set_title('Velocity along x-axis',fontsize=12)
-axs2.set_ylabel('u [-]',fontsize=12)
+axs2.set_title('Velocity along x-axis', fontsize=16)
+axs2.set_ylabel('u [-]', fontsize=16)
+axs2.tick_params(axis='both', which='major', labelsize=12)
 
-axs3.set_title('Angle of Attack',fontsize=12)
-axs3.set_ylabel(' \u03B1 [-]',fontsize=12)
 
-axs4.set_title('Pitch Angle',fontsize=12)
-axs4.set_ylabel('\u03B8 [-]',fontsize=12)
+axs3.set_title('Angle of Attack', fontsize=16)
+axs3.set_ylabel(' \u03B1 [-]', fontsize=16)
+axs3.tick_params(axis='both', which='major', labelsize=12)
 
-axs5.set_title('Pitch Rate',fontsize=12)
-axs5.set_ylabel('qc/V[-]',fontsize=12)
+axs4.set_title('Pitch Angle', fontsize=16)
+axs4.set_ylabel('\u03B8 [-]', fontsize=16)
+axs4.tick_params(axis='both', which='major', labelsize=12)
+
+
+axs5.set_title('Pitch Rate', fontsize=16)
+axs5.set_ylabel('qc/V[-]', fontsize=16)
+axs5.tick_params(axis='both', which='major', labelsize=12)
+
 
 plt.xlabel('Time [s]')
 
-legend2 = fig2.legend([l1, l2],['Actual Response', 'Numerical Response'], loc='center right',framealpha=1,frameon=True )
+legend2 = fig2.legend([l1, l2], ['Actual Response', 'Numerical Response'],
+                      loc='center right', framealpha=1, frameon=True, fontsize=16)
 plt.subplots_adjust(right=0.75)
 fig2.align_labels()
 
-plt.xlabel('Time [s]',fontsize=14)
+plt.xlabel('Time [s]', fontsize=14)
 frame2 = legend2.get_frame()
 
 frame2.set_facecolor('0.90')
 frame2.set_edgecolor('black')
 
 # Errors
-ph_e1 = np.transpose(u_2[celli_2:(celli_2+len(t2))]) - np.transpose(y2_f[:,0])
+ph_e1 = np.transpose(u_2[celli_2:(celli_2+len(t2))]) - np.transpose(y2_f[:, 0])
 ph_mean1 = np.mean(ph_e1)
 ph_std1 = np.std(ph_e1)
 
-ph_e2 = np.transpose(alpha_2[celli_2:(celli_2+len(t2))]) - np.transpose(y2_f[:,1])
+ph_e2 = np.transpose(alpha_2[celli_2:(celli_2+len(t2))]) - np.transpose(y2_f[:, 1])
 ph_mean2 = np.mean(ph_e2)
 ph_std2 = np.std(ph_e2)
 
-ph_e3 = np.transpose(theta_2[celli_2:(celli_2+len(t2))]) - np.transpose(y2_f[:,2])
+ph_e3 = np.transpose(theta_2[celli_2:(celli_2+len(t2))]) - np.transpose(y2_f[:, 2])
 ph_mean3 = np.mean(ph_e3)
 ph_std3 = np.std(ph_e3)
 
-ph_e4 = np.transpose(q_2[celli_2:(celli_2+len(t2))]) - np.transpose(y2_f[:,3])
+ph_e4 = np.transpose(q_2[celli_2:(celli_2+len(t2))]) - np.transpose(y2_f[:, 3])
 ph_mean4 = np.mean(ph_e4)
 ph_std4 = np.std(ph_e4)
 
 ph_std_tot = np.sqrt(ph_std1**2 + ph_std2**2 + ph_std3**2 + ph_std4**2)
 
 
+# Dutch Roll
+
+fig3, (axs3, axs4, axs5) = plt.subplots(3, sharex=True)
+fig3.suptitle('Dutch Roll Response', fontsize=20, fontweight='bold')
+l1, = axs3.plot(T3_f, phi[celli_3:(celli_3+len(t3))], '--', label='Actual Response')
+l2, = axs3.plot(T3_f, y3_f[:, 1], 'r', label='Flight data')
+
+axs4.plot(T3_f, p_3[celli_3:(celli_3+len(t3))], '--', label='Reference data')
+axs4.plot(T3_f, y3_f[:, 2], 'r', label='Flight data')
+
+axs5.plot(T3_f, r_3[celli_3:(celli_3+len(t3))], '--', label='Reference data')
+axs5.plot(T3_f, y3_f[:, 3], 'r', label='Flight data')
 
 
-#Dutch Roll
-
-fig3, (axs3,axs4,axs5) = plt.subplots(3, sharex=True)
-fig3.suptitle('Dutch Roll Response',fontsize=16, fontweight='bold')
-
-l1, = axs3.plot(T3_f, phi[celli_3:(celli_3+len(t3))], '--' , label = 'Actual Response')
-l2, = axs3.plot(T3_f,y3_f[:,1], 'r', label = 'Flight data')
-
-axs4.plot(T3_f, p_3[celli_3:(celli_3+len(t3))],'--', label = 'Reference data')
-axs4.plot(T3_f,y3_f[:,2], 'r', label = 'Flight data')
-
-axs5.plot(T3_f, r_3[celli_3:(celli_3+len(t3))],'--', label = 'Reference data')
-axs5.plot(T3_f,y3_f[:,3], 'r', label = 'Flight data')
+axs3.set_title('Roll Angle', fontsize=16)
+axs3.set_ylabel('\u03C6 [-]', fontsize=16)
+axs3.tick_params(axis='both', which='major', labelsize=12)
 
 
-axs3.set_title('Roll Angle',fontsize=12)
-axs3.set_ylabel('\u03C6 [-]',fontsize=12)
-
-axs4.set_title('Roll Rate',fontsize=12)
-axs4.set_ylabel(' pb/V[-]',fontsize=12)
-
-axs5.set_title('Yaw Rate',fontsize=12)
-axs5.set_ylabel('rb/V[-]',fontsize=12)
+axs4.set_title('Roll Rate', fontsize=16)
+axs4.set_ylabel(' pb/V[-]', fontsize=16)
+axs4.tick_params(axis='both', which='major', labelsize=12)
 
 
-legend3 = fig3.legend([l1, l2],['Actual Response', 'Numerical Response'], loc='center right',framealpha=1,frameon=True )
+axs5.set_title('Yaw Rate', fontsize=16)
+axs5.set_ylabel('rb/V[-]', fontsize=16)
+axs5.tick_params(axis='both', which='major', labelsize=12)
+
+
+legend3 = fig3.legend([l1, l2], ['Actual Response', 'Numerical Response'],
+                      loc='center right', framealpha=1, frameon=True, fontsize=16)
 plt.subplots_adjust(right=0.75)
 fig3.align_labels()
 
-plt.xlabel('Time [s]',fontsize=14)
+plt.xlabel('Time [s]', fontsize=16)
 frame3 = legend3.get_frame()
 
 frame3.set_facecolor('0.90')
 frame3.set_edgecolor('black')
 
-dr_e1 = np.transpose(phi[celli_3:(celli_3+len(t3))]) - np.transpose(y3_f[:,1])
+dr_e1 = np.transpose(phi[celli_3:(celli_3+len(t3))]) - np.transpose(y3_f[:, 1])
 dr_mean1 = np.mean(dr_e1)
 dr_std1 = np.std(dr_e1)
 
-dr_e2 = np.transpose(p_3[celli_3:(celli_3+len(t3))]) - np.transpose(y3_f[:,2])
+dr_e2 = np.transpose(p_3[celli_3:(celli_3+len(t3))]) - np.transpose(y3_f[:, 2])
 dr_mean2 = np.mean(dr_e2)
 dr_std2 = np.std(dr_e2)
 
-dr_e3 = np.transpose(r_3[celli_3:(celli_3+len(t3))]) - np.transpose(y3_f[:,3])
+dr_e3 = np.transpose(r_3[celli_3:(celli_3+len(t3))]) - np.transpose(y3_f[:, 3])
 dr_mean3 = np.mean(dr_e3)
 dr_std3 = np.std(dr_e3)
 
 dr_std_tot = np.sqrt(dr_std1**2 + dr_std2**2 + dr_std3**2)
 
 
-
-#Aperiodic Roll
-
-
-fig4, (axs3,axs4,axs5) = plt.subplots(3, sharex=True)
-fig4.suptitle('Aperiodic Roll Response',fontsize=16, fontweight='bold')
-l1, = axs3.plot(T4_f, phi[celli_4:(celli_4+len(t4))], '--' , label = 'Actual Response')
-l2, = axs3.plot(T4_f,y4_f[:,1], 'r', label = 'Flight data')
-
-axs4.plot(T4_f, p_4[celli_4:(celli_4+len(t4))],'--', label = 'Reference data')
-axs4.plot(T4_f,y4_f[:,2], 'r', label = 'Flight data')
-
-axs5.plot(T4_f, r_4[celli_4:(celli_4+len(t4))],'--', label = 'Reference data')
-axs5.plot(T4_f,y4_f[:,3], 'r', label = 'Flight data')
+# Aperiodic Roll
 
 
-axs3.set_title('Roll Angle',fontsize=12)
-axs3.set_ylabel('\u03C6 [-]',fontsize=12)
+fig4, (axs3, axs4, axs5) = plt.subplots(3, sharex=True)
+fig4.suptitle('Aperiodic Roll Response', fontsize=20, fontweight='bold')
+l1, = axs3.plot(T4_f, phi[celli_4:(celli_4+len(t4))], '--', label='Actual Response')
+l2, = axs3.plot(T4_f, y4_f[:, 1], 'r', label='Flight data')
+
+axs4.plot(T4_f, p_4[celli_4:(celli_4+len(t4))], '--', label='Reference data')
+axs4.plot(T4_f, y4_f[:, 2], 'r', label='Flight data')
+
+axs5.plot(T4_f, r_4[celli_4:(celli_4+len(t4))], '--', label='Reference data')
+axs5.plot(T4_f, y4_f[:, 3], 'r', label='Flight data')
 
 
-
-axs4.set_title('Roll Rate',fontsize=12)
-axs4.set_ylabel(' pb/V[-]',fontsize=12)
-
-
-
-axs5.set_title('Yaw Rate',fontsize=12)
-axs5.set_ylabel('rb/V[-]',fontsize=12)
+axs3.set_title('Roll Angle', fontsize=16)
+axs3.set_ylabel('\u03C6 [-]', fontsize=16)
+axs3.tick_params(axis='both', which='major', labelsize=12)
 
 
-legend4 = fig4.legend([l1, l2], ['Actual Response', 'Numerical Response'],loc='center right',framealpha=1,frameon=True )
+axs4.set_title('Roll Rate', fontsize=16)
+axs4.set_ylabel(' pb/V[-]', fontsize=16)
+axs4.tick_params(axis='both', which='major', labelsize=12)
+
+
+axs5.set_title('Yaw Rate', fontsize=16)
+axs5.set_ylabel('rb/V[-]', fontsize=16)
+axs5.tick_params(axis='both', which='major', labelsize=12)
+
+
+legend4 = fig4.legend([l1, l2], ['Actual Response', 'Numerical Response'],
+                      loc='center right', framealpha=1, frameon=True, fontsize=16)
 plt.subplots_adjust(right=0.75)
 fig4.align_labels()
 
-plt.xlabel('Time [s]',fontsize=14)
+plt.xlabel('Time [s]', fontsize=16)
 frame4 = legend4.get_frame()
 
 frame4.set_facecolor('0.90')
 frame4.set_edgecolor('black')
 
 
-ar_e1 = np.transpose(phi[celli_4:(celli_4+len(t4))]) - np.transpose(y4_f[:,1])
+ar_e1 = np.transpose(phi[celli_4:(celli_4+len(t4))]) - np.transpose(y4_f[:, 1])
 ar_mean1 = np.mean(ar_e1)
 ar_std1 = np.std(ar_e1)
 
-ar_e2 = np.transpose(p_4[celli_4:(celli_4+len(t4))]) - np.transpose(y4_f[:,2])
+ar_e2 = np.transpose(p_4[celli_4:(celli_4+len(t4))]) - np.transpose(y4_f[:, 2])
 ar_mean2 = np.mean(ar_e2)
 ar_std2 = np.std(ar_e2)
 
-ar_e3 = np.transpose(r_4[celli_4:(celli_4+len(t4))]) - np.transpose(y4_f[:,3])
+ar_e3 = np.transpose(r_4[celli_4:(celli_4+len(t4))]) - np.transpose(y4_f[:, 3])
 ar_mean3 = np.mean(ar_e3)
 ar_std3 = np.std(ar_e3)
 
 ar_std_tot = np.sqrt(ar_std1**2 + ar_std2**2 + ar_std3**2)
 
 
-#spiral
+# spiral
 
-fig5, (axs3,axs4,axs5) = plt.subplots(3, sharex=True)
-fig5.suptitle('Spiral Dive Response',fontsize=16, fontweight='bold')
+fig5, (axs3, axs4, axs5) = plt.subplots(3, sharex=True)
+fig5.suptitle('Spiral Dive Response', fontsize=16, fontweight='bold')
 
-l1, = axs3.plot(T5_f, phi[celli_5:(celli_5+len(t5))], '--' , label = 'Actual Response')
-l2, = axs3.plot(T5_f,y5_f[:,1], 'r', label = 'Flight data')
+l1, = axs3.plot(T5_f, phi[celli_5:(celli_5+len(t5))], '--', label='Actual Response')
+l2, = axs3.plot(T5_f, y5_f[:, 1], 'r', label='Flight data')
 
-axs4.plot(T5_f, p_5[celli_5:(celli_5+len(t5))],'--', label = 'Reference data')
-axs4.plot(T5_f,y5_f[:,2], 'r', label = 'Flight data')
+axs4.plot(T5_f, p_5[celli_5:(celli_5+len(t5))], '--', label='Reference data')
+axs4.plot(T5_f, y5_f[:, 2], 'r', label='Flight data')
 
-axs5.plot(T5_f, r_5[celli_5:(celli_5+len(t5))],'--', label = 'Reference data')
-axs5.plot(T5_f,y5_f[:,3], 'r', label = 'Flight data')
-
-
-axs3.set_title('Roll Angle',fontsize=12)
-axs3.set_ylabel('\u03C6 [-]',fontsize=12)
+axs5.plot(T5_f, r_5[celli_5:(celli_5+len(t5))], '--', label='Reference data')
+axs5.plot(T5_f, y5_f[:, 3], 'r', label='Flight data')
 
 
-
-axs4.set_title('Roll Rate',fontsize=12)
-axs4.set_ylabel(' pb/V[-]',fontsize=12)
-
-
-
-axs5.set_title('Yaw Rate',fontsize=12)
-axs5.set_ylabel('rb/V[-]',fontsize=12)
+axs3.set_title('Roll Angle', fontsize=16)
+axs3.set_ylabel('\u03C6 [-]', fontsize=16)
+axs3.tick_params(axis='both', which='major', labelsize=12)
 
 
-legend5 = fig5.legend([l1, l2],['Actual Response', 'Numerical Response'], loc='center right',framealpha=1,frameon=True )
+axs4.set_title('Roll Rate', fontsize=16)
+axs4.set_ylabel(' pb/V[-]', fontsize=16)
+axs4.tick_params(axis='both', which='major', labelsize=12)
+
+
+axs5.set_title('Yaw Rate', fontsize=16)
+axs5.set_ylabel('rb/V[-]', fontsize=16)
+axs4.tick_params(axis='both', which='major', labelsize=12)
+
+
+legend5 = fig5.legend([l1, l2], ['Actual Response', 'Numerical Response'],
+                      loc='center right', framealpha=1, frameon=True, fontsize=16)
 plt.subplots_adjust(right=0.75)
 fig5.align_labels()
 
-plt.xlabel('Time [s]',fontsize=14)
+plt.xlabel('Time [s]', fontsize=16)
 frame5 = legend5.get_frame()
 
 frame5.set_facecolor('0.90')
 frame5.set_edgecolor('black')
 
 
-spiral_e1 = np.transpose(phi[celli_5:(celli_5+len(t5))]) - np.transpose(y5_f[:,1])
+spiral_e1 = np.transpose(phi[celli_5:(celli_5+len(t5))]) - np.transpose(y5_f[:, 1])
 spiral_mean1 = np.mean(spiral_e1)
 spiral_std1 = np.std(spiral_e1)
 
-spiral_e2 = np.transpose(p_5[celli_5:(celli_5+len(t5))]) - np.transpose(y5_f[:,2])
+spiral_e2 = np.transpose(p_5[celli_5:(celli_5+len(t5))]) - np.transpose(y5_f[:, 2])
 spiral_mean2 = np.mean(spiral_e2)
 spiral_std2 = np.std(spiral_e2)
 
-spiral_e3 = np.transpose(r_5[celli_5:(celli_5+len(t5))]) - np.transpose(y5_f[:,3])
+spiral_e3 = np.transpose(r_5[celli_5:(celli_5+len(t5))]) - np.transpose(y5_f[:, 3])
 spiral_mean3 = np.mean(spiral_e3)
 spiral_std3 = np.std(spiral_e3)
 
