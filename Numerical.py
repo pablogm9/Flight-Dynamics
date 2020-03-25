@@ -19,7 +19,7 @@ def inputcr(delta_values, time_value, t_array, time_ini,
     missing = len(t_array) - len(values)
     zeros = np.zeros((1, missing))
     delta_values_aaa = np.hstack((delta_values_aa, zeros))
-    delta_values_array = np.transpose(delta_values_aaa)*-1
+    delta_values_array = np.transpose(delta_values_aaa)
 
     return delta_values_array, cell_ini
 
