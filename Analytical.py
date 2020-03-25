@@ -3,7 +3,8 @@ from math import *
 import cmath
 #import matplotlib.pyplot as plt
 
-rho, m, Cma, CZ0, Cl, hp0, V0, th0, Cmde, S, Sh, Sh_S, lh, c, lh_c, b, bh, A, Ah, Vh_V, ih, rho0, lamda, Temp0, R, g, W, muc, mub, KX2, KZ2, KXZ, KY2, Cmac, CNha, depsda, CX0, CXu, CXa, CXadot, CXq, CXde, CZ0, CZu, CZa, CZadot, CZq, CZde, Cmu, Cmadot, Cmq, CYb, CYbdot, CYp, CYr, CYda, CYdr, Clb, Clp, Clr, Clda, Cldr, Cnb, Cnbdot, Cnp, Cnr, Cnda, Cndr= Cit_par_Values(2,5)
+rho, m, Cma, CZ0, Cl, hp0, V0, th0, Cmde, S, Sh, Sh_S, lh, c, lh_c, b, bh, A, Ah, Vh_V, ih, rho0, lamda, Temp0, R, g, W, muc, mub, KX2, KZ2, KXZ, KY2, Cmac, CNha, depsda, CX0, CXu, CXa, CXadot, CXq, CXde, CZ0, CZu, CZa, CZadot, CZq, CZde, Cmu, Cmadot, Cmq, CYb, CYbdot, CYp, CYr, CYda, CYdr, Clb, Clp, Clr, Clda, Cldr, Cnb, Cnbdot, Cnp, Cnr, Cnda, Cndr= Cit_par_Values(2,3)
+
 
 # muc = 102.7
 # KY2 = 0.98
@@ -38,11 +39,12 @@ lambdas_real = []
 lambdas_imag = []
 t_half_sym      = []
 t_half_asym      = []
-taus        = []
-periods     = []
-no_per_half = []
-log_decr    = []
-damp_ratio  = []
+tau_aperiodic        = []
+tau_spiral= []
+period_shawty_phugoid_dutch    = []
+no_per_half_shawty_phugoid_dutch = []
+log_decr_shawty_phugid_dutch    = []
+damp_ratio_shawty_phugoid_dutch  = []
 
 
 #========================SYMMETRIC-MOTIONS=============================
@@ -52,7 +54,7 @@ A_sp = 2 * muc * KY2 * (2 * muc - CZadot)
 B_sp = - 2 * muc * KY2 * CZa - (2 * muc + CZq) * Cmadot - (2 * muc - CZadot) * Cmq
 C_sp = CZa * Cmq - (2 * muc + CZq) * Cma
 
-Eig_val_short_period_real = (-B_sp) / (2 * A_sp)
+Eig_val_short_period_real = (-B_sp) / (2 * A_sp) # lambda_c, used for the time period
 Eig_val_short_period_imag = cmath.sqrt(- 4 * A_sp * C_sp + B_sp**2) / (2 * A_sp)
 Eig_val_short_period_1 = (Eig_val_short_period_real + Eig_val_short_period_imag) * V0/c
 Eig_val_short_period_2 = (Eig_val_short_period_real - Eig_val_short_period_imag) * V0/c
@@ -127,27 +129,26 @@ y = [i.imag for i in lambdas]
 
 
 
-#--------------Time to half the amplitude---------------
 
-#for symmetric motions
+
+#----------------Time constant(only applies to motion with completely real eigevalues----------
 def tau(y):
-    return -1*c/(Vh_V*y)
-#def per(z):
- #   return 2*pi*c/()
+    return -1*c/(V0*y) # speed needs to be changed
 
-for i in lambdas:
-    taus.append(tau(i))
+tau_aperiodic.append(tau(lambda_aroll))
+tau_spiral.append(tau(lambda_spiral))
 
-# print('The time constants=', taus)
+print('The time constant for the aperiodic roll and spiral motion are:',[tau_aperiodic,tau_spiral])
+
 
 #----------------------Characteristics-------------------------
 
 #------------Half time-----------------
 #applies to all eigenvalues
 def thalf_sym(x):
-    return log(0.5, e) * c / (x * Vh_V) ### The velocity needs to be changed for every eigenmotion, the speed is taken at the beginning of the motion
+    return log(0.5, e) * c / (x * V0) ### The velocity needs to be changed for every eigenmotion, the speed is taken at the beginning of the motion
 def thalf_asym(x):
-    return log(0.5, e) * b / (x * Vh_V) ### The velocity needs to be changed for every eigenmotion, the speed is taken at the beginning of the motion
+    return log(0.5, e) * b / (x * V0) ### The velocity needs to be changed for every eigenmotion, the speed is taken at the beginning of the motion
 
 
 
@@ -155,48 +156,74 @@ for k in range(2):
         t_half_sym.append(thalf_sym(lambdas_real[k]))
 for k1 in range(2,5):
         t_half_asym.append(thalf_asym(lambdas_real[k1]))
-# print('Times to reach half amplitude for asymmetric motions=',t_half_asym)
+print('Times to reach half amplitude for short period',t_half_sym[0])
+print('Times to reach half amplitude for phugoid',t_half_sym[1])
+print('Times to reach half amplitude for aperiodic',t_half_asym[0])
+print('Times to reach half amplitude for dutch roll',t_half_asym[1])
+print('Times to reach half amplitude for spiral',t_half_asym[2])
+
 #----------Period---------------------
-#applies to complex eigvalues only
+#only applies to eigenmotions that have oomplex eigenvalues
 
-def per(z):
-    return 2*pi*c/(z*Vh_V)#again the velocity needs to be appended
-for j in lambdas_imag:
-    periods.append(per(j))
+def per_sym(z):
+    return 2*pi*c/(z*V0)#again the velocity needs to be appended
 
-#-----------Time constant------------------
-#only applies to real eigenvalues
-tau_aperiod = -1*c/lambda_aroll
-tau_spiral = -1*c/lambda_spiral
-taus.append(tau_aperiod)
-taus.append(tau_spiral)
+def per_asym(z1):
+    return 2*pi*b/(z1*V0)#again the velocity needs to be appended
+
+period_shawty_phugoid_dutch.append(per_sym(lambdas_imag[0]))
+period_shawty_phugoid_dutch.append(per_sym(lambdas_imag[1]))
+period_shawty_phugoid_dutch.append(per_asym(lambdas_imag[2]))
+print('The period for short period is', period_shawty_phugoid_dutch[0])
+print('The period for phugoid is', period_shawty_phugoid_dutch[1])
+print('The period for dutch roll is', period_shawty_phugoid_dutch[2])
+
 
 #----------C half values--------------
 #only applies to motions that have an imaginary part
-c_half_shawty = t_half_sym[0]/periods[0]
-c_half_phugoid= t_half_sym[1]/periods[1]
-c_half_droll = t_half_asym[1]/periods[2]
-no_per_half.append(c_half_shawty)
-no_per_half.append(c_half_phugoid)
-no_per_half.append(c_half_droll)
-
+c_half_shawty = t_half_sym[0]/period_shawty_phugoid_dutch[0]
+c_half_phugoid= t_half_sym[1]/period_shawty_phugoid_dutch[1]
+c_half_droll = t_half_asym[1]/period_shawty_phugoid_dutch[2]
+no_per_half_shawty_phugoid_dutch.append(c_half_shawty)
+no_per_half_shawty_phugoid_dutch.append(c_half_phugoid)
+no_per_half_shawty_phugoid_dutch.append(c_half_droll)
+print('The C_0.5 for short period is', no_per_half_shawty_phugoid_dutch[0])
+print('The C_0.5 for phugoid is', no_per_half_shawty_phugoid_dutch[1])
+print('The C_0.5 for dutch roll is', no_per_half_shawty_phugoid_dutch[2])
 #-----------Logarithmic decrement---------
 #only applies to motions that have an imaginary part
-dec_shawty = lambdas_real[0]*Vh_V*periods[0]/c
-dec_phugoid = lambdas_real[1]*Vh_V*periods[1]/c
-dec_droll = lambdas_real[3]*Vh_V*periods[2]/c
-log_decr.append(dec_shawty)
-log_decr.append(dec_phugoid)
-log_decr.append(dec_droll)
+for u in no_per_half_shawty_phugoid_dutch:
+    logdec = -0.693/u
+    log_decr_shawty_phugid_dutch.append(logdec)
+print('The logarithmic decrement for short period is', log_decr_shawty_phugid_dutch[0])
+print('The logarithmic decrement for phugoid is', log_decr_shawty_phugid_dutch[1])
+print('The logarithmic decrement for dutch roll is', log_decr_shawty_phugid_dutch[2])
 
 #-----------Damping ratio------------------
 #only applies to motions that have an imaginary part
 damp_shawty = -1*lambdas[0].real/abs(lambdas[0])
 damp_phugoid = -1*lambdas[2].real/abs(lambdas[2])
 damp_droll = -1*lambda_droll_real/abs(lambda_droll_real+lambda_droll_imag)
-damp_ratio.append(damp_shawty)
-damp_ratio.append(damp_phugoid)
-damp_ratio.append(damp_droll)
+damp_ratio_shawty_phugoid_dutch.append(damp_shawty)
+
+damp_ratio_shawty_phugoid_dutch.append(damp_phugoid)
+
+damp_ratio_shawty_phugoid_dutch.append(damp_droll)
+print('The damping ratio for short period is', damp_ratio_shawty_phugoid_dutch[0])
+print('The damping ratio for phugoid is', damp_ratio_shawty_phugoid_dutch[1])
+print('The damping ratio for dutch roll is', damp_ratio_shawty_phugoid_dutch[2])
+
+#----------------------------Natural frequency and undamped natural frequency-----------------
+#------------------------only applies to motions with complex eigenvalues-------------------
+def undamped_sym(a,b):
+    return sqrt(a**2 + b**2)*V0/c
+def undamped_asym(a1,b1):
+    return sqrt(a1**2 + b1**2)*V0/b
+
+
+print("The natural frequency for short period=",undamped_sym(lambdas[1].real,lambdas[1].imag)*sqrt(1-damp_ratio_shawty_phugoid_dutch[0]**2))
+print("The natural frequency for phugoid=",undamped_sym(lambdas[2].real,lambdas[2].imag)*sqrt(1-damp_ratio_shawty_phugoid_dutch[1]**2))
+print("The natural frequency for dutch roll=",undamped_asym(lambdas[5].real,lambdas[5].imag)*sqrt(1-damp_ratio_shawty_phugoid_dutch[2]**2))
 
 
 #============================COMPLETE SOLUTION SYMMETRICAL======================
