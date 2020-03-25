@@ -64,6 +64,16 @@ time = np.array(reference_data[[reference_headers[time_index]]])
 def ABCD(flight, motion):
     rho, m, Cma, CZ0, Cl, hp0, V0, th0, Cmde, S, Sh, Sh_S, lh, c, lh_c, b, bh, A, Ah, Vh_V, ih, rho0, lamda, Temp0, R, g, W, muc, mub, KX2, KZ2, KXZ, KY2, Cmac, CNha, depsda, CX0, CXu, CXa, CXadot, CXq, CXde, CZ0, CZu, CZa, CZadot, CZq, CZde, Cmu, Cmadot, Cmq, CYb, CYbdot, CYp, CYr, CYda, CYdr, Clb, Clp, Clr, Clda, Cldr, Cnb, Cnbdot, Cnp, Cnr, Cnda, Cndr = Cit_par_Values(
         flight, motion)
+    
+    #These are the parameters that need to be uncommented to obtained the improved PHUGOID
+    # CZu = -0.28      #PH
+    # Cmq = -8         #PH
+    # CXu = -0.004     #PH
+
+    # These are the parameters that need to be uncommented to obtained the improved DUTCH ROLL
+    # CYb = -1.35      #DUTCH
+    # Cnb = 0.075      #DUTCH
+    # Cnr = -0.21      #DUTCH
 
     ########## ASYMMETRIC EQUATIONS OF MOTION IN STATE-SPACE FORM ##########
     A1 = np.array([[(V0 / b) * (CYb / 2 / mub), (V0 / b) * (Cl / 2 / mub), (V0 / b) * (CYp / 2 / mub),
@@ -167,7 +177,7 @@ u2, cell = inputcr(reference_delta_e, time, t2, 3237, 3247)
 
 y2_r, T2_r, x2_r = ml.lsim(sys_ph_r, u2, t2)
 
-u2_f, celli_2 = inputcr(flight_delta_e, time, t2, 3230, 3250)
+u2_f, celli_2 = inputcr(flight_delta_e, time, t2, 3235, 3249)
 
 y2_f, T2_f, x2_f = ml.lsim(sys_ph_f, u2_f, t2)
 
@@ -285,20 +295,29 @@ frame1.set_edgecolor('black')
 sp_e1 = np.transpose(u_1[celli_1:(celli_1+len(t1))]) - np.transpose(y1_f[:, 0])
 sp_mean1 = np.mean(sp_e1)
 sp_std1 = np.std(sp_e1)
+sp_std1_mean = sp_std1/sp_mean1
 
 sp_e2 = np.transpose(alpha_1[celli_1:(celli_1+len(t1))]) - np.transpose(y1_f[:, 1])
 sp_mean2 = np.mean(sp_e2)
 sp_std2 = np.std(sp_e2)
+sp_std2_mean = sp_std2/sp_mean2
+
 
 sp_e3 = np.transpose(theta_1[celli_1:(celli_1+len(t1))]) - np.transpose(y1_f[:, 2])
 sp_mean3 = np.mean(sp_e3)
 sp_std3 = np.std(sp_e3)
+sp_std3_mean = sp_std2/sp_mean3
+
 
 sp_e4 = np.transpose(q_1[celli_1:(celli_1+len(t1))]) - np.transpose(y1_f[:, 3])
 sp_mean4 = np.mean(sp_e4)
 sp_std4 = np.std(sp_e4)
+sp_std4_mean = sp_std4/sp_mean4
+
 
 sp_std_tot = np.sqrt(sp_std1**2 + sp_std2**2 + sp_std3**2 + sp_std4**2)
+sp_std_tot_mean = np.sqrt(sp_std1_mean**2 + sp_std2_mean**2 + sp_std3_mean**2 + sp_std4_mean**2)
+
 
 
 # Phugoid
@@ -354,21 +373,28 @@ frame2.set_edgecolor('black')
 ph_e1 = np.transpose(u_2[celli_2:(celli_2+len(t2))]) - np.transpose(y2_f[:, 0])
 ph_mean1 = np.mean(ph_e1)
 ph_std1 = np.std(ph_e1)
+ph_std1_mean = ph_std1/ph_mean1
 
 ph_e2 = np.transpose(alpha_2[celli_2:(celli_2+len(t2))]) - np.transpose(y2_f[:, 1])
 ph_mean2 = np.mean(ph_e2)
 ph_std2 = np.std(ph_e2)
+ph_std2_mean = ph_std2/ph_mean2
+
 
 ph_e3 = np.transpose(theta_2[celli_2:(celli_2+len(t2))]) - np.transpose(y2_f[:, 2])
 ph_mean3 = np.mean(ph_e3)
 ph_std3 = np.std(ph_e3)
+ph_std3_mean = ph_std3/ph_mean3
+
 
 ph_e4 = np.transpose(q_2[celli_2:(celli_2+len(t2))]) - np.transpose(y2_f[:, 3])
 ph_mean4 = np.mean(ph_e4)
 ph_std4 = np.std(ph_e4)
+ph_std4_mean = ph_std4/ph_mean4
+
 
 ph_std_tot = np.sqrt(ph_std1**2 + ph_std2**2 + ph_std3**2 + ph_std4**2)
-
+ph_std_tot_mean = np.sqrt(ph_std1_mean**2 + ph_std2_mean**2 + ph_std3_mean**2 + ph_std4_mean**2)
 
 # Dutch Roll
 
@@ -413,16 +439,21 @@ frame3.set_edgecolor('black')
 dr_e1 = np.transpose(phi[celli_3:(celli_3+len(t3))]) - np.transpose(y3_f[:, 1])
 dr_mean1 = np.mean(dr_e1)
 dr_std1 = np.std(dr_e1)
+dr_std1_mean = dr_std1/dr_mean1
 
 dr_e2 = np.transpose(p_3[celli_3:(celli_3+len(t3))]) - np.transpose(y3_f[:, 2])
 dr_mean2 = np.mean(dr_e2)
 dr_std2 = np.std(dr_e2)
+dr_std2_mean = dr_std2/dr_mean2
+
 
 dr_e3 = np.transpose(r_3[celli_3:(celli_3+len(t3))]) - np.transpose(y3_f[:, 3])
 dr_mean3 = np.mean(dr_e3)
 dr_std3 = np.std(dr_e3)
+dr_std3_mean = dr_std3/dr_mean3
 
 dr_std_tot = np.sqrt(dr_std1**2 + dr_std2**2 + dr_std3**2)
+dr_std_tot_mean = np.sqrt(dr_std1_mean**2 + dr_std2_mean**2 + dr_std3_mean**2)
 
 
 # Aperiodic Roll
@@ -470,16 +501,21 @@ frame4.set_edgecolor('black')
 ar_e1 = np.transpose(phi[celli_4:(celli_4+len(t4))]) - np.transpose(y4_f[:, 1])
 ar_mean1 = np.mean(ar_e1)
 ar_std1 = np.std(ar_e1)
+ar_std1_mean = ar_std1/ar_mean1 
 
 ar_e2 = np.transpose(p_4[celli_4:(celli_4+len(t4))]) - np.transpose(y4_f[:, 2])
 ar_mean2 = np.mean(ar_e2)
 ar_std2 = np.std(ar_e2)
+ar_std2_mean = ar_std2/ar_mean2
 
 ar_e3 = np.transpose(r_4[celli_4:(celli_4+len(t4))]) - np.transpose(y4_f[:, 3])
 ar_mean3 = np.mean(ar_e3)
 ar_std3 = np.std(ar_e3)
+ar_std3_mean = ar_std3/ar_mean3
+
 
 ar_std_tot = np.sqrt(ar_std1**2 + ar_std2**2 + ar_std3**2)
+ar_std_tot_mean = np.sqrt(ar_std1_mean**2 + ar_std2_mean**2 + ar_std3_mean**2)
 
 
 # spiral
@@ -527,16 +563,25 @@ frame5.set_edgecolor('black')
 spiral_e1 = np.transpose(phi[celli_5:(celli_5+len(t5))]) - np.transpose(y5_f[:, 1])
 spiral_mean1 = np.mean(spiral_e1)
 spiral_std1 = np.std(spiral_e1)
+spiral_std1_mean = spiral_std1/spiral_mean1
+
+
 
 spiral_e2 = np.transpose(p_5[celli_5:(celli_5+len(t5))]) - np.transpose(y5_f[:, 2])
 spiral_mean2 = np.mean(spiral_e2)
 spiral_std2 = np.std(spiral_e2)
+spiral_std2_mean = spiral_std2/spiral_mean2
+
 
 spiral_e3 = np.transpose(r_5[celli_5:(celli_5+len(t5))]) - np.transpose(y5_f[:, 3])
 spiral_mean3 = np.mean(spiral_e3)
 spiral_std3 = np.std(spiral_e3)
+spiral_std3_mean = spiral_std3/spiral_mean3
+
 
 spiral_std_tot = np.sqrt(spiral_std1**2 + spiral_std2**2 + spiral_std3**2)
+spiral_std_tot_mean = np.sqrt(spiral_std1_mean**2 + spiral_std2_mean**2 + spiral_std3_mean**2)
+
 
 
 ###### Print Commands ##########
