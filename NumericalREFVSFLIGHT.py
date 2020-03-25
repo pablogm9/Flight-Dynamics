@@ -156,12 +156,12 @@ y1_f , T1_f, x1_f = ml.lsim(sys_sp_f, u1_f, t1)
 # Phugoid
 t2 = np.arange(0 , 150, dt)
 
-u2, cell = inputcr(reference_delta_e, time, t2, 3237, 3247)
+u2, cell = inputcr(reference_delta_e, time, t2, 3227, 3247)
 
 y2_r , T2_r, x2_r = ml.lsim(sys_ph_r, u2, t2)
 
 
-u2_f, celli_2 = inputcr(flight_delta_e, time, t2, 3230 , 3240)
+u2_f, celli_2 = inputcr(flight_delta_e, time, t2, 3230 , 3250)
 
 y2_f , T2_f, x2_f = ml.lsim(sys_ph_f, u2_f, t2)
 
@@ -232,7 +232,7 @@ plt.style.use('seaborn-darkgrid')
 
 
 fig1, (axs1,axs2,axs3,axs4,axs5) = plt.subplots(5, sharex=True)
-fig1.suptitle('Short Period Response', fontsize=16, fontweight='bold')
+fig1.suptitle('Short Period Response', fontsize=20, fontweight='bold')
 l1, = axs1.plot(T1_f, u1, '--', label = 'Reference Input')
 l2, = axs1.plot(T1_f, u1_f,'r', label = 'Flight Input')
 axs2.plot(T1_f,y1_r[:,0], '--', label = 'Reference data')
@@ -244,28 +244,38 @@ axs4.plot(T1_f,y1_f[:,2], 'r', label = 'Flight data')
 axs5.plot(T1_f, y1_r[:,3],'--', label = 'Reference data')
 axs5.plot(T1_f,y1_f[:,3], 'r', label = 'Flight data')
 
-axs1.set_title('Inputs',fontsize=12)
-axs1.set_ylabel('Def_e [rad]',fontsize=12)
+axs1.set_title('Inputs',fontsize=16)
+axs1.set_ylabel('Def_e [rad]',fontsize=16)
+axs1.tick_params(axis='both', which='major', labelsize=12)
 
-axs2.set_title('Velocity along x-axis',fontsize=12)
-axs2.set_ylabel('u [-]',fontsize=12)
 
-axs3.set_title('Angle of Attack',fontsize=12)
-axs3.set_ylabel(' \u03B1 [-]',fontsize=12)
+axs2.set_title('Velocity along x-axis',fontsize=16)
+axs2.set_ylabel('u [-]',fontsize=16)
+axs2.tick_params(axis='both', which='major', labelsize=12)
 
-axs4.set_title('Pitch Angle',fontsize=12)
-axs4.set_ylabel('\u03B8 [-]',fontsize=12)
 
-axs5.set_title('Pitch Rate',fontsize=12)
-axs5.set_ylabel('qc/V[-]',fontsize=12)
+axs3.set_title('Angle of Attack',fontsize=16)
+axs3.set_ylabel(' \u03B1 [-]',fontsize=16)
+axs3.tick_params(axis='both', which='major', labelsize=12)
+
+
+axs4.set_title('Pitch Angle',fontsize=16)
+axs4.set_ylabel('\u03B8 [-]',fontsize=16)
+axs4.tick_params(axis='both', which='major', labelsize=12)
+
+
+axs5.set_title('Pitch Rate',fontsize=16)
+axs5.set_ylabel('qc/V[-]',fontsize=16)
+axs5.tick_params(axis='both', which='major', labelsize=12)
+
 
 plt.xlabel('Time [s]')
 
-legend1 = fig1.legend([l1, l2],['Reference Data', 'Flight Data'], loc='center right',framealpha=1,frameon=True )
+legend1 = fig1.legend([l1, l2],['Reference Data', 'Flight Data'], loc='center right',framealpha=1,frameon=True,fontsize=16 )
 plt.subplots_adjust(right=0.75)
 fig1.align_labels()
 
-plt.xlabel('Time [s]',fontsize=14)
+plt.xlabel('Time [s]',fontsize=16)
 frame1 = legend1.get_frame()
 
 frame1.set_facecolor('0.90')
@@ -274,7 +284,7 @@ frame1.set_edgecolor('black')
 #Phugoid
 
 fig2, (axs1,axs2,axs3,axs4,axs5) = plt.subplots(5, sharex=True)
-fig2.suptitle('Phugoid Response', fontsize=16, fontweight='bold')
+fig2.suptitle('Phugoid Response', fontsize=20, fontweight='bold')
 l1, = axs1.plot(T2_f, u2, '--', label = 'Reference Input')
 l2, = axs1.plot(T2_f, u2_f,'r', label = 'Flight Input')
 axs2.plot(T2_f,y2_r[:,0], '--', label = 'Reference data')
@@ -286,28 +296,38 @@ axs4.plot(T2_f,y2_f[:,2], 'r', label = 'Flight data')
 axs5.plot(T2_f, y2_r[:,3],'--', label = 'Reference data')
 axs5.plot(T2_f,y2_f[:,3], 'r', label = 'Flight data')
 
-axs1.set_title('Inputs',fontsize=12)
-axs1.set_ylabel('Def_e [rad]',fontsize=12)
+axs1.set_title('Inputs',fontsize=16)
+axs1.set_ylabel('Def_e [rad]',fontsize=16)
+axs1.tick_params(axis='both', which='major', labelsize=12)
 
-axs2.set_title('Velocity along x-axis',fontsize=12)
-axs2.set_ylabel('u [-]',fontsize=12)
 
-axs3.set_title('Angle of Attack',fontsize=12)
-axs3.set_ylabel(' \u03B1 [-]',fontsize=12)
+axs2.set_title('Velocity along x-axis',fontsize=16)
+axs2.set_ylabel('u [-]',fontsize=16)
+axs2.tick_params(axis='both', which='major', labelsize=12)
 
-axs4.set_title('Pitch Angle',fontsize=12)
-axs4.set_ylabel('\u03B8 [-]',fontsize=12)
 
-axs5.set_title('Pitch Rate',fontsize=12)
-axs5.set_ylabel('qc/V[-]',fontsize=12)
+axs3.set_title('Angle of Attack',fontsize=16)
+axs3.set_ylabel(' \u03B1 [-]',fontsize=16)
+axs3.tick_params(axis='both', which='major', labelsize=12)
+
+
+axs4.set_title('Pitch Angle',fontsize=16)
+axs4.set_ylabel('\u03B8 [-]',fontsize=16)
+axs4.tick_params(axis='both', which='major', labelsize=12)
+
+
+axs5.set_title('Pitch Rate',fontsize=16)
+axs5.set_ylabel('qc/V[-]',fontsize=16)
+axs5.tick_params(axis='both', which='major', labelsize=12)
+
 
 plt.xlabel('Time [s]')
 
-legend2 = fig2.legend([l1, l2],['Reference Data', 'Flight Data'], loc='center right',framealpha=1,frameon=True )
+legend2 = fig2.legend([l1, l2],['Reference Data', 'Flight Data'], loc='center right',framealpha=1,frameon=True,fontsize=16 )
 plt.subplots_adjust(right=0.75)
 fig2.align_labels()
 
-plt.xlabel('Time [s]',fontsize=14)
+plt.xlabel('Time [s]',fontsize=16)
 frame2 = legend2.get_frame()
 
 frame2.set_facecolor('0.90')
@@ -317,7 +337,7 @@ frame2.set_edgecolor('black')
 
 
 fig3, (axs1,axs2,axs3,axs4,axs5) = plt.subplots(5, sharex=True)
-fig3.suptitle('Dutch Roll Response',fontsize=16, fontweight='bold')
+fig3.suptitle('Dutch Roll Response',fontsize=20, fontweight='bold')
 l1, = axs1.plot(T3_f, u3_t, '--', label = 'Reference Input')
 l2, = axs1.plot(T3_f, u3_t_f,'r', label = 'Flight Input')
 axs2.plot(T3_f,y3_r[:,0], '--', label = 'Reference data')
@@ -329,35 +349,44 @@ axs4.plot(T3_f,y3_f[:,2], 'r', label = 'Flight data')
 axs5.plot(T3_f, y3_r[:,3],'--', label = 'Reference data')
 axs5.plot(T3_f,y3_f[:,3], 'r', label = 'Flight data')
 
-axs1.set_title('Inputs',fontsize=12)
-axs1.set_ylabel('Def_r [rad]',fontsize=12)
-
-
-axs2.set_title('Yaw Angle',fontsize=12)
-axs2.set_ylabel('\u03B2 [-]',fontsize=12)
+axs1.set_title('Inputs',fontsize=16)
+axs1.set_ylabel('Def_r [rad]',fontsize=16)
+axs1.tick_params(axis='both', which='major', labelsize=12)
 
 
 
-axs3.set_title('Roll Angle',fontsize=12)
-axs3.set_ylabel('\u03C6 [-]',fontsize=12)
+axs2.set_title('Yaw Angle',fontsize=16)
+axs2.set_ylabel('\u03B2 [-]',fontsize=16)
+axs2.tick_params(axis='both', which='major', labelsize=12)
 
 
 
-axs4.set_title('Roll Rate',fontsize=12)
-axs4.set_ylabel(' qb/V[-]',fontsize=12)
+
+axs3.set_title('Roll Angle',fontsize=16)
+axs3.set_ylabel('\u03C6 [-]',fontsize=16)
+axs3.tick_params(axis='both', which='major', labelsize=12)
 
 
 
-axs5.set_title('Yaw Rate',fontsize=12)
-axs5.set_ylabel('rb/V[-]',fontsize=12)
+axs4.set_title('Roll Rate',fontsize=16)
+axs4.set_ylabel(' pb/V[-]',fontsize=16)
+axs4.tick_params(axis='both', which='major', labelsize=12)
 
 
 
-legend3 = fig3.legend([l1, l2],['Reference Data', 'Flight Data'], loc='center right',framealpha=1,frameon=True )
+
+axs5.set_title('Yaw Rate',fontsize=16)
+axs5.set_ylabel('rb/V[-]',fontsize=16)
+axs5.tick_params(axis='both', which='major', labelsize=12)
+
+
+
+
+legend3 = fig3.legend([l1, l2],['Reference Data', 'Flight Data'], loc='center right',framealpha=1,frameon=True,fontsize=16 )
 plt.subplots_adjust(right=0.75)
 fig3.align_labels()
 
-plt.xlabel('Time [s]',fontsize=14)
+plt.xlabel('Time [s]',fontsize=16)
 frame3 = legend3.get_frame()
 
 frame3.set_facecolor('0.90')
@@ -366,7 +395,7 @@ frame3.set_edgecolor('black')
 #Aperiodic Roll
 
 fig4, (axs1,axs2,axs3,axs4,axs5) = plt.subplots(5, sharex=True)
-fig4.suptitle('Aperiodic Roll Response',fontsize=16, fontweight='bold')
+fig4.suptitle('Aperiodic Roll Response',fontsize=20, fontweight='bold')
 l3, = axs1.plot(T4_f, u4_t1_f, 'g', label = 'Flight data aileron deflection')
 l4, = axs1.plot(T4_f, u4_t2_f,'b', label = 'Flight data rudder deflection')
 l5, = axs1.plot(T4_f, u4_t1_r, 'g--', label = 'Reference data aileron deflection')
@@ -380,26 +409,34 @@ axs4.plot(T4_f,y4_f[:,2], 'r', label = 'Flight data')
 axs5.plot(T4_f, y4_r[:,3],'--', label = 'Reference data')
 axs5.plot(T4_f,y4_f[:,3], 'r', label = 'Flight data')
 
-axs1.set_title('Inputs',fontsize=12)
-axs1.set_ylabel('Def [rad]',fontsize=14)
+axs1.set_title('Inputs',fontsize=16)
+axs1.set_ylabel('Def [rad]',fontsize=16)
+axs1.tick_params(axis='both', which='major', labelsize=12)
 
-axs2.set_title('Yaw Angle',fontsize=12)
-axs2.set_ylabel('\u03B2 [-]',fontsize=14)
+axs2.set_title('Yaw Angle',fontsize=16)
+axs2.set_ylabel('\u03B2 [-]',fontsize=16)
+axs2.tick_params(axis='both', which='major', labelsize=12)
 
-axs3.set_title('Roll Angle',fontsize=12)
-axs3.set_ylabel('\u03C6 [-]',fontsize=14)
 
-axs4.set_title('Roll Rate',fontsize=12)
-axs4.set_ylabel('qb/V[-]',fontsize=14)
+axs3.set_title('Roll Angle',fontsize=16)
+axs3.set_ylabel('\u03C6 [-]',fontsize=16)
+axs3.tick_params(axis='both', which='major', labelsize=12)
 
-axs5.set_title('Yaw Rate',fontsize=12)
-axs5.set_ylabel('rb/V[-]',fontsize=14)
+
+axs4.set_title('Roll Rate',fontsize=16)
+axs4.set_ylabel('pb/V[-]',fontsize=16)
+axs4.tick_params(axis='both', which='major', labelsize=12)
+
+axs5.set_title('Yaw Rate',fontsize=16)
+axs5.set_ylabel('rb/V[-]',fontsize=16)
+axs5.tick_params(axis='both', which='major', labelsize=12)
+
 
 plt.subplots_adjust(right=0.75)
 fig4.align_labels()
 
-legend4 = fig4.legend([l2, l3, l4,l1, l5, l6],['Flight data response','Flight data aileron deflection','Flight data rudder deflection', 'Reference data response','Reference data aileron deflection', 'Reference data rudder deflection'], loc='center right',framealpha=1,frameon=True)
-plt.xlabel('Time [s]',fontsize=14)
+legend4 = fig4.legend([l2, l3, l4,l1, l5, l6],['Flight data response','Flight data aileron deflection','Flight data rudder deflection', 'Reference data response','Reference data aileron deflection', 'Reference data rudder deflection'], loc='center right',framealpha=1,frameon=True,fontsize=16)
+plt.xlabel('Time [s]',fontsize=16)
 
 frame4 = legend4.get_frame()
 
@@ -409,7 +446,7 @@ frame4.set_edgecolor('black')
 #spiral
 
 fig5, (axs1,axs2,axs3,axs4,axs5) = plt.subplots(5, sharex=True)
-fig5.suptitle('Spiral Dive Response',fontsize=16, fontweight='bold')
+fig5.suptitle('Spiral Dive Response',fontsize=20, fontweight='bold')
 l3, = axs1.plot(T5_f, u5_t1_f, 'g', label = 'Flight data aileron deflection')
 l4, = axs1.plot(T5_f, u5_t2_f,'b', label = 'Flight data rudder deflection')
 l5, = axs1.plot(T5_f, u5_t1_r, 'g--', label = 'Reference data aileron deflection')
@@ -423,32 +460,41 @@ axs4.plot(T5_f,y5_f[:,2], 'r', label = 'Flight data')
 axs5.plot(T5_f, y5_r[:,3],'--', label = 'Reference data')
 axs5.plot(T5_f,y5_f[:,3], 'r', label = 'Flight data')
 
-axs1.set_title('Inputs',fontsize=12)
-axs1.set_ylabel('Def [rad]',fontsize=14)
+axs1.set_title('Inputs',fontsize=16)
+axs1.set_ylabel('Def [rad]',fontsize=16)
+axs1.tick_params(axis='both', which='major', labelsize=12)
 
-axs2.set_title('Yaw Angle',fontsize=12)
-axs2.set_ylabel('\u03B2 [-]',fontsize=14)
 
-axs3.set_title('Roll Angle',fontsize=12)
-axs3.set_ylabel('\u03C6 [-]',fontsize=14)
+axs2.set_title('Yaw Angle',fontsize=16)
+axs2.set_ylabel('\u03B2 [-]',fontsize=16)
+axs2.tick_params(axis='both', which='major', labelsize=12)
 
-axs4.set_title('Roll Rate',fontsize=12)
-axs4.set_ylabel('qb/V[-]',fontsize=14)
 
-axs5.set_title('Yaw Rate',fontsize=12)
-axs5.set_ylabel('rb/V[-]',fontsize=14)
+axs3.set_title('Roll Angle',fontsize=16)
+axs3.set_ylabel('\u03C6 [-]',fontsize=16)
+axs3.tick_params(axis='both', which='major', labelsize=12)
+
+
+axs4.set_title('Roll Rate',fontsize=16)
+axs4.set_ylabel('pb/V[-]',fontsize=16)
+axs4.tick_params(axis='both', which='major', labelsize=12)
+
+
+axs5.set_title('Yaw Rate',fontsize=16)
+axs5.set_ylabel('rb/V[-]',fontsize=16)
+axs5.tick_params(axis='both', which='major', labelsize=12)
+
 
 plt.subplots_adjust(right=0.75)
 fig5.align_labels()
 
-legend5 = fig5.legend([l2, l3, l4,l1, l5, l6],['Flight data response','Flight data aileron deflection','Flight data rudder deflection', 'Reference data response','Reference data aileron deflection', 'Reference data rudder deflection'], loc='center right',framealpha=1,frameon=True)
-plt.xlabel('Time [s]',fontsize=14)
+legend5 = fig5.legend([l2, l3, l4,l1, l5, l6],['Flight data response','Flight data aileron deflection','Flight data rudder deflection', 'Reference data response','Reference data aileron deflection', 'Reference data rudder deflection'], loc='center right',framealpha=1,frameon=True,fontsize=16)
+plt.xlabel('Time [s]',fontsize=16)
 
 frame5 = legend5.get_frame()
 
 frame5.set_facecolor('0.90')
 frame5.set_edgecolor('black')
-
 
 
 
